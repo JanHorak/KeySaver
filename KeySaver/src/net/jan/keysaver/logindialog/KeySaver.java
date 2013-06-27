@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package keysaver;
+package net.jan.keysaver.logindialog;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +18,7 @@ public class KeySaver extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("Mainpage.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("LoginDialog.fxml"));
         
         Scene scene = new Scene(root);
         
