@@ -8,16 +8,16 @@
 
 <AnchorPane id="AnchorPane" prefHeight="464.0" prefWidth="612.0" xmlns:fx="http://javafx.com/fxml" fx:controller="net.jan.keysaver.mainpage.MainpageController">
   <children>
-    <TitledPane animated="false" collapsible="false" layoutX="12.0" layoutY="30.0" prefHeight="418.0" text="Keys">
+    <TitledPane animated="false" collapsible="false" layoutY="24.0" prefHeight="440.0" text="Keys">
       <content>
         <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
           <children>
-            <TreeView prefHeight="392.0" prefWidth="200.0" />
+            <TreeView prefHeight="414.0" prefWidth="200.0" />
           </children>
         </AnchorPane>
       </content>
     </TitledPane>
-    <GridPane layoutX="236.0" layoutY="30.0" prefHeight="317.0" prefWidth="304.0">
+    <GridPane layoutX="209.0" layoutY="30.0" prefHeight="317.0" prefWidth="396.0">
       <children>
         <Label text="Keyname" GridPane.columnIndex="0" GridPane.rowIndex="0" />
         <Label text="Username" GridPane.columnIndex="0" GridPane.rowIndex="1" />
@@ -27,20 +27,16 @@
         <TextField prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
         <TextField prefHeight="96.0" prefWidth="202.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
         <PasswordField prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-        <Button mnemonicParsing="false" text="Save" GridPane.columnIndex="1" GridPane.rowIndex="4" />
       </children>
       <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="151.0" minWidth="10.0" prefWidth="102.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="227.0" minWidth="10.0" prefWidth="202.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="163.0" minWidth="10.0" prefWidth="44.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="334.0" minWidth="10.0" prefWidth="334.0" />
       </columnConstraints>
       <rowConstraints>
         <RowConstraints maxHeight="144.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="260.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="143.0" minHeight="10.0" prefHeight="94.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="143.0" minHeight="0.0" prefHeight="48.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="143.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="143.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="143.0" minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
     <MenuBar prefWidth="612.0">
@@ -74,5 +70,15 @@
         </Menu>
       </menus>
     </MenuBar>
+    <TitledPane animated="false" collapsible="false" layoutX="209.0" layoutY="406.0" prefHeight="56.0" prefWidth="396.0" text="Actions">
+      <content>
+        <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+          <children>
+            <Button layoutX="333.0" layoutY="4.0" mnemonicParsing="false" text="Save" />
+            <Button layoutX="284.0" layoutY="4.0" mnemonicParsing="false" text="Edit" />
+          </children>
+        </AnchorPane>
+      </content>
+    </TitledPane>
   </children>
 </AnchorPane>
