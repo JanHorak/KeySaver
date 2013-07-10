@@ -1,6 +1,8 @@
 package net.jan.keysaver.sources;
 
 import java.io.Serializable;
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyEvent;
 
 /*
  * To change this template, choose Tools | Templates
@@ -51,6 +53,10 @@ public class Key implements Serializable{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setOnKeyReleased(EventHandler<KeyEvent> eventHandler) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     
