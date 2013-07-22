@@ -59,6 +59,11 @@ public class Key implements Serializable{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    
+    public void overwriteKey(Key newKey){
+        this.keyname = newKey.getKeyname();
+        this.description = newKey.getDescription();
+        this.password = newKey.getPassword();
+        this.username = newKey.getUsername();
+    }
     
 }

@@ -81,14 +81,16 @@
         </Menu>
       </menus>
     </MenuBar>
-    <TitledPane animated="false" collapsible="false" layoutX="209.0" layoutY="406.0" prefHeight="56.0" prefWidth="396.0" text="Actions">
+    <TitledPane animated="false" collapsible="false" layoutX="209.0" layoutY="380.0" prefHeight="82.0" prefWidth="396.0" text="Actions">
       <content>
         <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
           <children>
-            <Button fx:id="btn_save" disable="true" layoutX="333.0" layoutY="4.0" mnemonicParsing="false" text="Save" />
+            <Button fx:id="btn_save" disable="true" layoutX="333.0" layoutY="4.0" mnemonicParsing="false" onAction="#save" text="Save" />
             <Button fx:id="btn_edit" disable="true" layoutX="284.0" layoutY="4.0" mnemonicParsing="false" onAction="#edit" text="Edit" />
             <Button fx:id="btn_cancel" disable="true" layoutX="221.0" layoutY="5.0" mnemonicParsing="false" onAction="#editCancel" text="Cancel" />
             <Button fx:id="btn_addCat" disable="true" layoutX="8.0" layoutY="4.0" mnemonicParsing="false" onAction="#prepareAddCat" text="Add Category" />
+            <Button id="btn_addCat" fx:id="btn_trash" disable="true" layoutX="125.0" layoutY="6.0" mnemonicParsing="false" onAction="#remove" text="Remove" />
+            <Button id="btn_addCat" fx:id="btn_addKey" disable="true" layoutX="8.0" layoutY="30.0" mnemonicParsing="false" onAction="#prepareAddKey" prefWidth="94.0" text="Add Key" />
           </children>
         </AnchorPane>
       </content>

@@ -9,9 +9,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.RotateTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -21,6 +24,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TextField;
@@ -29,6 +33,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import net.jan.keysaver.manager.ErrorManager;
 import net.jan.keysaver.manager.FileManager;
 import net.jan.keysaver.manager.SettingManager;
@@ -68,7 +73,13 @@ public class MainpageController implements Initializable {
     private Button btn_edit;
     @FXML
     private Button btn_addCat;
+    @FXML
+    private Button btn_trash;
+    @FXML
+    private Button btn_addKey;
     private Image addCatImage;
+    private Image trashImage;
+    private Image keyImage;
     private CategoryList catList = new CategoryList();
     private FileManager fileManager = new FileManager();
     private final String PATH_PROPERTIES = "src\\net\\jan\\keysaver\\properties\\Properties.fxml";
@@ -76,43 +87,77 @@ public class MainpageController implements Initializable {
     private ContextMenu conMenu = new ContextMenu();
     private Key selectedKey = new Key();
     private TreeItem selectedItem = new TreeItem();
-    private boolean modCat = false;
+    private boolean addCat = false;
+    private boolean editKey = false;
+    private boolean addKey = false;
+    private boolean editCat = false;
+    private String tmpBuffer = "";
+    private Key keyBuffer = new Key();
+    private Key editedKey = new Key();
+    private String selectedCat = "";
+    private boolean isKeySelected = false;
+    private boolean isCatSelected = false;
 
     @FXML
     private void edit() {
+        tmpBuffer = selectedItem.getValue().toString();
         if (selectedItem.isLeaf()) {
             unlockFields();
             lockTree();
-            btn_cancel.setDisable(false);
-            btn_save.setDisable(false);
-            btn_edit.setDisable(true);
+            disableControl(btn_edit, btn_trash);
+            enableControl(btn_cancel, btn_save);
+            keyBuffer = new FileManager().returnKey(tmpBuffer);
+            editKey = true;
+            System.out.println("editKey:" + editKey);
         }
         if (!selectedItem.isLeaf()) {
             lockTree();
             lockFields();
-            lb_catName.setVisible(true);
-            tf_catName.setVisible(true);
-            btn_save.setDisable(false);
-            btn_addCat.setDisable(true);
-            btn_cancel.setDisable(false);
-            btn_edit.setDisable(true);
-            tf_catName.setText(selectedItem.getValue().toString());
-            modCat = true;
+            setControlVisible(lb_catName, tf_catName);
+            disableControl(btn_addCat, btn_edit, btn_trash);
+            enableControl(btn_save, btn_cancel);
+            tf_catName.setText(tmpBuffer);
+            editCat = true;
+            System.out.println("editCat:" + editCat);
         }
+    }
+
+    @FXML
+    private void prepareAddCat() {
+        setControlVisible(lb_catName, tf_catName);
+        disableControl(btn_edit, btn_addCat, btn_trash, btn_addKey);
+        enableControl(btn_cancel, btn_save);
+        btn_save.setText("Add");
+        addCat = true;
+        System.out.println("AddCat: " + addCat);
+        lockTree();
+    }
+
+    @FXML
+    private void prepareAddKey() {
+        disableControl(btn_edit, btn_addCat, btn_trash, btn_addKey);
+        // Buttons
+        enableControl(btn_cancel, btn_save);
+        // Textfields
+        enableControl(tf_keyname, tf_description, tf_password, tf_passwordConfirm, tf_username);
+        btn_save.setText("Save");
+        addKey = true;
+        System.out.println("AddKey: " + addKey);
+        lockTree();
     }
 
     @FXML
     private void editCancel() {
         lockFields();
         unlockTree();
-        btn_cancel.setDisable(true);
-        btn_edit.setDisable(true);
-        btn_save.setDisable(true);
-        lb_catName.setVisible(false);
-        tf_catName.setVisible(false);
-        lb_catName.setVisible(false);
-        tf_catName.setVisible(false);
-        modCat = false;
+        setControlUnvisible(lb_catName, tf_catName);
+        disableControl(btn_edit, btn_save, btn_addCat, btn_addKey, btn_cancel, btn_trash);
+        btn_save.setText("Save");
+        tf_catName.setText("");
+        addCat = false;
+        editKey = false;
+        addKey = false;
+        editCat = false;
     }
 
     private void initTree() {
@@ -129,28 +174,6 @@ public class MainpageController implements Initializable {
         tree.setRoot(rootItem);
         model = tree.getSelectionModel();
         tree.setEditable(true);
-        tree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue ov, Object t, Object t1) {
-                if (ov != null || t != null || t1 != null) {
-                    selectedItem = (TreeItem) ov.getValue();
-                    if (selectedItem.isLeaf()) {
-                        selectedKey = new FileManager().returnKey(selectedItem.getValue().toString());
-                        tf_keyname.setText(selectedKey.getKeyname());
-                        tf_username.setText(selectedKey.getUsername());
-                        tf_description.setText(selectedKey.getDescription());
-                        tf_password.setText(selectedKey.getPassword());
-                        tf_passwordConfirm.setText(selectedKey.getPassword());
-                        btn_edit.setDisable(false);
-                        btn_addCat.setDisable(true);
-                    } else {
-                        btn_edit.setDisable(false);
-                        btn_addCat.setDisable(false);
-                        resetFields();
-                    }
-                }
-            }
-        });
 
     }
 
@@ -163,19 +186,11 @@ public class MainpageController implements Initializable {
     }
 
     private void lockFields() {
-        tf_keyname.setDisable(true);
-        tf_username.setDisable(true);
-        tf_description.setDisable(true);
-        tf_password.setDisable(true);
-        tf_passwordConfirm.setDisable(true);
+        disableControl(tf_keyname, tf_username, tf_description, tf_password, tf_passwordConfirm);
     }
 
     private void unlockFields() {
-        tf_keyname.setDisable(false);
-        tf_username.setDisable(false);
-        tf_description.setDisable(false);
-        tf_password.setDisable(false);
-        tf_passwordConfirm.setDisable(false);
+        enableControl(tf_keyname, tf_username, tf_description, tf_password, tf_passwordConfirm);
     }
 
     private void lockTree() {
@@ -205,25 +220,225 @@ public class MainpageController implements Initializable {
         }
     }
 
+    @FXML
+    private void remove() {
+        boolean stop = false;
+        if (isKeySelected) {
+            List<Category> cat = catList.getCategoryList();
+
+            for (Category c : cat) {
+                List<Key> keyList = c.getKeylist();
+                for (Key k : keyList) {
+                    if (stop) {
+                        break;
+                    }
+                    if (k.getKeyname().equals(selectedKey.getKeyname())) {
+                        if (keyList.size() == 1) {
+                            cat.remove(c);
+
+                            stop = true;
+                            break;
+                        } else {
+                            keyList.remove(k);
+                            c.setKeylist(keyList);
+                        }
+                    }
+                }
+                if (stop) {
+                    break;
+                }
+            }
+            catList.setCategoryList(cat);
+            new FileManager().saveStructure(catList);
+            initTree();
+            editCancel();
+        }
+        if (isCatSelected) {
+            List<Category> cat = catList.getCategoryList();
+            for (Category c : cat) {
+                if (stop) {
+                    break;
+                }
+                if (c.getName().equals(selectedCat)) {
+                    cat.remove(c);
+                    stop = true;
+                    break;
+                }
+            }
+            new FileManager().saveStructure(catList);
+            initTree();
+            editCancel();
+        }
+    }
+
+    @FXML
+    private void save() {
+        //new Category
+        if (addCat) {
+            //VALIDATION IS MISSING
+            String catname = tf_catName.getText();
+            Category cat = new Category();
+            cat.setName(catname);
+
+            Key k = new Key();
+            List<Key> keyList = new ArrayList<Key>();
+            k.setKeyname("new Key");
+            k.setDescription("unknown");
+            k.setPassword("unknown");
+            k.setUsername("unknown");
+            keyList.add(k);
+            cat.setKeylist(keyList);
+            List<Category> categoryList = new ArrayList<>();
+            categoryList = catList.getCategoryList();
+            categoryList.add(cat);
+            catList.setCategoryList(categoryList);
+            new FileManager().saveStructure(catList);
+            initTree();
+            editCancel();
+        }
+        // Change existing name of Cat
+        if (editCat) {
+            //VALIDATION IS MISSING
+            for (Category cat : catList.getCategoryList()) {
+                if (cat.getName().equals(tmpBuffer)) {
+                    cat.setName(tf_catName.getText());
+                    new FileManager().saveStructure(catList);
+                    initTree();
+                    editCancel();
+                    break;
+                }
+            }
+
+        }
+
+        if (editKey) {
+            Key oldKey = keyBuffer;
+            editedKey.setKeyname(tf_keyname.getText());
+            editedKey.setDescription(tf_description.getText());
+            editedKey.setPassword(tf_passwordConfirm.getText());
+            editedKey.setUsername(tf_username.getText());
+
+            List<Category> cat = catList.getCategoryList();
+            boolean stop = false;
+            //VALIDATION IS MISSING
+            for (Category c : cat) {
+                List<Key> keyList = c.getKeylist();
+                for (Key k : keyList) {
+                    if (stop) {
+                        break;
+                    }
+                    if (k.getKeyname().equals(oldKey.getKeyname())) {
+                        k.overwriteKey(editedKey);
+                        c.setKeylist(keyList);
+                        stop = true;
+                    }
+                }
+
+            }
+            catList.setCategoryList(cat);
+            new FileManager().saveStructure(catList);
+            initTree();
+            editCancel();
+        }
+
+        if (addKey) {
+            Key k = new Key();
+            k.setKeyname(tf_keyname.getText());
+            k.setDescription(tf_description.getText());
+            k.setPassword(tf_passwordConfirm.getText());
+            k.setUsername(tf_username.getText());
+
+            List<Category> cat = catList.getCategoryList();
+            boolean stop = false;
+            for (Category c : cat) {
+                if (stop) {
+                    break;
+                }
+                if (c.getName().equals(selectedCat)) {
+                    c.getKeylist().add(k);
+                    stop = true;
+                }
+            }
+            //VALIDATION IS MISSING
+            catList.setCategoryList(cat);
+            new FileManager().saveStructure(catList);
+            initTree();
+            editCancel();
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         catList = fileManager.returnListofCategories();
         lb_username.setText(new SettingManager().returnProperty("USERNAME"));
         try {
             addCatImage = new Image(new FileInputStream("AppData\\Images\\intern\\addCat_16x16.png"));
+            trashImage = new Image(new FileInputStream("AppData\\Images\\intern\\trash_16x16.png"));
+            keyImage = new Image(new FileInputStream("AppData\\Images\\intern\\Key_8x16.png"));
         } catch (FileNotFoundException ex) {
             Logger.getLogger(MainpageController.class.getName()).log(Level.SEVERE, null, ex);
         }
         btn_addCat.setGraphic(new ImageView(addCatImage));
+        btn_trash.setGraphic(new ImageView(trashImage));
+        btn_addKey.setGraphic(new ImageView(keyImage));
+        tree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue ov, Object t, Object t1) {
+                if (ov != null || t != null || t1 != null) {
+                    selectedItem = (TreeItem) ov.getValue();
+                    if (selectedItem != null) {
+                        btn_trash.setDisable(false);
+                        if (selectedItem.isLeaf()) {
+                            selectedKey = new FileManager().returnKey(selectedItem.getValue().toString());
+                            tf_keyname.setText(selectedKey.getKeyname());
+                            tf_username.setText(selectedKey.getUsername());
+                            tf_description.setText(selectedKey.getDescription());
+                            tf_password.setText(selectedKey.getPassword());
+                            tf_passwordConfirm.setText(selectedKey.getPassword());
+                            btn_edit.setDisable(false);
+                            btn_addCat.setDisable(true);
+                            btn_addKey.setDisable(true);
+                            isCatSelected = false;
+                            isKeySelected = true;
+                        } else {
+                            btn_edit.setDisable(false);
+                            btn_addCat.setDisable(false);
+                            btn_addKey.setDisable(false);
+                            selectedCat = selectedItem.getValue().toString();
+                            isCatSelected = true;
+                            isKeySelected = false;
+                            resetFields();
+                        }
+                    }
+                }
+            }
+        });
+
         initTree();
         lockFields();
     }
 
-    @FXML
-    private void prepareAddCat() {
-        lb_catName.setVisible(true);
-        tf_catName.setVisible(true);
-        btn_cancel.setDisable(false);
-        lockTree();
+    private void disableControl(Control... c) {
+        for (Control b : c) {
+            b.setDisable(true);
+        }
+    }
+
+    private void enableControl(Control... c) {
+        for (Control b : c) {
+            b.setDisable(false);
+        }
+    }
+
+    private void setControlVisible(Control... c) {
+        for (Control b : c) {
+            b.setVisible(true);
+        }
+    }
+
+    private void setControlUnvisible(Control... c) {
+        for (Control b : c) {
+            b.setVisible(false);
+        }
     }
 }
