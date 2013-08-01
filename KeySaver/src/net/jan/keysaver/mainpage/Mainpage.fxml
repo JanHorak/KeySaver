@@ -70,8 +70,8 @@
               </content>
             </CustomMenuItem>
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Iconmanagement" />
-            <MenuItem mnemonicParsing="false" onAction="#open_Properties" text="Properties" />
+            <MenuItem mnemonicParsing="false" text="Iconmanagement" fx:id="iconsItem" />
+            <MenuItem mnemonicParsing="false" onAction="#open_Properties" text="Properties" fx:id="settingsItem" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Help">

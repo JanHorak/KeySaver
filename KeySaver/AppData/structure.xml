@@ -1,1 +1,1 @@
-<?xml version="1.0" ?><structure><category name="sdfsdfdfsdf"><keys><key keyname="new Key" username="unknown" description="unknown" password="unknown"/></keys></category></structure>
+<?xml version="1.0" ?><structure name="categories"><category name="default"><keys><key keyname="defaultKey" username="defaultName" description="This is a default-Key" password="password"/></keys></category></structure>
