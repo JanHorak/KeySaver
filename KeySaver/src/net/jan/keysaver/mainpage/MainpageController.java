@@ -26,6 +26,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
@@ -77,9 +78,21 @@ public class MainpageController implements Initializable {
     private Button btn_trash;
     @FXML
     private Button btn_addKey;
+    //Images
     private Image addCatImage;
     private Image trashImage;
     private Image keyImage;
+    private Image settingImage;
+    private Image iconsImage;
+    ////////
+    
+    //MenuItems
+    @FXML
+    MenuItem settingsItem;
+    @FXML
+    MenuItem iconsItem;
+    
+    
     private CategoryList catList = new CategoryList();
     private FileManager fileManager = new FileManager();
     private final String PATH_PROPERTIES = "src\\net\\jan\\keysaver\\properties\\Properties.fxml";
@@ -369,18 +382,24 @@ public class MainpageController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        new FileManager().checkAvailibility();
         catList = fileManager.returnListofCategories();
         lb_username.setText(new SettingManager().returnProperty("USERNAME"));
         try {
             addCatImage = new Image(new FileInputStream("AppData\\Images\\intern\\addCat_16x16.png"));
             trashImage = new Image(new FileInputStream("AppData\\Images\\intern\\trash_16x16.png"));
             keyImage = new Image(new FileInputStream("AppData\\Images\\intern\\Key_8x16.png"));
+            settingImage = new Image(new FileInputStream("AppData\\Images\\intern\\Settings_16x16.png"));
+            iconsImage = new Image(new FileInputStream("AppData\\Images\\intern\\IconManagement_16x16.png"));
         } catch (FileNotFoundException ex) {
             Logger.getLogger(MainpageController.class.getName()).log(Level.SEVERE, null, ex);
         }
         btn_addCat.setGraphic(new ImageView(addCatImage));
         btn_trash.setGraphic(new ImageView(trashImage));
         btn_addKey.setGraphic(new ImageView(keyImage));
+        settingsItem.setGraphic(new ImageView(settingImage));
+        iconsItem.setGraphic(new ImageView(iconsImage));
+        
         tree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue ov, Object t, Object t1) {
