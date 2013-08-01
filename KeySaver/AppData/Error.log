@@ -8,3 +8,13 @@ Exception:
 java.io.FileNotFoundException: C:\Users\Jan Horak\Documents\Development\KeySaver\KeySaver\AppData\structure.xml (Das System kann die angegebene Datei nicht finden)
 ------------------------------------
 
+---------------ERROR---------------
+Time: Thu Aug 01 10:36:59 CEST 2013
+
+Hint from Developer: 
+SAX: Cant load XML-File
+
+Exception: 
+java.io.FileNotFoundException: C:\Users\Jan Horak\Documents\Development\KeySaver\KeySaver\AppData\structure.xml (Das System kann die angegebene Datei nicht finden)
+------------------------------------
+

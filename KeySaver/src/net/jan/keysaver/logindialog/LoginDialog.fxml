@@ -7,7 +7,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" fx:id="mainpane" prefHeight="108.0" prefWidth="255.0" xmlns:fx="http://javafx.com/fxml" fx:controller="net.jan.keysaver.logindialog.LoginDialogController">
+<AnchorPane id="AnchorPane" fx:id="mainpane" prefHeight="120.0" prefWidth="255.0" xmlns:fx="http://javafx.com/fxml" fx:controller="net.jan.keysaver.logindialog.LoginDialogController">
   <children>
     <Label layoutX="14.0" layoutY="51.0" text="Password:" />
     <PasswordField fx:id="pwField" layoutX="81.0" layoutY="51.0" prefWidth="156.0" />
@@ -17,5 +17,6 @@
         <Image url="@../../../../../AppData/Images/Logo_key.png" preserveRatio="false" smooth="false" />
       </image>
     </ImageView>
+    <Label fx:id="errorLabel" layoutX="14.0" layoutY="83.0" textFill="RED" />
   </children>
 </AnchorPane>
