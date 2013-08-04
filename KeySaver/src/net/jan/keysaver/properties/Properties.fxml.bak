@@ -10,7 +10,7 @@
 <AnchorPane id="AnchorPane" prefHeight="221.0" prefWidth="428.0" xmlns:fx="http://javafx.com/fxml" fx:controller="net.jan.keysaver.properties.PropertiesController">
   <children>
     <Button fx:id="saveButton" disable="true" layoutX="381.0" layoutY="197.0" mnemonicParsing="false" onAction="#save" text="Save" />
-    <Button cancelButton="true" layoutX="316.0" layoutY="197.0" mnemonicParsing="false" text="Cancel" />
+    <Button cancelButton="true" layoutX="316.0" layoutY="197.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
     <GridPane layoutX="2.0" layoutY="5.0" prefHeight="157.0" prefWidth="424.0">
       <children>
         <Label text="Username" GridPane.columnIndex="0" GridPane.rowIndex="0" />
@@ -20,13 +20,17 @@
         <PasswordField fx:id="pwfield" onKeyReleased="#proofPW" prefWidth="248.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
         <PasswordField fx:id="confirm_pwfield" onKeyReleased="#proofPW" prefWidth="206.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
         <ImageView fx:id="statusImage" fitHeight="31.5" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-        <ImageView fitHeight="70.125" fitWidth="93.5" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
         <TextField fx:id="tf_name" onKeyReleased="#proofName" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" GridPane.columnIndex="1" GridPane.rowIndex="3">
+          <content>
+            <ListView fx:id="iconList" prefHeight="74.0" prefWidth="235.0" />
+          </content>
+        </ScrollPane>
       </children>
       <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="262.0" minWidth="10.0" prefWidth="147.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="320.0" minWidth="10.0" prefWidth="227.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="296.0" minWidth="10.0" prefWidth="50.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="320.0" minWidth="10.0" prefWidth="235.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="296.0" minWidth="10.0" prefWidth="42.0" />
       </columnConstraints>
       <rowConstraints>
         <RowConstraints maxHeight="39.0" minHeight="10.0" prefHeight="21.0" vgrow="SOMETIMES" />

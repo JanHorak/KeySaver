@@ -55,6 +55,8 @@ public class MainpageController implements Initializable {
     @FXML
     private Label lb_catName;
     @FXML
+    private Label lb_confpw;
+    @FXML
     private TextField tf_description;
     @FXML
     private TextField tf_username;
@@ -78,12 +80,19 @@ public class MainpageController implements Initializable {
     private Button btn_trash;
     @FXML
     private Button btn_addKey;
+    @FXML
+    private ImageView pwImage;
+    @FXML
+    private ImageView avatarIV;
+    
     //Images
     private Image addCatImage;
     private Image trashImage;
     private Image keyImage;
     private Image settingImage;
     private Image iconsImage;
+    private Image okImage;
+    private Image nokImage;
     ////////
     
     //MenuItems
@@ -379,18 +388,35 @@ public class MainpageController implements Initializable {
             editCancel();
         }
     }
+    
+    @FXML
+    private void validatePW(){
+            if ( tf_password.getText().equals(tf_passwordConfirm.getText() )){
+                pwImage.setImage(okImage);
+                enableControl(btn_save);
+             }else{
+                pwImage.setImage(nokImage);
+                disableControl(btn_save);
+            }
+    }
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         new FileManager().checkAvailibility();
+        SettingManager sm = new SettingManager();
         catList = fileManager.returnListofCategories();
-        lb_username.setText(new SettingManager().returnProperty("USERNAME"));
+        String userAvatar = sm.returnProperty("AVATAR");
+        lb_username.setText(sm.returnProperty("USERNAME"));
         try {
+            avatarIV.setImage(new Image(new FileInputStream(userAvatar)));
             addCatImage = new Image(new FileInputStream("AppData\\Images\\intern\\addCat_16x16.png"));
             trashImage = new Image(new FileInputStream("AppData\\Images\\intern\\trash_16x16.png"));
             keyImage = new Image(new FileInputStream("AppData\\Images\\intern\\Key_8x16.png"));
             settingImage = new Image(new FileInputStream("AppData\\Images\\intern\\Settings_16x16.png"));
             iconsImage = new Image(new FileInputStream("AppData\\Images\\intern\\IconManagement_16x16.png"));
+            okImage = new Image(new FileInputStream("AppData\\Images\\intern\\Ok_16x16.png"));
+            nokImage = new Image(new FileInputStream("AppData\\Images\\intern\\NOk_16x16.png"));
         } catch (FileNotFoundException ex) {
             Logger.getLogger(MainpageController.class.getName()).log(Level.SEVERE, null, ex);
         }
