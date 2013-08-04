@@ -12,7 +12,12 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,10 +25,15 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import net.jan.keysaver.manager.ErrorManager;
 import net.jan.keysaver.manager.SettingManager;
@@ -48,13 +58,17 @@ public class PropertiesController implements Initializable {
     private ImageView statusImage;
     @FXML
     private Button saveButton;
+    @FXML
+    private ListView<Label> iconList;
+    
     private Image imageOK;
     private Image imageNOK;
     private String nameBuffer;
     private final String PATH_INFODIALOG = "src\\net\\jan\\keysaver\\infodialog\\InfoDialog.fxml";
+    private String selectedAvatar = ""; 
+    private String selectedInitialAvatar ="";
     
     
-
     @FXML
     private void proofPW() {
         if (pwfield.getText().equals(confirm_pwfield.getText())) {
@@ -81,6 +95,7 @@ public class PropertiesController implements Initializable {
             SettingManager sm = new SettingManager();
             sm.storeProperty("USERNAME", tf_name.getText());
             sm.storeProperty("MPW", confirm_pwfield.getText());
+            sm.storeProperty("AVATAR", "AppData\\Images\\Avatars\\"+selectedAvatar);
         } catch (FileNotFoundException ex) {
             ErrorManager.writeToErrorFile("Cant find Error-File", ex);
         } catch (IOException ex) {
@@ -113,9 +128,45 @@ public class PropertiesController implements Initializable {
         }
         tf_name.setText(sm.returnProperty("USERNAME"));
         String mpw = sm.returnProperty("MPW");
+        selectedInitialAvatar = sm.returnProperty("AVATAR");
         pwfield.setText(mpw);
         confirm_pwfield.setText(mpw);
         nameBuffer = tf_name.getText();
+        ObservableList<Label> avatarList = FXCollections.observableArrayList();
+        
+        File dir = new File("AppData\\Images\\Avatars");
+        String[] files = dir.list();
+        int tmpcounter = 0;
+        int position = 0;
+        for (String s : files ){
+            Label l = new Label(s);
+            try {
+                l.setGraphic(new ImageView(new Image(new FileInputStream("AppData\\Images\\Avatars\\" + s))));
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (("AppData\\Images\\Avatars\\" + s).equals(selectedInitialAvatar)){
+                position = tmpcounter;
+            }
+            avatarList.add(l);
+            tmpcounter++;
+        }
+        
+        iconList.setItems(avatarList);
+        iconList.getSelectionModel().select(position);
+        iconList.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            
+            @Override
+            public void handle(MouseEvent t) {
+                selectedAvatar = iconList.getSelectionModel().getSelectedItem().getText();
+                if (("AppData\\Images\\Avatars\\" + selectedAvatar).equals(selectedInitialAvatar)){
+                    saveButton.setDisable(true);
+                }else{
+                    proofName();
+                    proofPW();
+                }
+            }
+        });
     }
     
     private void loadPage(String pathString, String title, double width, double height ) {
