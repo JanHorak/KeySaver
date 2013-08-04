@@ -88,6 +88,7 @@ public class LoginDialogController implements Initializable {
             @Override
             public void handle(KeyEvent t) {
                 if (t.getCode().equals(KeyCode.ENTER)) {
+                    
                 }
             }
         });    
