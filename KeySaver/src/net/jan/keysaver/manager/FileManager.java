@@ -43,7 +43,6 @@ public class FileManager {
     OutputStream outputStream = null;
     BufferedOutputStream bufferedOutputStream = null;
 
-
     public void saveStructure(CategoryList categoryList) {
         prepareSAX();
         List<Category> catList = categoryList.getCategoryList();
@@ -60,17 +59,16 @@ public class FileManager {
             out.writeStartDocument();
             out.writeStartElement("structure");
 
-            for (Category c : catList){
+            for (Category c : catList) {
                 List<Key> keyList = c.getKeylist();
                 out.writeStartElement("category");
                 out.writeAttribute("name", c.getName());
-                
-                if ( keyList.isEmpty() ){
+                out.writeAttribute("icon", c.getIconPath());
+                if (keyList.isEmpty()) {
                     out.writeEmptyElement("keys");
-                }
-                else{
+                } else {
                     out.writeStartElement("keys");
-                    for (Key k : keyList){
+                    for (Key k : keyList) {
                         out.writeEmptyElement("key");
                         out.writeAttribute("keyname", k.getKeyname());
                         out.writeAttribute("username", k.getUsername());
@@ -105,20 +103,21 @@ public class FileManager {
                 XMLStreamWriter out = XMLOutputFactory.newInstance().createXMLStreamWriter(
                         new OutputStreamWriter(outputStream, "utf-8"));
                 out.writeStartDocument();
-                    out.writeStartElement("structure");
-                    out.writeAttribute("name", "categories");
-                    out.writeStartElement("category");
-                    out.writeAttribute("name", "default");
-                        out.writeStartElement("keys");
-                            out.writeEmptyElement("key");
-                            out.writeAttribute("keyname", "defaultKey");
-                            out.writeAttribute("username", "defaultName");
-                            out.writeAttribute("description", "This is a default-Key");
-                            out.writeAttribute("password", "password");
-                        out.writeEndElement();
-                    out.writeEndElement();
-                    out.writeEndElement();
-                        
+                out.writeStartElement("structure");
+                out.writeAttribute("name", "categories");
+                out.writeStartElement("category");
+                out.writeAttribute("name", "default");
+                out.writeAttribute("icon", returnDefaultPath());
+                out.writeStartElement("keys");
+                out.writeEmptyElement("key");
+                out.writeAttribute("keyname", "defaultKey");
+                out.writeAttribute("username", "defaultName");
+                out.writeAttribute("description", "This is a default-Key");
+                out.writeAttribute("password", "password");
+                out.writeEndElement();
+                out.writeEndElement();
+                out.writeEndElement();
+
                 out.writeEndDocument();
                 try {
                     out.close();
@@ -150,7 +149,7 @@ public class FileManager {
             List<Key> keyList = new ArrayList<Key>();
             Element e = (Element) listOfNodes.item(i);
             cat.setName(e.getAttribute("name"));
-
+            cat.setIconPath(e.getAttribute("icon"));
             NodeList keys = e.getElementsByTagName("key");
             for (int j = 0; j < keys.getLength(); j++) {
                 Key k = new Key();
@@ -170,15 +169,15 @@ public class FileManager {
 
         return categoryList;
     }
-    
-    public Key returnKey(String keyName){
+
+    public Key returnKey(String keyName) {
         Key result = new Key();
         prepareSAX();
         NodeList keys = doc.getElementsByTagName("key");
-        
-        for (int i = 0; i < keys.getLength(); i++ ){
+
+        for (int i = 0; i < keys.getLength(); i++) {
             Element e = (Element) keys.item(i);
-            if ( e.getAttribute("keyname").endsWith(keyName) ){
+            if (e.getAttribute("keyname").endsWith(keyName)) {
                 result.setKeyname(keyName);
                 result.setUsername(e.getAttribute("username"));
                 result.setDescription(e.getAttribute("description"));
@@ -186,8 +185,15 @@ public class FileManager {
                 return result;
             }
         }
-        
+
         return result;
+    }
+
+    private String returnDefaultPath() {
+        return "AppData\\" 
+                + "Images\\" 
+                + "intern\\"
+                + "Folder_default_16x16.png";
     }
 
     private void prepareSAX() {
