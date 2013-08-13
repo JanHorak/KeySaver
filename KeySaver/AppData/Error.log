@@ -18,3 +18,33 @@ Exception:
 java.io.FileNotFoundException: C:\Users\Jan Horak\Documents\Development\KeySaver\KeySaver\AppData\structure.xml (Das System kann die angegebene Datei nicht finden)
 ------------------------------------
 
+---------------ERROR---------------
+Time: Wed Aug 07 13:21:04 CEST 2013
+
+Hint from Developer: 
+null
+
+Exception: 
+java.io.FileNotFoundException: C:\Users\Jan Horak\Documents\Development\KeySaver\KeySaver\src\net\jan\keysaver\commomDialogs\KeyAdded.fxml (Das System kann den angegebenen Pfad nicht finden)
+------------------------------------
+
+---------------ERROR---------------
+Time: Mon Aug 12 11:51:19 CEST 2013
+
+Hint from Developer: 
+initialize() -> Failed to load Folder_default_16x16.png
+
+Exception: 
+java.io.FileNotFoundException: AppData\Images\intern\Folder_default_16x16.png (Das System kann die angegebene Datei nicht finden)
+------------------------------------
+
+---------------ERROR---------------
+Time: Mon Aug 12 11:51:19 CEST 2013
+
+Hint from Developer: 
+Init-Tree() -> Iconpath for Category
+
+Exception: 
+java.io.FileNotFoundException: AppData\Images\intern\Folder_default_16x16.png (Das System kann die angegebene Datei nicht finden)
+------------------------------------
+

@@ -16,11 +16,10 @@ import java.util.logging.Logger;
  * @author Jan Horak
  */
 public class ErrorManager {
-    
+
     static String pathErrorFile = "AppData\\Error.log";
-    
-    
-    public static void writeToErrorFile(String errorText, Exception inputEx){
+
+    public static void writeToErrorFile(String errorText, Exception inputEx) {
         Date date = new Date();
         FileWriter fw = null;
         try {
@@ -31,15 +30,19 @@ public class ErrorManager {
         BufferedWriter bw = new BufferedWriter(fw);
         try {
             fw.append("---------------ERROR---------------\n");
-            fw.append("Time: "+date+"\n");
+            fw.append("Time: " + date + "\n");
             fw.append("\n");
             fw.append("Hint from Developer: \n");
-            fw.append(errorText+"\n");
+            if (errorText != null) {
+                fw.append(errorText + "\n");
+            } else {
+                fw.append("No Hint given \n");
+            }
             fw.append("\n");
             fw.append("Exception: \n");
-            if (inputEx != null){
+            if (inputEx != null) {
                 fw.append(inputEx + "\n");
-            }else{
+            } else {
                 fw.append("No Exception given \n");
             }
             fw.append("------------------------------------\n");

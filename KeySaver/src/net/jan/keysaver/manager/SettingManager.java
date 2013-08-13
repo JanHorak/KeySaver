@@ -9,7 +9,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +23,10 @@ public class SettingManager {
 
    private Properties property;
    private String filePathINI = "settings.ini";
+   
+   public SettingManager(String path){
+       filePathINI = path;
+   }
 
     public String returnSetLanguage() throws FileNotFoundException, IOException {
         String result = "";
@@ -58,6 +63,15 @@ public class SettingManager {
        } catch (IOException ex) {
            Logger.getLogger(SettingManager.class.getName()).log(Level.SEVERE, null, ex);
        }
+    }
+    
+    public List<Object> returnAllProperties(){
+        initProperty();
+        List<Object> obList = new ArrayList<>();
+        for ( Object o : property.keySet() ){
+            obList.add(o);
+        }
+        return obList;
     }
     
 }

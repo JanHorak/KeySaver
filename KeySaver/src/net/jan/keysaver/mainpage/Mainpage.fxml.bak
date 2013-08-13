@@ -9,11 +9,11 @@
 
 <AnchorPane id="AnchorPane" prefHeight="464.0" prefWidth="612.0" xmlns:fx="http://javafx.com/fxml" fx:controller="net.jan.keysaver.mainpage.MainpageController">
   <children>
-    <TitledPane animated="false" collapsible="false" layoutY="24.0" prefHeight="440.0" text="Keys">
+    <TitledPane animated="false" collapsible="false" layoutY="24.0" prefHeight="356.0" text="Keys">
       <content>
-        <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+        <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="332.0" prefWidth="200.0">
           <children>
-            <TreeView fx:id="tree" prefHeight="414.0" prefWidth="200.0" />
+            <TreeView fx:id="tree" prefHeight="332.0" prefWidth="200.0" />
           </children>
         </AnchorPane>
       </content>
@@ -28,17 +28,20 @@
         <TextField fx:id="tf_username" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
         <TextField fx:id="tf_description" prefHeight="96.0" prefWidth="202.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
         <Label id="tf_username" fx:id="lb_username" text="\#{Username}" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-        <ImageView fitHeight="53.75" fitWidth="71.66666398640712" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <ImageView fx:id="avatarIV" fitHeight="45.750030233694744" fitWidth="61.000038146972656" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="0" />
         <Label fx:id="lb_confpw" text="Confirm Password" GridPane.columnIndex="0" GridPane.rowIndex="5" />
         <TextField fx:id="tf_password" onKeyReleased="#validatePW" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
         <TextField fx:id="tf_passwordConfirm" onKeyReleased="#validatePW" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
         <Label fx:id="lb_catName" text="Categoryname" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="6" />
         <TextField fx:id="tf_catName" prefWidth="200.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="6" />
         <ImageView fx:id="pwImage" fitHeight="21.24999992161581" fitWidth="28.33333396911621" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+        <CheckBox fx:id="chk_useDefaultIcon" mnemonicParsing="false" onAction="#selectDefaultCheckBox" selected="true" text="Use default Icon" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+        <Button fx:id="btn_browse" disable="true" mnemonicParsing="false" prefWidth="75.0" text="Browse" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+        <ImageView id="pwImage" fx:id="iconPreview" fitHeight="21.24999992161581" fitWidth="28.33333396911621" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="7" />
       </children>
       <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.0" minWidth="10.0" prefWidth="109.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="374.0" minWidth="10.0" prefWidth="254.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.0" minWidth="10.0" prefWidth="115.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="374.0" minWidth="10.0" prefWidth="248.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="334.0" minWidth="10.0" prefWidth="33.0" />
       </columnConstraints>
       <rowConstraints>
@@ -46,6 +49,7 @@
         <RowConstraints maxHeight="144.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="260.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="143.0" minHeight="10.0" prefHeight="94.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="143.0" minHeight="0.0" prefHeight="48.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="143.0" minHeight="0.0" prefHeight="48.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="143.0" minHeight="0.0" prefHeight="48.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="143.0" minHeight="0.0" prefHeight="48.0" vgrow="SOMETIMES" />
@@ -72,7 +76,7 @@
               </content>
             </CustomMenuItem>
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Iconmanagement" fx:id="iconsItem" />
+            <MenuItem mnemonicParsing="false" onAction="#open_Iconsite" text="Iconmanagement" fx:id="iconsItem" />
             <MenuItem mnemonicParsing="false" onAction="#open_Properties" text="Properties" fx:id="settingsItem" />
           </items>
         </Menu>
@@ -93,6 +97,16 @@
             <Button fx:id="btn_addCat" disable="true" layoutX="8.0" layoutY="4.0" mnemonicParsing="false" onAction="#prepareAddCat" text="Add Category" />
             <Button id="btn_addCat" fx:id="btn_trash" disable="true" layoutX="125.0" layoutY="6.0" mnemonicParsing="false" onAction="#remove" text="Remove" />
             <Button id="btn_addCat" fx:id="btn_addKey" disable="true" layoutX="8.0" layoutY="30.0" mnemonicParsing="false" onAction="#prepareAddKey" prefWidth="94.0" text="Add Key" />
+          </children>
+        </AnchorPane>
+      </content>
+    </TitledPane>
+    <TitledPane animated="false" collapsible="false" layoutY="380.0" minWidth="204.0" prefHeight="82.0" prefWidth="204.0" text="Notifications">
+      <content>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+          <children>
+            <Label fx:id="notifyLabel" layoutX="14.0" layoutY="6.0" prefHeight="38.0" prefWidth="174.0" />
+            <Hyperlink layoutX="1.0" layoutY="33.0" onAction="#openErrorFile" text="Errorlog" />
           </children>
         </AnchorPane>
       </content>
