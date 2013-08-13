@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -27,8 +26,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import net.jan.keysaver.manager.SettingManager;
+import net.jan.keysaver.sources.PageLoadHelper;
 
 /**
  * FXML Controller class
@@ -51,11 +50,13 @@ public class LoginDialogController implements Initializable {
     private Button loginButton;
     @FXML
     private Label errorLabel;
+    
+    private final String PATH_MAIN_FRAME = "src\\net\\jan\\keysaver\\mainpage\\Mainpage.fxml";
 
     @FXML
     private void login(ActionEvent actionEvent) {
         if (pwField.getText().equals(pw)) {
-            loadMainPage();
+            new PageLoadHelper(PATH_MAIN_FRAME, "KeySaver2.0", 612, 464);
             //close the Window
             Node source = (Node) actionEvent.getSource();
             Stage stage = (Stage) source.getScene().getWindow();
@@ -64,26 +65,12 @@ public class LoginDialogController implements Initializable {
             errorLabel.setText("Not the right password!");
         }
     }
-
-    private void loadMainPage() {
-        Parent root;
-        try {
-            root = FXMLLoader.load(new File("src\\net\\jan\\keysaver\\mainpage\\Mainpage.fxml").toURL());
-            Stage stage = new Stage();
-            stage.setTitle("KeySaver2.0");
-            stage.setScene(new Scene(root, 612, 464));
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Image image = new Image(new File("AppData\\Images\\Logo_key.png").toURI().toString());
         imageView.setImage(image);
-        pw = new SettingManager().returnProperty("MPW");
+        pw = new SettingManager("settings.ini").returnProperty("MPW");
         pwField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent t) {

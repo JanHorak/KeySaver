@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="366.0" xmlns:fx="http://javafx.com/fxml" fx:controller="net.jan.keysaver.icondialog.IcondialogController">
+  <children>
+    <ListView fx:id="dataList" layoutX="14.0" layoutY="14.0" prefHeight="186.0" prefWidth="338.0" />
+    <Label layoutX="14.0" layoutY="210.0" text="Filename:" />
+    <Label layoutX="14.0" layoutY="237.0" text="Preview:" />
+    <Label layoutX="14.0" layoutY="261.0" text="Size:" />
+    <Label layoutX="14.0" layoutY="288.0" text="Kind of File:" />
+    <Button layoutX="14.0" layoutY="365.0" mnemonicParsing="false" prefWidth="62.0" text="edit" />
+    <Button layoutX="296.0" layoutY="365.0" mnemonicParsing="false" prefWidth="51.0" text="Save" />
+    <Button layoutX="213.0" layoutY="365.0" mnemonicParsing="false" prefWidth="72.0" text="Cancel" />
+    <Label layoutX="104.0" layoutY="210.0" text="Label" />
+    <Label layoutX="104.0" layoutY="237.0" text="Label" />
+    <Label layoutX="104.0" layoutY="261.0" text="Label" />
+    <Label layoutX="104.0" layoutY="288.0" text="Label" />
+  </children>
+</AnchorPane>
