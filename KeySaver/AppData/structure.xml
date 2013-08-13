@@ -1,1 +1,1 @@
-<?xml version="1.0" ?><structure name="categories"><category name="default"><keys><key keyname="defaultKey" username="defaultName" description="This is a default-Key" password="password"/></keys></category></structure>
+<?xml version="1.0" ?><structure><category name="default" icon="AppData\Images\intern\Folder_default_16x16.png"><keys><key keyname="defaultKey" username="defaultName" description="This is a default-Key" password="password"/></keys></category></structure>

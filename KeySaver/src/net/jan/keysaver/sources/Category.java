@@ -16,7 +16,17 @@ public class Category implements Serializable{
     private List<Key> keylist;
     
     private String name;
+    
+    private String iconPath;
 
+    public String getIconPath() {
+        return iconPath;
+    }
+
+    public void setIconPath(String iconPath) {
+        this.iconPath = iconPath;
+    }
+    
     public String getName() {
         return name;
     }

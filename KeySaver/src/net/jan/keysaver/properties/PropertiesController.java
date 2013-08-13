@@ -15,21 +15,14 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -37,6 +30,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import net.jan.keysaver.manager.ErrorManager;
 import net.jan.keysaver.manager.SettingManager;
+import net.jan.keysaver.sources.PageLoadHelper;
 
 /**
  * FXML Controller class
@@ -92,7 +86,7 @@ public class PropertiesController implements Initializable {
     @FXML
     private void save(ActionEvent actionEvent) {
         try {
-            SettingManager sm = new SettingManager();
+            SettingManager sm = new SettingManager("settings.ini");
             sm.storeProperty("USERNAME", tf_name.getText());
             sm.storeProperty("MPW", confirm_pwfield.getText());
             sm.storeProperty("AVATAR", "AppData\\Images\\Avatars\\"+selectedAvatar);
@@ -107,7 +101,7 @@ public class PropertiesController implements Initializable {
         Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
         
-        loadPage(PATH_INFODIALOG, "Information", 343, 59);
+        new PageLoadHelper(PATH_INFODIALOG, "Information", 343, 59);
     }
 
     @FXML
@@ -119,7 +113,7 @@ public class PropertiesController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        SettingManager sm = new SettingManager();
+        SettingManager sm = new SettingManager("settings.ini");
         try {
             imageOK = new Image(new FileInputStream("AppData\\Images\\intern\\Ok_32x32.png"));
             imageNOK = new Image(new FileInputStream("AppData\\Images\\intern\\NOk_32x32.png"));
@@ -169,17 +163,4 @@ public class PropertiesController implements Initializable {
         });
     }
     
-    private void loadPage(String pathString, String title, double width, double height ) {
-        Parent root;
-        try {
-            root = FXMLLoader.load(new File(pathString).toURL());
-            Stage stage = new Stage();
-            stage.setTitle(title);
-            stage.setScene(new Scene(root, width, height));
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
