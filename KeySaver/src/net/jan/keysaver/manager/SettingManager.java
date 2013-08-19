@@ -9,11 +9,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -22,17 +23,22 @@ import java.util.logging.Logger;
 public class SettingManager {
 
    private Properties property;
-   private String filePathINI = "settings.ini";
+   private String filePathINI = "";
    
    public SettingManager(String path){
        filePathINI = path;
    }
+   
+   public Properties initAndReturnProperties() throws IOException{
+       initProperty();
+       return this.property;
+   }
 
-    public String returnSetLanguage() throws FileNotFoundException, IOException {
+    public String returnSetLanguage() throws IOException {
         String result = "";
         initProperty();
         result = property.getProperty("LANG");
-        System.out.println("Initial Language founded: " + result);
+        System.out.println("Language founded: " + result);
         return result;
     }
 
@@ -40,7 +46,7 @@ public class SettingManager {
         initProperty();
         property.setProperty("LANG", lang);
         property.store(new FileOutputStream(new File(filePathINI)), "");
-        System.out.println("Saved initial Language Successfully: " + lang);
+        System.out.println("Saved Language: " + lang);
     }
     
     public void storeProperty(String key, String value) throws FileNotFoundException, IOException {
@@ -49,23 +55,22 @@ public class SettingManager {
         property.store(new FileOutputStream(new File(filePathINI)), "");
     }
     
-    public String returnProperty(String propertyKey){
+    public String returnProperty(String propertyKey) throws IOException{
         initProperty();
-        String result = property.getProperty(propertyKey);
+        String tmp = property.getProperty(propertyKey);
+        String result = new String(tmp.getBytes(), Charset.forName("UTF-8"));
         return result;
     }
     
     
-    private void initProperty(){
+    private void initProperty() throws IOException{
         property = new Properties();
-       try {
-           property.load(new FileInputStream(new File(filePathINI)));
-       } catch (IOException ex) {
-           Logger.getLogger(SettingManager.class.getName()).log(Level.SEVERE, null, ex);
-       }
+        Reader r = new InputStreamReader(new FileInputStream(new File(filePathINI)), "UTF8");
+        property.load(r);
     }
     
-    public List<Object> returnAllProperties(){
+    // Special Method for the ObList in IcondialogController.java
+    public List<Object> returnAllProperties() throws IOException{
         initProperty();
         List<Object> obList = new ArrayList<>();
         for ( Object o : property.keySet() ){
@@ -73,5 +78,7 @@ public class SettingManager {
         }
         return obList;
     }
+    
+    
     
 }
