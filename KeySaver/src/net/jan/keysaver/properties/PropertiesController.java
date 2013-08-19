@@ -20,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
@@ -28,7 +29,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import net.jan.keysaver.manager.ErrorManager;
+import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.manager.SettingManager;
 import net.jan.keysaver.sources.PageLoadHelper;
 
@@ -51,56 +52,101 @@ public class PropertiesController implements Initializable {
     @FXML
     private ImageView statusImage;
     @FXML
-    private Button saveButton;
+    private Button btn_save;
+    @FXML
+    private Button btn_cancel;
     @FXML
     private ListView<Label> iconList;
+    @FXML
+    private CheckBox chk_debug;
+    
+    @FXML
+    private Label lb_username;
+    @FXML
+    private Label lb_pw;
+    @FXML
+    private Label lb_confirmPW;
+    @FXML
+    private Label lb_image;
+    @FXML
+    private Label lb_debugmode;
+    
     
     private Image imageOK;
     private Image imageNOK;
     private String nameBuffer;
     private final String PATH_INFODIALOG = "src\\net\\jan\\keysaver\\infodialog\\InfoDialog.fxml";
-    private String selectedAvatar = ""; 
-    private String selectedInitialAvatar ="";
-    
-    
+    private String selectedAvatar = "";
+    private String selectedInitialAvatar = "";
+    SettingManager sm_main = new SettingManager("settings.ini");
+    SettingManager sm_langDE = new SettingManager("AppData\\Lang_DE.properties");
+    SettingManager sm_langEN = new SettingManager("AppData\\Lang_EN.properties");
+    private int debug = 0;
+    private int debugBuffer = 0;
+    private String lang = "";
+
     @FXML
     private void proofPW() {
         if (pwfield.getText().equals(confirm_pwfield.getText())) {
             statusImage.setImage(imageOK);
-            saveButton.setDisable(false);
+            btn_save.setDisable(false);
         } else {
             statusImage.setImage(imageNOK);
-            saveButton.setDisable(true);
+            btn_save.setDisable(true);
         }
     }
 
     @FXML
     private void proofName() {
         if (nameBuffer.equals(tf_name.getText())) {
-            saveButton.setDisable(true);
+            btn_save.setDisable(true);
         } else {
-            saveButton.setDisable(false);
+            btn_save.setDisable(false);
+        }
+    }
+    
+    @FXML
+    private void proofDebug() {
+        if ( chk_debug.isSelected() ){
+            debug = 1;
+        }else {
+            debug = 0;
+        }
+        if (debugBuffer == debug) {
+            btn_save.setDisable(true);
+        } else {
+            btn_save.setDisable(false);
         }
     }
 
     @FXML
     private void save(ActionEvent actionEvent) {
+        if ( chk_debug.isSelected() ){
+            debug = 1;
+        } else {
+            debug = 0;
+        }
         try {
-            SettingManager sm = new SettingManager("settings.ini");
-            sm.storeProperty("USERNAME", tf_name.getText());
-            sm.storeProperty("MPW", confirm_pwfield.getText());
-            sm.storeProperty("AVATAR", "AppData\\Images\\Avatars\\"+selectedAvatar);
+            sm_main = new SettingManager("settings.ini");
+            sm_main.storeProperty("USERNAME", tf_name.getText());
+            sm_main.storeProperty("MPW", confirm_pwfield.getText());
+            if ( selectedAvatar.equals("") ){
+                sm_main.storeProperty("AVATAR", selectedInitialAvatar);
+            } else {
+                sm_main.storeProperty("AVATAR", "AppData\\Images\\Avatars\\" + selectedAvatar);
+            }
+            sm_main.storeProperty("DEBUG", String.valueOf(debug));
         } catch (FileNotFoundException ex) {
-            ErrorManager.writeToErrorFile("Cant find Error-File", ex);
+            LoggingManager.writeToErrorFile("Cant find Error-File", ex);
         } catch (IOException ex) {
-            ErrorManager.writeToErrorFile(null, ex);
+            LoggingManager.writeToErrorFile(null, ex);
         }
 
         //close
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
-        
+
         new PageLoadHelper(PATH_INFODIALOG, "Information", 343, 59);
     }
 
@@ -113,54 +159,118 @@ public class PropertiesController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        SettingManager sm = new SettingManager("settings.ini");
+        try {
+            lang = sm_main.returnProperty("LANG");
+        } catch (IOException ex) {
+            Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        initLanguage();
+        try {
+            debug = Integer.decode(sm_main.returnProperty("DEBUG"));
+            debugBuffer = debug;
+            if (debug == 0) {
+                chk_debug.setSelected(false);
+            }
+            if (debug == 1) {
+                chk_debug.setSelected(true);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
         try {
             imageOK = new Image(new FileInputStream("AppData\\Images\\intern\\Ok_32x32.png"));
             imageNOK = new Image(new FileInputStream("AppData\\Images\\intern\\NOk_32x32.png"));
         } catch (FileNotFoundException ex) {
-            ErrorManager.writeToErrorFile("Error at loading Images", ex);
+            LoggingManager.writeToErrorFile("Error at loading Images", ex);
         }
-        tf_name.setText(sm.returnProperty("USERNAME"));
-        String mpw = sm.returnProperty("MPW");
-        selectedInitialAvatar = sm.returnProperty("AVATAR");
+        try {
+            tf_name.setText(sm_main.returnProperty("USERNAME"));
+        } catch (IOException ex) {
+            LoggingManager.writeToErrorFile(null, ex);
+        }
+        String mpw = "";
+        try {
+            mpw = sm_main.returnProperty("MPW");
+        } catch (IOException ex) {
+            LoggingManager.writeToErrorFile(null, ex);
+        }
+        try {
+            selectedInitialAvatar = sm_main.returnProperty("AVATAR");
+        } catch (IOException ex) {
+            LoggingManager.writeToErrorFile(null, ex);
+        }
         pwfield.setText(mpw);
         confirm_pwfield.setText(mpw);
         nameBuffer = tf_name.getText();
         ObservableList<Label> avatarList = FXCollections.observableArrayList();
-        
+
         File dir = new File("AppData\\Images\\Avatars");
         String[] files = dir.list();
         int tmpcounter = 0;
         int position = 0;
-        for (String s : files ){
+        for (String s : files) {
             Label l = new Label(s);
             try {
                 l.setGraphic(new ImageView(new Image(new FileInputStream("AppData\\Images\\Avatars\\" + s))));
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            if (("AppData\\Images\\Avatars\\" + s).equals(selectedInitialAvatar)){
+            if (("AppData\\Images\\Avatars\\" + s).equals(selectedInitialAvatar)) {
                 position = tmpcounter;
             }
             avatarList.add(l);
             tmpcounter++;
         }
-        
+
         iconList.setItems(avatarList);
         iconList.getSelectionModel().select(position);
         iconList.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            
             @Override
             public void handle(MouseEvent t) {
                 selectedAvatar = iconList.getSelectionModel().getSelectedItem().getText();
-                if (("AppData\\Images\\Avatars\\" + selectedAvatar).equals(selectedInitialAvatar)){
-                    saveButton.setDisable(true);
-                }else{
+                if (("AppData\\Images\\Avatars\\" + selectedAvatar).equals(selectedInitialAvatar)) {
+                    btn_save.setDisable(true);
+                } else {
                     proofName();
                     proofPW();
+                    proofDebug();
                 }
             }
         });
     }
+    
+    private void initLanguage(){
+        if ( lang.equals("DE") ){
+            try {
+                lb_username.setText(sm_langDE.returnProperty("USERNAME"));
+                lb_pw.setText(sm_langDE.returnProperty("PASSWORD"));
+                lb_confirmPW.setText(sm_langDE.returnProperty("CONFPASSWORD"));
+                lb_image.setText(sm_langDE.returnProperty("AVATAR"));
+                lb_debugmode.setText(sm_langDE.returnProperty("DEBUG"));
+                chk_debug.setText(sm_langDE.returnProperty("ACTIVATE"));
+                btn_save.setText(sm_langDE.returnProperty("SAVE"));
+                btn_cancel.setText(sm_langDE.returnProperty("CANCEL"));
+            } catch (IOException ex) {
+                Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if ( lang.equals("EN") ){
+            try {
+                lb_username.setText(sm_langEN.returnProperty("USERNAME"));
+                lb_pw.setText(sm_langEN.returnProperty("PASSWORD"));
+                lb_confirmPW.setText(sm_langEN.returnProperty("CONFPASSWORD"));
+                lb_image.setText(sm_langEN.returnProperty("AVATAR"));
+                lb_debugmode.setText(sm_langEN.returnProperty("DEBUG"));
+                chk_debug.setText(sm_langEN.returnProperty("ACTIVATE"));
+                btn_save.setText(sm_langEN.returnProperty("SAVE"));
+                btn_cancel.setText(sm_langEN.returnProperty("CANCEL"));
+            } catch (IOException ex) {
+                Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     
 }

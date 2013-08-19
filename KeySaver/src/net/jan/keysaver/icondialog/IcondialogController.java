@@ -7,6 +7,7 @@ package net.jan.keysaver.icondialog;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.manager.SettingManager;
 
 /**
@@ -51,7 +53,11 @@ public class IcondialogController implements Initializable {
         ObservableList<String> data = FXCollections.observableArrayList();
         final SettingManager sm = new SettingManager("AppData\\icons.properties");
         List<Object> obList = new ArrayList<>();
-        obList = sm.returnAllProperties();
+        try {
+            obList = sm.returnAllProperties();
+        } catch (IOException ex) {
+            LoggingManager.writeToErrorFile("IcondialogController: Failed to load ObjectList", ex);
+        }
         for (Object o : obList) {
             data.add(o.toString());
         }
@@ -74,13 +80,20 @@ public class IcondialogController implements Initializable {
                 try {
                     image = new ImageView(new Image(new FileInputStream(sm.returnProperty(selectedProperty))));
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(IcondialogController.class.getName()).log(Level.SEVERE, null, ex);
+                    LoggingManager.writeToErrorFile(null, ex);
+                } catch (IOException ex) {
+                    LoggingManager.writeToErrorFile(null, ex);
                 }
                 return image;
             }
             
             private String getFileName(){
-                String tmp = sm.returnProperty(selectedProperty);
+                String tmp = "";
+                try {
+                    tmp = sm.returnProperty(selectedProperty);
+                } catch (IOException ex) {
+                    LoggingManager.writeToErrorFile(null, ex);
+                }
                 File f = new File(tmp);
                 return f.getName();
             }
@@ -90,7 +103,12 @@ public class IcondialogController implements Initializable {
             }
             
             private String getSuffix(){
-                String tmp = sm.returnProperty(selectedProperty);
+                String tmp = "";
+                try {
+                    tmp = sm.returnProperty(selectedProperty);
+                } catch (IOException ex) {
+                    LoggingManager.writeToErrorFile(null, ex);
+                }
                 String suffix = "unknown";
                 if ( tmp.endsWith(".jpg") || tmp.endsWith(".JPG") ){
                     suffix = "JPG";
