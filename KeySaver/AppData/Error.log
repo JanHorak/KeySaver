@@ -1,50 +1,20 @@
 ---------------ERROR---------------
-Time: Mon Jul 22 12:59:05 CEST 2013
+Time: Sun Aug 18 15:52:41 CEST 2013
 
 Hint from Developer: 
-SAX: Cant load XML-File
+No Hint given 
 
 Exception: 
-java.io.FileNotFoundException: C:\Users\Jan Horak\Documents\Development\KeySaver\KeySaver\AppData\structure.xml (Das System kann die angegebene Datei nicht finden)
+java.io.FileNotFoundException: AppData\Lang_EN.properties (Das System kann die angegebene Datei nicht finden)
 ------------------------------------
 
 ---------------ERROR---------------
-Time: Thu Aug 01 10:36:59 CEST 2013
+Time: Sun Aug 18 15:52:41 CEST 2013
 
 Hint from Developer: 
-SAX: Cant load XML-File
+startNotification()
 
 Exception: 
-java.io.FileNotFoundException: C:\Users\Jan Horak\Documents\Development\KeySaver\KeySaver\AppData\structure.xml (Das System kann die angegebene Datei nicht finden)
-------------------------------------
-
----------------ERROR---------------
-Time: Wed Aug 07 13:21:04 CEST 2013
-
-Hint from Developer: 
-null
-
-Exception: 
-java.io.FileNotFoundException: C:\Users\Jan Horak\Documents\Development\KeySaver\KeySaver\src\net\jan\keysaver\commomDialogs\KeyAdded.fxml (Das System kann den angegebenen Pfad nicht finden)
-------------------------------------
-
----------------ERROR---------------
-Time: Mon Aug 12 11:51:19 CEST 2013
-
-Hint from Developer: 
-initialize() -> Failed to load Folder_default_16x16.png
-
-Exception: 
-java.io.FileNotFoundException: AppData\Images\intern\Folder_default_16x16.png (Das System kann die angegebene Datei nicht finden)
-------------------------------------
-
----------------ERROR---------------
-Time: Mon Aug 12 11:51:19 CEST 2013
-
-Hint from Developer: 
-Init-Tree() -> Iconpath for Category
-
-Exception: 
-java.io.FileNotFoundException: AppData\Images\intern\Folder_default_16x16.png (Das System kann die angegebene Datei nicht finden)
+java.io.FileNotFoundException: AppData\Lang_EN.properties (Das System kann die angegebene Datei nicht finden)
 ------------------------------------
 

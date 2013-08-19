@@ -15,9 +15,10 @@ import java.util.logging.Logger;
  *
  * @author Jan Horak
  */
-public class ErrorManager {
+public class LoggingManager {
 
     static String pathErrorFile = "AppData\\Error.log";
+    static String pathLoggingFile = "AppData\\Logging.log";
 
     public static void writeToErrorFile(String errorText, Exception inputEx) {
         Date date = new Date();
@@ -25,7 +26,7 @@ public class ErrorManager {
         try {
             fw = new FileWriter(pathErrorFile, true);
         } catch (IOException ex) {
-            Logger.getLogger(ErrorManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoggingManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         BufferedWriter bw = new BufferedWriter(fw);
         try {
@@ -50,7 +51,25 @@ public class ErrorManager {
             fw.close();
             System.err.println("New Entry in Errorlog!");
         } catch (IOException ex) {
-            Logger.getLogger(ErrorManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoggingManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    public static void writeToLogFile(String LogText) {
+        Date date = new Date();
+        FileWriter fw = null;
+        try {
+            fw = new FileWriter(pathLoggingFile, true);
+        } catch (IOException ex) {
+            Logger.getLogger(LoggingManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        BufferedWriter bw = new BufferedWriter(fw);
+        try {
+            fw.append(date + ": " + LogText+"\n");
+            
+        } catch (IOException ex) {
+            Logger.getLogger(LoggingManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

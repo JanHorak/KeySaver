@@ -8,14 +8,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -26,6 +25,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.manager.SettingManager;
 import net.jan.keysaver.sources.PageLoadHelper;
 
@@ -70,7 +70,11 @@ public class LoginDialogController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         Image image = new Image(new File("AppData\\Images\\Logo_key.png").toURI().toString());
         imageView.setImage(image);
-        pw = new SettingManager("settings.ini").returnProperty("MPW");
+        try {
+            pw = new SettingManager("settings.ini").returnProperty("MPW");
+        } catch (IOException ex) {
+            LoggingManager.writeToErrorFile(null, ex);
+        }
         pwField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent t) {

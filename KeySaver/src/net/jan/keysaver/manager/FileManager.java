@@ -51,7 +51,7 @@ public class FileManager {
             try {
                 outputStream = new FileOutputStream(new File(path));
             } catch (FileNotFoundException ex) {
-                ErrorManager.writeToErrorFile("File not found! XML", ex);
+                LoggingManager.writeToErrorFile("File not found! XML", ex);
             }
 
             XMLStreamWriter out = XMLOutputFactory.newInstance().createXMLStreamWriter(
@@ -83,9 +83,9 @@ public class FileManager {
             out.close();
             outputStream.close();
         } catch (XMLStreamException ex) {
-            ErrorManager.writeToErrorFile(null, ex);
+            LoggingManager.writeToErrorFile(null, ex);
         } catch (UnsupportedEncodingException ex) {
-            ErrorManager.writeToErrorFile(null, ex);
+            LoggingManager.writeToErrorFile(null, ex);
         } catch (IOException ex) {
             Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -97,7 +97,7 @@ public class FileManager {
                 try {
                     outputStream = new FileOutputStream(new File(path));
                 } catch (FileNotFoundException ex) {
-                    ErrorManager.writeToErrorFile("File not found! XML", ex);
+                    LoggingManager.writeToErrorFile("File not found! XML", ex);
                 }
 
                 XMLStreamWriter out = XMLOutputFactory.newInstance().createXMLStreamWriter(
@@ -123,13 +123,13 @@ public class FileManager {
                     out.close();
                     outputStream.close();
                 } catch (XMLStreamException | IOException ex) {
-                    ErrorManager.writeToErrorFile("Cant close XMLOutWriter or OutputStream", ex);
+                    LoggingManager.writeToErrorFile("Cant close XMLOutWriter or OutputStream", ex);
                 }
                 System.out.println("First Start: List of Categories not existing. Created and initialized it!");
             } catch (XMLStreamException ex) {
-                ErrorManager.writeToErrorFile(null, ex);
+                LoggingManager.writeToErrorFile(null, ex);
             } catch (UnsupportedEncodingException ex) {
-                ErrorManager.writeToErrorFile(null, ex);
+                LoggingManager.writeToErrorFile(null, ex);
             }
         } else {
             System.out.println("Category-File founded");
@@ -201,14 +201,14 @@ public class FileManager {
         try {
             dBuilder = dbFactory.newDocumentBuilder();
         } catch (ParserConfigurationException ex) {
-            ErrorManager.writeToErrorFile("SAX: Cant load db-Factory!", ex);
+            LoggingManager.writeToErrorFile("SAX: Cant load db-Factory!", ex);
         }
         try {
             doc = dBuilder.parse(path);
         } catch (SAXException ex) {
-            ErrorManager.writeToErrorFile("SAX-Parse-Exception!", ex);
+            LoggingManager.writeToErrorFile("SAX-Parse-Exception!", ex);
         } catch (IOException ex) {
-            ErrorManager.writeToErrorFile("SAX: Cant load XML-File", ex);
+            LoggingManager.writeToErrorFile("SAX: Cant load XML-File", ex);
         }
     }
 }

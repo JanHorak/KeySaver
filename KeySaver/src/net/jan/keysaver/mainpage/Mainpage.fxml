@@ -6,10 +6,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane id="AnchorPane" prefHeight="464.0" prefWidth="612.0" xmlns:fx="http://javafx.com/fxml" fx:controller="net.jan.keysaver.mainpage.MainpageController">
   <children>
-    <TitledPane animated="false" collapsible="false" layoutY="24.0" prefHeight="356.0" text="Keys">
+    <TitledPane fx:id="keyPane" animated="false" collapsible="false" layoutY="24.0" prefHeight="356.0" text="Keys">
       <content>
         <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="332.0" prefWidth="200.0">
           <children>
@@ -20,14 +21,14 @@
     </TitledPane>
     <GridPane layoutX="209.0" layoutY="30.0" prefHeight="323.0" prefWidth="396.0">
       <children>
-        <Label text="Keyname" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-        <Label text="Username" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-        <Label alignment="TOP_LEFT" text="Description" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-        <Label text="Password" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+        <Label fx:id="lb_keyname" text="Keyname" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <Label fx:id="lb_username" text="Username" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <Label fx:id="lb_description" alignment="TOP_LEFT" text="Description" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+        <Label fx:id="lb_password" text="Password" GridPane.columnIndex="0" GridPane.rowIndex="4" />
         <TextField fx:id="tf_keyname" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
         <TextField fx:id="tf_username" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
         <TextField fx:id="tf_description" prefHeight="96.0" prefWidth="202.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-        <Label id="tf_username" fx:id="lb_username" text="\#{Username}" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <Label id="tf_username" fx:id="lb_dynamicUserName" text="\#{Username}" GridPane.columnIndex="0" GridPane.rowIndex="0" />
         <ImageView fx:id="avatarIV" fitHeight="45.750030233694744" fitWidth="61.000038146972656" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="0" />
         <Label fx:id="lb_confpw" text="Confirm Password" GridPane.columnIndex="0" GridPane.rowIndex="5" />
         <TextField fx:id="tf_password" onKeyReleased="#validatePW" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
@@ -36,7 +37,7 @@
         <TextField fx:id="tf_catName" prefWidth="200.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="6" />
         <ImageView fx:id="pwImage" fitHeight="21.24999992161581" fitWidth="28.33333396911621" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="5" />
         <CheckBox fx:id="chk_useDefaultIcon" mnemonicParsing="false" onAction="#selectDefaultCheckBox" selected="true" text="Use default Icon" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="7" />
-        <Button fx:id="btn_browse" disable="true" mnemonicParsing="false" prefWidth="75.0" text="Browse" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+        <Button fx:id="btn_browse" disable="true" mnemonicParsing="false" onAction="#browseImage" prefWidth="75.0" text="Browse" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="7" />
         <ImageView id="pwImage" fx:id="iconPreview" fitHeight="21.24999992161581" fitWidth="28.33333396911621" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="7" />
       </children>
       <columnConstraints>
@@ -55,24 +56,24 @@
         <RowConstraints maxHeight="143.0" minHeight="0.0" prefHeight="48.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
-    <MenuBar prefWidth="612.0">
+    <MenuBar fx:id="menuBar" prefWidth="612.0">
       <menus>
-        <Menu mnemonicParsing="false" text="File">
+        <Menu mnemonicParsing="false" text="File" fx:id="fileMenu">
           <items>
             <MenuItem mnemonicParsing="false" text="Close" />
           </items>
         </Menu>
-        <Menu mnemonicParsing="false" text="Edit">
+        <Menu mnemonicParsing="false" text="Edit" fx:id="editMenu">
           <items>
-            <MenuItem disable="true" mnemonicParsing="false" text="Language" />
+            <MenuItem disable="true" mnemonicParsing="false" text="Language" fx:id="languageItem" />
             <CustomMenuItem mnemonicParsing="false" text="Unspecified Action">
               <content>
-                <CheckBox selected="true" styleClass="menu-item, custom-menu-item" text="English" />
+                <CheckBox id="englishMI" fx:id="chk_englishLang" onAction="#changeLangEN" selected="true" styleClass="menu-item, custom-menu-item" text="English" />
               </content>
             </CustomMenuItem>
             <CustomMenuItem mnemonicParsing="false" text="Unspecified Action">
               <content>
-                <CheckBox styleClass="menu-item, custom-menu-item" text="German" />
+                <CheckBox id="germanMI" fx:id="chk_germanLang" onAction="#changeLangDE" styleClass="menu-item, custom-menu-item" text="German" />
               </content>
             </CustomMenuItem>
             <SeparatorMenuItem mnemonicParsing="false" />
@@ -80,36 +81,45 @@
             <MenuItem mnemonicParsing="false" onAction="#open_Properties" text="Properties" fx:id="settingsItem" />
           </items>
         </Menu>
-        <Menu mnemonicParsing="false" text="Help">
+        <Menu mnemonicParsing="false" text="Help" fx:id="helpMenu">
           <items>
             <MenuItem mnemonicParsing="false" text="About" />
           </items>
         </Menu>
       </menus>
     </MenuBar>
-    <TitledPane animated="false" collapsible="false" layoutX="209.0" layoutY="380.0" prefHeight="82.0" prefWidth="396.0" text="Actions">
+    <TitledPane fx:id="actionPane" animated="false" collapsible="false" layoutX="209.0" layoutY="380.0" prefHeight="82.0" prefWidth="396.0" text="Actions">
       <content>
         <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
           <children>
-            <Button fx:id="btn_save" disable="true" layoutX="333.0" layoutY="4.0" mnemonicParsing="false" onAction="#save" text="Save" />
-            <Button fx:id="btn_edit" disable="true" layoutX="284.0" layoutY="4.0" mnemonicParsing="false" onAction="#edit" text="Edit" />
-            <Button fx:id="btn_cancel" disable="true" layoutX="221.0" layoutY="5.0" mnemonicParsing="false" onAction="#editCancel" text="Cancel" />
-            <Button fx:id="btn_addCat" disable="true" layoutX="8.0" layoutY="4.0" mnemonicParsing="false" onAction="#prepareAddCat" text="Add Category" />
-            <Button id="btn_addCat" fx:id="btn_trash" disable="true" layoutX="125.0" layoutY="6.0" mnemonicParsing="false" onAction="#remove" text="Remove" />
-            <Button id="btn_addCat" fx:id="btn_addKey" disable="true" layoutX="8.0" layoutY="30.0" mnemonicParsing="false" onAction="#prepareAddKey" prefWidth="94.0" text="Add Key" />
+            <Button fx:id="btn_edit" disable="true" mnemonicParsing="false" onAction="#edit" prefWidth="93.0" text="Edit" AnchorPane.rightAnchor="81.0" AnchorPane.topAnchor="30.0">
+              <font>
+                <Font size="10.5" fx:id="x1" />
+              </font>
+            </Button>
+            <Button fx:id="btn_cancel" disable="true" font="$x1" mnemonicParsing="false" onAction="#editCancel" prefWidth="93.0" text="Cancel" AnchorPane.rightAnchor="185.0" AnchorPane.topAnchor="30.0" />
+            <Button fx:id="btn_addCat" disable="true" font="$x1" layoutX="8.0" layoutY="4.0" mnemonicParsing="false" onAction="#prepareAddCat" prefWidth="145.0" text="Add Category" />
+            <Button id="btn_addCat" fx:id="btn_remove" disable="true" font="$x1" mnemonicParsing="false" onAction="#remove" prefWidth="93.0" text="Remove" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
+            <Button id="btn_addCat" fx:id="btn_addKey" disable="true" font="$x1" mnemonicParsing="false" onAction="#prepareAddKey" prefWidth="114.0" text="Add Key" AnchorPane.rightAnchor="115.0" AnchorPane.topAnchor="5.0" />
+            <Button fx:id="btn_save" disable="true" font="$x1" mnemonicParsing="false" onAction="#save" prefWidth="68.0" text="Save" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="30.0" />
           </children>
         </AnchorPane>
       </content>
     </TitledPane>
-    <TitledPane animated="false" collapsible="false" layoutY="380.0" minWidth="204.0" prefHeight="82.0" prefWidth="204.0" text="Notifications">
+    <TitledPane fx:id="notificationPane" animated="false" collapsible="false" layoutY="380.0" minWidth="204.0" prefHeight="82.0" prefWidth="204.0" text="Notifications">
       <content>
         <AnchorPane prefHeight="200.0" prefWidth="200.0">
           <children>
             <Label fx:id="notifyLabel" layoutX="14.0" layoutY="6.0" prefHeight="38.0" prefWidth="174.0" />
-            <Hyperlink layoutX="21.0" layoutY="17.0" onAction="#openErrorFile" prefHeight="24.9998779296875" prefWidth="160.0" />
+            <Hyperlink fx:id="errorLogHyperlink" disable="true" layoutX="21.0" layoutY="17.0" minHeight="16.0" onAction="#openErrorFile" prefHeight="24.0" prefWidth="160.0" />
           </children>
         </AnchorPane>
       </content>
     </TitledPane>
+    <Label fx:id="pathLabel" layoutX="324.0" layoutY="353.0" prefHeight="21.0" prefWidth="248.0">
+      <font>
+        <Font size="8.0" />
+      </font>
+    </Label>
   </children>
 </AnchorPane>
