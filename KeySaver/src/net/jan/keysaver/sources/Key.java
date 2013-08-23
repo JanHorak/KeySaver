@@ -13,7 +13,7 @@ import javafx.scene.input.KeyEvent;
  *
  * @author Jan Horak
  */
-public class Key implements Serializable{
+public class Key{
     
     private String keyname;
     
@@ -55,9 +55,6 @@ public class Key implements Serializable{
         this.password = password;
     }
 
-    public void setOnKeyReleased(EventHandler<KeyEvent> eventHandler) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
     public void overwriteKey(Key newKey){
         this.keyname = newKey.getKeyname();

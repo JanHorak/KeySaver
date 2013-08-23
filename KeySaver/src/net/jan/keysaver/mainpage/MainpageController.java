@@ -45,7 +45,9 @@ import net.jan.keysaver.sources.Category;
 import net.jan.keysaver.sources.CategoryList;
 import net.jan.keysaver.sources.EnumNotification;
 import net.jan.keysaver.sources.Key;
+import net.jan.keysaver.sources.Language_Singleton;
 import net.jan.keysaver.sources.PageLoadHelper;
+import net.jan.keysaver.validators.Validator;
 
 /**
  *
@@ -147,6 +149,7 @@ public class MainpageController implements Initializable {
     private Image iconsImage;
     private Image okImage;
     private Image nokImage;
+    private Image warningImage;
     ////////
     //Panes
     @FXML
@@ -175,9 +178,10 @@ public class MainpageController implements Initializable {
     private String selectedLanguage = "unknown";
     private SettingManager sm_main;
     private SettingManager sm_icons;
-    private SettingManager sm_languageDE;
-    private SettingManager sm_languageEN;
     private int debug = 0;
+    private String addString = "";
+    private String addString2 = "";
+    Language_Singleton languageBean;
 
     @FXML
     private void edit() {
@@ -195,7 +199,7 @@ public class MainpageController implements Initializable {
             lockTree();
             lockFields();
             setControlVisible(lb_catName, tf_catName);
-            disableControl(btn_addCat, btn_edit, btn_remove);
+            disableControl(btn_addCat, btn_edit, btn_remove, btn_addKey);
             enableControl(btn_save, btn_cancel);
             tf_catName.setText(tmpBuffer);
             editCat = true;
@@ -208,7 +212,7 @@ public class MainpageController implements Initializable {
         setControlVisible(lb_catName, tf_catName, chk_useDefaultIcon, btn_browse);
         disableControl(btn_edit, btn_addCat, btn_remove, btn_addKey);
         enableControl(btn_cancel, btn_save);
-        btn_save.setText("Add");
+        btn_save.setText(addString2);
         addCat = true;
         if (iconPreview.getImage() == null) {
             try {
@@ -231,7 +235,7 @@ public class MainpageController implements Initializable {
         enableControl(btn_cancel, btn_save);
         // Textfields
         enableControl(tf_keyname, tf_description, tf_password, tf_passwordConfirm, tf_username);
-        btn_save.setText("Save");
+        btn_save.setText(addString);
         addKey = true;
         System.out.println("AddKey detected - " + addKey);
         lockTree();
@@ -243,7 +247,7 @@ public class MainpageController implements Initializable {
         unlockTree();
         setControlUnvisible(lb_catName, tf_catName, btn_browse, chk_useDefaultIcon);
         disableControl(btn_edit, btn_save, btn_addCat, btn_addKey, btn_cancel, btn_remove);
-        btn_save.setText("Save");
+        btn_save.setText(addString);
         tf_catName.setText("");
         addCat = false;
         editKey = false;
@@ -343,6 +347,9 @@ public class MainpageController implements Initializable {
             String catname = tf_catName.getText();
             Category cat = new Category();
             cat.setName(catname);
+
+
+
             iconPreview.setVisible(true);
             if (chk_useDefaultIcon.isSelected()) {
                 cat.setIconPath("AppData\\Images\\intern\\Folder_default_16x16.png");
@@ -368,7 +375,6 @@ public class MainpageController implements Initializable {
         }
         // Change existing name of Cat
         if (editCat) {
-            //VALIDATION IS MISSING
             for (Category cat : catList.getCategoryList()) {
                 if (cat.getName().equals(tmpBuffer)) {
                     cat.setName(tf_catName.getText());
@@ -383,58 +389,75 @@ public class MainpageController implements Initializable {
 
         if (editKey) {
             Key oldKey = keyBuffer;
-            editedKey.setKeyname(tf_keyname.getText());
-            editedKey.setDescription(tf_description.getText());
-            editedKey.setPassword(tf_passwordConfirm.getText());
-            editedKey.setUsername(tf_username.getText());
+            editedKey.setKeyname(tf_keyname.getText().trim());
+            editedKey.setDescription(tf_description.getText().trim());
+            editedKey.setPassword(tf_passwordConfirm.getText().trim());
+            editedKey.setUsername(tf_username.getText().trim());
 
             List<Category> cat = catList.getCategoryList();
             boolean stop = false;
-            //VALIDATION IS MISSING
-            for (Category c : cat) {
-                List<Key> keyList = c.getKeylist();
-                for (Key k : keyList) {
-                    if (stop) {
-                        break;
-                    }
-                    if (k.getKeyname().equals(oldKey.getKeyname())) {
-                        k.overwriteKey(editedKey);
-                        c.setKeylist(keyList);
-                        stop = true;
-                    }
-                }
 
+            //Validation of the Key
+            if (new Validator().validateKey(editedKey)) {
+
+                for (Category c : cat) {
+                    List<Key> keyList = c.getKeylist();
+                    for (Key k : keyList) {
+                        if (stop) {
+                            break;
+                        }
+                        if (k.getKeyname().equals(oldKey.getKeyname())) {
+                            k.overwriteKey(editedKey);
+                            c.setKeylist(keyList);
+                            stop = true;
+                        }
+                    }
+
+                }
+                catList.setCategoryList(cat);
+                new FileManager().saveStructure(catList);
+                initTree();
+                editCancel();
+
+                //Key is Invalid
+            } else {
+                startNotification(EnumNotification.WARNING);
             }
-            catList.setCategoryList(cat);
-            new FileManager().saveStructure(catList);
-            initTree();
-            editCancel();
+
         }
 
         if (addKey) {
-            Key k = new Key();
-            k.setKeyname(tf_keyname.getText());
-            k.setDescription(tf_description.getText());
-            k.setPassword(tf_passwordConfirm.getText());
-            k.setUsername(tf_username.getText());
+            Key newKey = new Key();
+            newKey.setKeyname(tf_keyname.getText().trim());
+            newKey.setDescription(tf_description.getText().trim());
+            newKey.setPassword(tf_passwordConfirm.getText().trim());
+            newKey.setUsername(tf_username.getText().trim());
 
-            List<Category> cat = catList.getCategoryList();
-            boolean stop = false;
-            for (Category c : cat) {
-                if (stop) {
-                    break;
+
+            // Validate new Key
+            if (new Validator().validateKey(newKey)) {
+
+                List<Category> cat = catList.getCategoryList();
+                boolean stop = false;
+                for (Category c : cat) {
+                    if (stop) {
+                        break;
+                    }
+                    if (c.getName().equals(selectedCat)) {
+                        c.getKeylist().add(newKey);
+                        stop = true;
+                    }
                 }
-                if (c.getName().equals(selectedCat)) {
-                    c.getKeylist().add(k);
-                    stop = true;
-                }
+                catList.setCategoryList(cat);
+                new FileManager().saveStructure(catList);
+                initTree();
+                editCancel();
+                startNotification(EnumNotification.KEY_ADDED);
+
+                // new Key is invalid!
+            } else {
+                startNotification(EnumNotification.WARNING);
             }
-            //VALIDATION IS MISSING
-            catList.setCategoryList(cat);
-            new FileManager().saveStructure(catList);
-            initTree();
-            editCancel();
-            startNotification(EnumNotification.KEY_ADDED);
         }
     }
 
@@ -455,35 +478,15 @@ public class MainpageController implements Initializable {
     //
     ////////////////////////////////
     private void startNotification(EnumNotification eNotification) {
-        String addCatMessage = "";
-        String addKeyMessage = "";
-        String removeCatMessage = "";
-        String removeKeyMessage = "";
-        String errorMessage = "";
+        String addCatMessage = languageBean.returnValue("NOTIFIADDCAT");
+        String addKeyMessage = languageBean.returnValue("NOTIFIADDKEY");
+        String removeCatMessage = languageBean.returnValue("NOTIFIREMOVECAT");
+        String removeKeyMessage = languageBean.returnValue("NOTIFIREMOVEKEY");
+        String errorMessage = languageBean.returnValue("NOTIFIERROR");
+        String warningMessage = languageBean.returnValue("NOTIFIWARNING");
 
-        if (selectedLanguage.equals("DE")) {
-            try {
-                addCatMessage = sm_languageDE.returnProperty("NOTIFIADDCAT");
-                addKeyMessage = sm_languageDE.returnProperty("NOTIFIADDKEY");
-                removeCatMessage = sm_languageDE.returnProperty("NOTIFIREMOVECAT");
-                removeKeyMessage = sm_languageDE.returnProperty("NOTIFIREMOVEKEY");
-                errorMessage = sm_languageDE.returnProperty("NOTIFIERROR");
-            } catch (IOException ex) {
-                LoggingManager.writeToErrorFile("startNotification()", ex);
-            }
-        }
 
-        if (selectedLanguage.equals("EN")) {
-            try {
-                addCatMessage = sm_languageEN.returnProperty("NOTIFIADDCAT");
-                addKeyMessage = sm_languageEN.returnProperty("NOTIFIADDKEY");
-                removeCatMessage = sm_languageEN.returnProperty("NOTIFIREMOVECAT");
-                removeKeyMessage = sm_languageEN.returnProperty("NOTIFIREMOVEKEY");
-                errorMessage = sm_languageEN.returnProperty("NOTIFIERROR");
-            } catch (IOException ex) {
-                LoggingManager.writeToErrorFile("startNotification()", ex);
-            }
-        }
+
 
         if (eNotification.equals(EnumNotification.ERROR)) {
             errorLogHyperlink.setGraphic(new ImageView(nokImage));
@@ -517,6 +520,12 @@ public class MainpageController implements Initializable {
             fadeIn(notifyLabel, 500);
             fadeOut(notifyLabel, 5500);
         }
+        if (eNotification.equals(EnumNotification.WARNING)) {
+            notifyLabel.setGraphic(new ImageView(warningImage));
+            notifyLabel.setText(warningMessage);
+            fadeIn(notifyLabel, 500);
+            fadeOut(notifyLabel, 5500);
+        }
     }
 
     private void fadeIn(Control con, double duration) {
@@ -545,76 +554,49 @@ public class MainpageController implements Initializable {
     //
     ////////////////////////////////
     private void initLanguage() {
-        debugLog("Try to load new Language from Properties...");
-        Properties prop = new Properties();
-        debugLog("  try to get the language we want to load...");
-        try {
-            selectedLanguage = sm_main.returnSetLanguage();
-            debugLog("  ... ok");
-        } catch (IOException ex) {
-            LoggingManager.writeToErrorFile(null, ex);
-            startNotification(EnumNotification.ERROR);
-        }
-
         setLanguageCheckbox();
         debugLog("  try to get the data from the Properties...");
-        if (selectedLanguage.equals("DE")) {
-            try {
-                prop = sm_languageDE.initAndReturnProperties();
-                debugLog("  ...ok");
-            } catch (IOException ex) {
-                LoggingManager.writeToErrorFile(null, ex);
-                startNotification(EnumNotification.ERROR);
-            }
-        }
-        if (selectedLanguage.equals("EN")) {
-            try {
-                prop = sm_languageEN.initAndReturnProperties();
-                debugLog("  ...ok");
-            } catch (IOException ex) {
-                LoggingManager.writeToErrorFile(null, ex);
-                startNotification(EnumNotification.ERROR);
-            }
-        }
+
+        addString = languageBean.returnValue("SAVE");
+        addString2 = languageBean.returnValue("SAVEII");
+
 
         debugLog("  Changing Language...");
         //Labels
-        lb_catName.setText(prop.getProperty("CATNAME"));
-        lb_confpw.setText(prop.getProperty("CONFPASSWORD"));
-        lb_username.setText(prop.getProperty("USERNAME"));
-        lb_description.setText(prop.getProperty("DESCRIPTION"));
-        lb_password.setText(prop.getProperty("PASSWORD"));
-        lb_confpw.setText(prop.getProperty("CONFPASSWORD"));
+        lb_catName.setText(languageBean.returnValue("CATNAME"));
+        lb_confpw.setText(languageBean.returnValue("CONFPASSWORD"));
+        lb_username.setText(languageBean.returnValue("USERNAME"));
+        lb_description.setText(languageBean.returnValue("DESCRIPTION"));
+        lb_password.setText(languageBean.returnValue("PASSWORD"));
+        lb_confpw.setText(languageBean.returnValue("CONFPASSWORD"));
         debugLog("  ...Labels done");
 
         //Buttons
-        btn_addCat.setText(prop.getProperty("ADDCAT"));
-        btn_addKey.setText(prop.getProperty("ADDKEY"));
-        btn_browse.setText(prop.getProperty("BROWSE"));
-        btn_cancel.setText(prop.getProperty("CANCEL"));
-        btn_edit.setText(prop.getProperty("EDIT"));
-        btn_save.setText(prop.getProperty("SAVE"));
-        btn_remove.setText(prop.getProperty("REMOVE"));
+        btn_addCat.setText(languageBean.returnValue("ADDCAT"));
+        btn_addKey.setText(languageBean.returnValue("ADDKEY"));
+        btn_browse.setText(languageBean.returnValue("BROWSE"));
+        btn_cancel.setText(languageBean.returnValue("CANCEL"));
+        btn_edit.setText(languageBean.returnValue("EDIT"));
+        btn_save.setText(addString);
+        btn_remove.setText(languageBean.returnValue("REMOVE"));
         debugLog("  ...Buttons done");
 
         //Menu / MenuItems
-        fileMenu.setText(prop.getProperty("FILE"));
-        editMenu.setText(prop.getProperty("EDIT"));
-        helpMenu.setText(prop.getProperty("HELP"));
-        languageItem.setText(prop.getProperty("LANGUAGE"));
-        chk_englishLang.setText(prop.getProperty("ENGLISH"));
-        chk_germanLang.setText(prop.getProperty("GERMAN"));
-        iconsItem.setText(prop.getProperty("ICONMAN"));
-        settingsItem.setText(prop.getProperty("PROP"));
+        fileMenu.setText(languageBean.returnValue("FILE"));
+        editMenu.setText(languageBean.returnValue("EDIT"));
+        helpMenu.setText(languageBean.returnValue("HELP"));
+        languageItem.setText(languageBean.returnValue("LANGUAGE"));
+        chk_englishLang.setText(languageBean.returnValue("ENGLISH"));
+        chk_germanLang.setText(languageBean.returnValue("GERMAN"));
+        iconsItem.setText(languageBean.returnValue("ICONMAN"));
+        settingsItem.setText(languageBean.returnValue("PROP"));
         debugLog("  ...Menus and Items done");
 
         //Panes
-        keyPane.setText(prop.getProperty("KEYS"));
-        notificationPane.setText(prop.getProperty("NOTIFICATION"));
-        actionPane.setText(prop.getProperty("ACTIONS"));
+        keyPane.setText(languageBean.returnValue("KEYS"));
+        notificationPane.setText(languageBean.returnValue("NOTIFICATION"));
+        actionPane.setText(languageBean.returnValue("ACTIONS"));
         debugLog("  ...Panes done");
-
-
 
         debugLog("");
         debugLog("...Language is changed!");
@@ -633,6 +615,8 @@ public class MainpageController implements Initializable {
             startNotification(EnumNotification.ERROR);
         }
         debugLog("...ok");
+        languageBean.setupNewLanguage();
+
         initLanguage();
         chk_germanLang.setSelected(false);
     }
@@ -651,6 +635,9 @@ public class MainpageController implements Initializable {
             startNotification(EnumNotification.ERROR);
         }
         debugLog("...ok");
+        languageBean.setupNewLanguage();
+
+
         initLanguage();
         chk_englishLang.setSelected(false);
     }
@@ -850,8 +837,8 @@ public class MainpageController implements Initializable {
         //Load the ini-Files and provide data
 
         sm_icons = new SettingManager("AppData\\icons.properties");
-        sm_languageDE = new SettingManager("AppData\\Lang_DE.properties");
-        sm_languageEN = new SettingManager("AppData\\Lang_EN.properties");
+        languageBean = Language_Singleton.getInstance();
+
         debugLog("Property and Ini- Files are loaded");
 
         // Set up the Language
@@ -883,6 +870,7 @@ public class MainpageController implements Initializable {
             iconsImage = new Image(new FileInputStream(sm_icons.returnProperty("ICONS")));
             okImage = new Image(new FileInputStream(sm_icons.returnProperty("OK")));
             nokImage = new Image(new FileInputStream(sm_icons.returnProperty("NOK")));
+            warningImage = new Image(new FileInputStream(sm_icons.returnProperty("WARNING")));
         } catch (FileNotFoundException ex) {
             LoggingManager.writeToErrorFile("initialize() -> Loading Icons from icons.properties failed", ex);
             startNotification(EnumNotification.ERROR);

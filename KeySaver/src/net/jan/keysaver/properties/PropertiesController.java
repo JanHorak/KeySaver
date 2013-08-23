@@ -31,6 +31,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.manager.SettingManager;
+import net.jan.keysaver.sources.Language_Singleton;
+
 import net.jan.keysaver.sources.PageLoadHelper;
 
 /**
@@ -59,7 +61,6 @@ public class PropertiesController implements Initializable {
     private ListView<Label> iconList;
     @FXML
     private CheckBox chk_debug;
-    
     @FXML
     private Label lb_username;
     @FXML
@@ -70,8 +71,6 @@ public class PropertiesController implements Initializable {
     private Label lb_image;
     @FXML
     private Label lb_debugmode;
-    
-    
     private Image imageOK;
     private Image imageNOK;
     private String nameBuffer;
@@ -79,11 +78,10 @@ public class PropertiesController implements Initializable {
     private String selectedAvatar = "";
     private String selectedInitialAvatar = "";
     SettingManager sm_main = new SettingManager("settings.ini");
-    SettingManager sm_langDE = new SettingManager("AppData\\Lang_DE.properties");
-    SettingManager sm_langEN = new SettingManager("AppData\\Lang_EN.properties");
     private int debug = 0;
     private int debugBuffer = 0;
     private String lang = "";
+    Language_Singleton language_singelton;
 
     @FXML
     private void proofPW() {
@@ -104,12 +102,12 @@ public class PropertiesController implements Initializable {
             btn_save.setDisable(false);
         }
     }
-    
+
     @FXML
     private void proofDebug() {
-        if ( chk_debug.isSelected() ){
+        if (chk_debug.isSelected()) {
             debug = 1;
-        }else {
+        } else {
             debug = 0;
         }
         if (debugBuffer == debug) {
@@ -121,7 +119,7 @@ public class PropertiesController implements Initializable {
 
     @FXML
     private void save(ActionEvent actionEvent) {
-        if ( chk_debug.isSelected() ){
+        if (chk_debug.isSelected()) {
             debug = 1;
         } else {
             debug = 0;
@@ -130,7 +128,7 @@ public class PropertiesController implements Initializable {
             sm_main = new SettingManager("settings.ini");
             sm_main.storeProperty("USERNAME", tf_name.getText());
             sm_main.storeProperty("MPW", confirm_pwfield.getText());
-            if ( selectedAvatar.equals("") ){
+            if (selectedAvatar.equals("")) {
                 sm_main.storeProperty("AVATAR", selectedInitialAvatar);
             } else {
                 sm_main.storeProperty("AVATAR", "AppData\\Images\\Avatars\\" + selectedAvatar);
@@ -159,11 +157,7 @@ public class PropertiesController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        try {
-            lang = sm_main.returnProperty("LANG");
-        } catch (IOException ex) {
-            Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        language_singelton = Language_Singleton.getInstance();
         initLanguage();
         try {
             debug = Integer.decode(sm_main.returnProperty("DEBUG"));
@@ -240,37 +234,15 @@ public class PropertiesController implements Initializable {
             }
         });
     }
-    
-    private void initLanguage(){
-        if ( lang.equals("DE") ){
-            try {
-                lb_username.setText(sm_langDE.returnProperty("USERNAME"));
-                lb_pw.setText(sm_langDE.returnProperty("PASSWORD"));
-                lb_confirmPW.setText(sm_langDE.returnProperty("CONFPASSWORD"));
-                lb_image.setText(sm_langDE.returnProperty("AVATAR"));
-                lb_debugmode.setText(sm_langDE.returnProperty("DEBUG"));
-                chk_debug.setText(sm_langDE.returnProperty("ACTIVATE"));
-                btn_save.setText(sm_langDE.returnProperty("SAVE"));
-                btn_cancel.setText(sm_langDE.returnProperty("CANCEL"));
-            } catch (IOException ex) {
-                Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        if ( lang.equals("EN") ){
-            try {
-                lb_username.setText(sm_langEN.returnProperty("USERNAME"));
-                lb_pw.setText(sm_langEN.returnProperty("PASSWORD"));
-                lb_confirmPW.setText(sm_langEN.returnProperty("CONFPASSWORD"));
-                lb_image.setText(sm_langEN.returnProperty("AVATAR"));
-                lb_debugmode.setText(sm_langEN.returnProperty("DEBUG"));
-                chk_debug.setText(sm_langEN.returnProperty("ACTIVATE"));
-                btn_save.setText(sm_langEN.returnProperty("SAVE"));
-                btn_cancel.setText(sm_langEN.returnProperty("CANCEL"));
-            } catch (IOException ex) {
-                Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
 
-    
+    private void initLanguage() {
+        lb_username.setText(language_singelton.returnValue("USERNAME"));
+        lb_pw.setText(language_singelton.returnValue("PASSWORD"));
+        lb_confirmPW.setText(language_singelton.returnValue("CONFPASSWORD"));
+        lb_image.setText(language_singelton.returnValue("AVATAR"));
+        lb_debugmode.setText(language_singelton.returnValue("DEBUG"));
+        chk_debug.setText(language_singelton.returnValue("ACTIVATE"));
+        btn_save.setText(language_singelton.returnValue("SAVE"));
+        btn_cancel.setText(language_singelton.returnValue("CANCEL"));
+    }
 }
