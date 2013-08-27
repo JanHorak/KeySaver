@@ -12,10 +12,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -45,7 +42,8 @@ import net.jan.keysaver.sources.Category;
 import net.jan.keysaver.sources.CategoryList;
 import net.jan.keysaver.sources.EnumNotification;
 import net.jan.keysaver.sources.Key;
-import net.jan.keysaver.sources.Language_Singleton;
+import net.jan.keysaver.beans.Language_Singleton;
+import net.jan.keysaver.beans.Settings_Singelton;
 import net.jan.keysaver.sources.PageLoadHelper;
 import net.jan.keysaver.validators.Validator;
 
@@ -176,12 +174,12 @@ public class MainpageController implements Initializable {
     private boolean isKeySelected = false;
     private boolean isCatSelected = false;
     private String selectedLanguage = "unknown";
-    private SettingManager sm_main;
     private SettingManager sm_icons;
     private int debug = 0;
     private String addString = "";
     private String addString2 = "";
     Language_Singleton languageBean;
+    Settings_Singelton settingsBean;
 
     @FXML
     private void edit() {
@@ -478,12 +476,12 @@ public class MainpageController implements Initializable {
     //
     ////////////////////////////////
     private void startNotification(EnumNotification eNotification) {
-        String addCatMessage = languageBean.returnValue("NOTIFIADDCAT");
-        String addKeyMessage = languageBean.returnValue("NOTIFIADDKEY");
-        String removeCatMessage = languageBean.returnValue("NOTIFIREMOVECAT");
-        String removeKeyMessage = languageBean.returnValue("NOTIFIREMOVEKEY");
-        String errorMessage = languageBean.returnValue("NOTIFIERROR");
-        String warningMessage = languageBean.returnValue("NOTIFIWARNING");
+        String addCatMessage = languageBean.getValue("NOTIFIADDCAT");
+        String addKeyMessage = languageBean.getValue("NOTIFIADDKEY");
+        String removeCatMessage = languageBean.getValue("NOTIFIREMOVECAT");
+        String removeKeyMessage = languageBean.getValue("NOTIFIREMOVEKEY");
+        String errorMessage = languageBean.getValue("NOTIFIERROR");
+        String warningMessage = languageBean.getValue("NOTIFIWARNING");
 
 
 
@@ -554,48 +552,48 @@ public class MainpageController implements Initializable {
     //
     ////////////////////////////////
     private void initLanguage() {
-        setLanguageCheckbox();
+        setUpLanguageCheckbox();
         debugLog("  try to get the data from the Properties...");
 
-        addString = languageBean.returnValue("SAVE");
-        addString2 = languageBean.returnValue("SAVEII");
+        addString = languageBean.getValue("SAVE");
+        addString2 = languageBean.getValue("SAVEII");
 
 
         debugLog("  Changing Language...");
         //Labels
-        lb_catName.setText(languageBean.returnValue("CATNAME"));
-        lb_confpw.setText(languageBean.returnValue("CONFPASSWORD"));
-        lb_username.setText(languageBean.returnValue("USERNAME"));
-        lb_description.setText(languageBean.returnValue("DESCRIPTION"));
-        lb_password.setText(languageBean.returnValue("PASSWORD"));
-        lb_confpw.setText(languageBean.returnValue("CONFPASSWORD"));
+        lb_catName.setText(languageBean.getValue("CATNAME"));
+        lb_confpw.setText(languageBean.getValue("CONFPASSWORD"));
+        lb_username.setText(languageBean.getValue("USERNAME"));
+        lb_description.setText(languageBean.getValue("DESCRIPTION"));
+        lb_password.setText(languageBean.getValue("PASSWORD"));
+        lb_confpw.setText(languageBean.getValue("CONFPASSWORD"));
         debugLog("  ...Labels done");
 
         //Buttons
-        btn_addCat.setText(languageBean.returnValue("ADDCAT"));
-        btn_addKey.setText(languageBean.returnValue("ADDKEY"));
-        btn_browse.setText(languageBean.returnValue("BROWSE"));
-        btn_cancel.setText(languageBean.returnValue("CANCEL"));
-        btn_edit.setText(languageBean.returnValue("EDIT"));
+        btn_addCat.setText(languageBean.getValue("ADDCAT"));
+        btn_addKey.setText(languageBean.getValue("ADDKEY"));
+        btn_browse.setText(languageBean.getValue("BROWSE"));
+        btn_cancel.setText(languageBean.getValue("CANCEL"));
+        btn_edit.setText(languageBean.getValue("EDIT"));
         btn_save.setText(addString);
-        btn_remove.setText(languageBean.returnValue("REMOVE"));
+        btn_remove.setText(languageBean.getValue("REMOVE"));
         debugLog("  ...Buttons done");
 
         //Menu / MenuItems
-        fileMenu.setText(languageBean.returnValue("FILE"));
-        editMenu.setText(languageBean.returnValue("EDIT"));
-        helpMenu.setText(languageBean.returnValue("HELP"));
-        languageItem.setText(languageBean.returnValue("LANGUAGE"));
-        chk_englishLang.setText(languageBean.returnValue("ENGLISH"));
-        chk_germanLang.setText(languageBean.returnValue("GERMAN"));
-        iconsItem.setText(languageBean.returnValue("ICONMAN"));
-        settingsItem.setText(languageBean.returnValue("PROP"));
+        fileMenu.setText(languageBean.getValue("FILE"));
+        editMenu.setText(languageBean.getValue("EDIT"));
+        helpMenu.setText(languageBean.getValue("HELP"));
+        languageItem.setText(languageBean.getValue("LANGUAGE"));
+        chk_englishLang.setText(languageBean.getValue("ENGLISH"));
+        chk_germanLang.setText(languageBean.getValue("GERMAN"));
+        iconsItem.setText(languageBean.getValue("ICONMAN"));
+        settingsItem.setText(languageBean.getValue("PROP"));
         debugLog("  ...Menus and Items done");
 
         //Panes
-        keyPane.setText(languageBean.returnValue("KEYS"));
-        notificationPane.setText(languageBean.returnValue("NOTIFICATION"));
-        actionPane.setText(languageBean.returnValue("ACTIONS"));
+        keyPane.setText(languageBean.getValue("KEYS"));
+        notificationPane.setText(languageBean.getValue("NOTIFICATION"));
+        actionPane.setText(languageBean.getValue("ACTIONS"));
         debugLog("  ...Panes done");
 
         debugLog("");
@@ -605,18 +603,11 @@ public class MainpageController implements Initializable {
     @FXML
     private void changeLangEN() {
         debugLog("Try to change language detected...");
-        try {
-            sm_main.saveLanguageInIniFile("EN");
-        } catch (FileNotFoundException ex) {
-            LoggingManager.writeToErrorFile(null, ex);
-            startNotification(EnumNotification.ERROR);
-        } catch (IOException ex) {
-            LoggingManager.writeToErrorFile(null, ex);
-            startNotification(EnumNotification.ERROR);
-        }
+        settingsBean.storeInBean("LANG","EN");
+        settingsBean.saveBean();
         debugLog("...ok");
-        languageBean.setupNewLanguage();
-
+        languageBean.setupNewLanguage(settingsBean.getValue("LANG"));
+        selectedLanguage = "EN";
         initLanguage();
         chk_germanLang.setSelected(false);
     }
@@ -625,50 +616,24 @@ public class MainpageController implements Initializable {
     private void changeLangDE() {
         debugLog("Try to change language detected...");
         chk_englishLang.setSelected(false);
-        try {
-            sm_main.saveLanguageInIniFile("DE");
-        } catch (FileNotFoundException ex) {
-            LoggingManager.writeToErrorFile(null, ex);
-            startNotification(EnumNotification.ERROR);
-        } catch (IOException ex) {
-            LoggingManager.writeToErrorFile(null, ex);
-            startNotification(EnumNotification.ERROR);
-        }
+        settingsBean.storeInBean("LANG","DE");
+        settingsBean.saveBean();
         debugLog("...ok");
-        languageBean.setupNewLanguage();
-
-
+        languageBean.setupNewLanguage(settingsBean.getValue("LANG"));
+        selectedLanguage = "DE";
         initLanguage();
         chk_englishLang.setSelected(false);
     }
 
-    private void setLanguageCheckbox() {
-        debugLog("  try to manage the Checkboxen in the UI ...");
+    private void setUpLanguageCheckbox() {
+        debugLog("try to manage the Checkboxen in the UI ...");
         if (selectedLanguage.equals("EN")) {
             chk_englishLang.setSelected(true);
             chk_germanLang.setSelected(false);
-            try {
-                sm_main.saveLanguageInIniFile("EN");
-            } catch (FileNotFoundException ex) {
-                LoggingManager.writeToErrorFile("setLanguageCheckbox-Event", ex);
-                startNotification(EnumNotification.ERROR);
-            } catch (IOException ex) {
-                LoggingManager.writeToErrorFile(null, ex);
-                startNotification(EnumNotification.ERROR);
-            }
         }
         if (selectedLanguage.equals("DE")) {
             chk_englishLang.setSelected(false);
             chk_germanLang.setSelected(true);
-            try {
-                sm_main.saveLanguageInIniFile("DE");
-            } catch (FileNotFoundException ex) {
-                LoggingManager.writeToErrorFile("setLanguageCheckbox-Event", ex);
-                startNotification(EnumNotification.ERROR);
-            } catch (IOException ex) {
-                LoggingManager.writeToErrorFile(null, ex);
-                startNotification(EnumNotification.ERROR);
-            }
         }
         debugLog("  ...ok");
     }
@@ -815,14 +780,12 @@ public class MainpageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Load Main-ini
-        sm_main = new SettingManager("settings.ini");
+        settingsBean = Settings_Singelton.getInstance();
+        selectedLanguage = settingsBean.getValue("LANG");
+        
         // Debugsettings
-        try {
-            debug = Integer.decode(sm_main.returnProperty("DEBUG"));
-        } catch (IOException ex) {
-            LoggingManager.writeToErrorFile(null, ex);
-            startNotification(EnumNotification.ERROR);
-        }
+        debug = Integer.decode(settingsBean.getValue("DEBUG"));
+
         System.out.println(debug);
         debugLog("Try to initialize the Program");
         debugLog("------------------------------");
@@ -849,18 +812,10 @@ public class MainpageController implements Initializable {
         debugLog("Get converted List from Structure.xml");
 
         String userAvatar = null;
-        try {
-            userAvatar = sm_main.returnProperty("AVATAR");
-        } catch (IOException ex) {
-            LoggingManager.writeToErrorFile(null, ex);
-            startNotification(EnumNotification.ERROR);
-        }
-        try {
-            lb_dynamicUserName.setText(sm_main.returnProperty("USERNAME"));
-        } catch (IOException ex) {
-            LoggingManager.writeToErrorFile(null, ex);
-            startNotification(EnumNotification.ERROR);
-        }
+        userAvatar = settingsBean.getValue("AVATAR");
+        lb_dynamicUserName.setText(settingsBean.getValue("USERNAME"));
+        
+        
         try {
             avatarIV.setImage(new Image(new FileInputStream(userAvatar)));
             addCatImage = new Image(new FileInputStream(sm_icons.returnProperty("ADDCAT")));

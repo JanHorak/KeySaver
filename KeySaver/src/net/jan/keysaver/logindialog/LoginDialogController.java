@@ -25,7 +25,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.manager.SettingManager;
-import net.jan.keysaver.sources.Language_Singleton;
+import net.jan.keysaver.beans.Language_Singleton;
 import net.jan.keysaver.sources.PageLoadHelper;
 
 /**

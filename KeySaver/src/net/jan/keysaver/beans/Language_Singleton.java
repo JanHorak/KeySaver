@@ -2,9 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.jan.keysaver.sources;
+package net.jan.keysaver.beans;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,18 +39,32 @@ public class Language_Singleton {
         }
         try {
             instanceProperties = new SettingManager("AppData\\Lang_"+lang+".properties").initAndReturnProperties();
+            instanceProperties = setCharsetInNewPropertiesFile();
             System.out.println("Language-Values loaded in Singelton");
         } catch (IOException ex) {
             Logger.getLogger(Language_Singleton.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public void setupNewLanguage(){
-        instance = new Language_Singleton();
+    public void setupNewLanguage(String lang){
+        try {
+            instanceProperties = new SettingManager("AppData\\Lang_"+lang+".properties").initAndReturnProperties();
+            System.out.println("New Language set in Lang-Bean!");
+        } catch (IOException ex) {
+            Logger.getLogger(Language_Singleton.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
-    public String returnValue(String value){
+    public String getValue(String value){
         return instanceProperties.getProperty(value);
+    }
+    
+    private Properties setCharsetInNewPropertiesFile(){
+        Properties props = new Properties();
+        for ( Object obj : instanceProperties.stringPropertyNames() ){
+            props.setProperty(obj.toString(), new String(instanceProperties.getProperty(obj.toString()).getBytes(), Charset.forName("UTF-8")));
+        }
+        return props;
     }
     
 }
