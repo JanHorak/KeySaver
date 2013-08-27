@@ -31,7 +31,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.manager.SettingManager;
-import net.jan.keysaver.sources.Language_Singleton;
+import net.jan.keysaver.beans.Language_Singleton;
 
 import net.jan.keysaver.sources.PageLoadHelper;
 
@@ -236,13 +236,13 @@ public class PropertiesController implements Initializable {
     }
 
     private void initLanguage() {
-        lb_username.setText(language_singelton.returnValue("USERNAME"));
-        lb_pw.setText(language_singelton.returnValue("PASSWORD"));
-        lb_confirmPW.setText(language_singelton.returnValue("CONFPASSWORD"));
-        lb_image.setText(language_singelton.returnValue("AVATAR"));
-        lb_debugmode.setText(language_singelton.returnValue("DEBUG"));
-        chk_debug.setText(language_singelton.returnValue("ACTIVATE"));
-        btn_save.setText(language_singelton.returnValue("SAVE"));
-        btn_cancel.setText(language_singelton.returnValue("CANCEL"));
+        lb_username.setText(language_singelton.getValue("USERNAME"));
+        lb_pw.setText(language_singelton.getValue("PASSWORD"));
+        lb_confirmPW.setText(language_singelton.getValue("CONFPASSWORD"));
+        lb_image.setText(language_singelton.getValue("AVATAR"));
+        lb_debugmode.setText(language_singelton.getValue("DEBUG"));
+        chk_debug.setText(language_singelton.getValue("ACTIVATE"));
+        btn_save.setText(language_singelton.getValue("SAVE"));
+        btn_cancel.setText(language_singelton.getValue("CANCEL"));
     }
 }
