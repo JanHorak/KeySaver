@@ -13,6 +13,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -29,6 +31,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
@@ -180,6 +183,9 @@ public class MainpageController implements Initializable {
     private String addString2 = "";
     Language_Singleton languageBean;
     Settings_Singelton settingsBean;
+    
+    @FXML
+    private Tooltip errorTooltip;
 
     @FXML
     private void edit() {
@@ -214,11 +220,13 @@ public class MainpageController implements Initializable {
         addCat = true;
         if (iconPreview.getImage() == null) {
             try {
-                iconPreview.setImage(new Image(new FileInputStream("AppData\\Images\\intern\\Folder_default_16x16.png")));
+                iconPreview.setImage(new Image(new FileInputStream(sm_icons.returnProperty("FOLDER_DEFAULT"))));
 
             } catch (FileNotFoundException ex) {
                 LoggingManager.writeToErrorFile("initialize() -> Failed to load Folder_default_16x16.png", ex);
                 startNotification(EnumNotification.ERROR);
+            } catch (IOException ex) {
+                Logger.getLogger(MainpageController.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             iconPreview.setVisible(true);
@@ -255,6 +263,7 @@ public class MainpageController implements Initializable {
         chk_useDefaultIcon.setSelected(true);
         tf_catName.setText("");
         btn_browse.setDisable(true);
+        pwImage.setImage(null);
     }
 
     private void initTree() {
@@ -338,7 +347,7 @@ public class MainpageController implements Initializable {
     }
 
     @FXML
-    private void save() {
+    private void save() throws IOException {
         //new Category
         if (addCat) {
             //VALIDATION IS MISSING
@@ -350,7 +359,7 @@ public class MainpageController implements Initializable {
 
             iconPreview.setVisible(true);
             if (chk_useDefaultIcon.isSelected()) {
-                cat.setIconPath("AppData\\Images\\intern\\Folder_default_16x16.png");
+                cat.setIconPath(sm_icons.returnProperty("FOLDER_DEFAULT"));
             } else {
                 cat.setIconPath(pathLabel.getText());
             }
@@ -489,7 +498,6 @@ public class MainpageController implements Initializable {
         if (eNotification.equals(EnumNotification.ERROR)) {
             errorLogHyperlink.setGraphic(new ImageView(nokImage));
             errorLogHyperlink.setText(errorMessage);
-            errorLogHyperlink.setDisable(false);
             fadeIn(errorLogHyperlink, 500);
             fadeOut(errorLogHyperlink, 10500);
             debugLog("Error! Please look at the Error.log");
@@ -538,7 +546,6 @@ public class MainpageController implements Initializable {
         fadeTransition.setFromValue(1.0);
         fadeTransition.setToValue(0.0);
         fadeTransition.play();
-        errorLogHyperlink.setDisable(true);
     }
 
     ////////////////////////////////
@@ -595,7 +602,12 @@ public class MainpageController implements Initializable {
         notificationPane.setText(languageBean.getValue("NOTIFICATION"));
         actionPane.setText(languageBean.getValue("ACTIONS"));
         debugLog("  ...Panes done");
-
+        
+        //Special
+        chk_useDefaultIcon.setText(languageBean.getValue("USEDEFAULTICON"));
+        errorTooltip.setText(languageBean.getValue("ERRORBOX"));
+        debugLog("  ...Specials done");
+        
         debugLog("");
         debugLog("...Language is changed!");
     }
@@ -603,7 +615,7 @@ public class MainpageController implements Initializable {
     @FXML
     private void changeLangEN() {
         debugLog("Try to change language detected...");
-        settingsBean.storeInBean("LANG","EN");
+        settingsBean.storeInBean("LANG", "EN");
         settingsBean.saveBean();
         debugLog("...ok");
         languageBean.setupNewLanguage(settingsBean.getValue("LANG"));
@@ -616,7 +628,7 @@ public class MainpageController implements Initializable {
     private void changeLangDE() {
         debugLog("Try to change language detected...");
         chk_englishLang.setSelected(false);
-        settingsBean.storeInBean("LANG","DE");
+        settingsBean.storeInBean("LANG", "DE");
         settingsBean.saveBean();
         debugLog("...ok");
         languageBean.setupNewLanguage(settingsBean.getValue("LANG"));
@@ -653,10 +665,12 @@ public class MainpageController implements Initializable {
         if (chk_useDefaultIcon.isSelected()) {
             disableControl(btn_browse);
             try {
-                iconPreview.setImage(new Image(new FileInputStream("AppData\\Images\\intern\\Folder_default_16x16.png")));
+                iconPreview.setImage(new Image(new FileInputStream(sm_icons.returnProperty("FOLDER_DEFAULT"))));
             } catch (FileNotFoundException ex) {
                 LoggingManager.writeToErrorFile("selectDefaultCheckBox()", ex);
                 startNotification(EnumNotification.ERROR);
+            } catch (IOException ex) {
+                Logger.getLogger(MainpageController.class.getName()).log(Level.SEVERE, null, ex);
             }
             pathLabel.setText("");
         } else {
@@ -741,13 +755,14 @@ public class MainpageController implements Initializable {
         File path = chooser.showOpenDialog(null);
 
         debugLog("Filechooser opened...");
-
-        pathLabel.setText(path.getAbsolutePath());
-        try {
-            iconPreview.setImage(new Image(new FileInputStream(path)));
-        } catch (FileNotFoundException ex) {
-            LoggingManager.writeToErrorFile("browseImage()", ex);
-            startNotification(EnumNotification.ERROR);
+        if (path != null) {
+            pathLabel.setText(path.getAbsolutePath());
+            try {
+                iconPreview.setImage(new Image(new FileInputStream(path)));
+            } catch (FileNotFoundException ex) {
+                LoggingManager.writeToErrorFile("browseImage()", ex);
+                startNotification(EnumNotification.ERROR);
+            }
         }
     }
 
@@ -782,7 +797,7 @@ public class MainpageController implements Initializable {
         // Load Main-ini
         settingsBean = Settings_Singelton.getInstance();
         selectedLanguage = settingsBean.getValue("LANG");
-        
+
         // Debugsettings
         debug = Integer.decode(settingsBean.getValue("DEBUG"));
 
@@ -814,8 +829,8 @@ public class MainpageController implements Initializable {
         String userAvatar = null;
         userAvatar = settingsBean.getValue("AVATAR");
         lb_dynamicUserName.setText(settingsBean.getValue("USERNAME"));
-        
-        
+
+
         try {
             avatarIV.setImage(new Image(new FileInputStream(userAvatar)));
             addCatImage = new Image(new FileInputStream(sm_icons.returnProperty("ADDCAT")));

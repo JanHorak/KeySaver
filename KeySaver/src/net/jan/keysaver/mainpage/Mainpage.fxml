@@ -36,13 +36,13 @@
         <Label fx:id="lb_catName" text="Categoryname" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="6" />
         <TextField fx:id="tf_catName" prefWidth="200.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="6" />
         <ImageView fx:id="pwImage" fitHeight="21.24999992161581" fitWidth="28.33333396911621" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-        <CheckBox fx:id="chk_useDefaultIcon" mnemonicParsing="false" onAction="#selectDefaultCheckBox" selected="true" text="Use default Icon" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="7" />
-        <Button fx:id="btn_browse" disable="true" mnemonicParsing="false" onAction="#browseImage" prefWidth="75.0" text="Browse" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+        <CheckBox fx:id="chk_useDefaultIcon" mnemonicParsing="false" onAction="#selectDefaultCheckBox" prefWidth="126.0" selected="true" text="Use default Icon" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+        <Button fx:id="btn_browse" disable="true" mnemonicParsing="false" onAction="#browseImage" prefWidth="114.0" text="Browse" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="7" />
         <ImageView id="pwImage" fx:id="iconPreview" fitHeight="21.24999992161581" fitWidth="28.33333396911621" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="7" />
       </children>
       <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.0" minWidth="10.0" prefWidth="115.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="374.0" minWidth="10.0" prefWidth="248.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.0" minWidth="10.0" prefWidth="126.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="374.0" minWidth="10.0" prefWidth="237.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="334.0" minWidth="10.0" prefWidth="33.0" />
       </columnConstraints>
       <rowConstraints>
@@ -92,16 +92,16 @@
       <content>
         <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
           <children>
-            <Button fx:id="btn_edit" disable="true" mnemonicParsing="false" onAction="#edit" prefWidth="93.0" text="Edit" AnchorPane.rightAnchor="81.0" AnchorPane.topAnchor="30.0">
+            <Button fx:id="btn_edit" disable="true" mnemonicParsing="false" onAction="#edit" prefWidth="93.0" text="Edit" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="30.0">
               <font>
                 <Font size="10.5" fx:id="x1" />
               </font>
             </Button>
-            <Button fx:id="btn_cancel" disable="true" font="$x1" mnemonicParsing="false" onAction="#editCancel" prefWidth="93.0" text="Cancel" AnchorPane.rightAnchor="185.0" AnchorPane.topAnchor="30.0" />
+            <Button fx:id="btn_cancel" disable="true" font="$x1" mnemonicParsing="false" onAction="#editCancel" prefWidth="93.0" text="Cancel" AnchorPane.rightAnchor="205.0" AnchorPane.topAnchor="30.0" />
             <Button fx:id="btn_addCat" disable="true" font="$x1" layoutX="8.0" layoutY="4.0" mnemonicParsing="false" onAction="#prepareAddCat" prefWidth="145.0" text="Add Category" />
             <Button id="btn_addCat" fx:id="btn_remove" disable="true" font="$x1" mnemonicParsing="false" onAction="#remove" prefWidth="93.0" text="Remove" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
             <Button id="btn_addCat" fx:id="btn_addKey" disable="true" font="$x1" mnemonicParsing="false" onAction="#prepareAddKey" prefWidth="114.0" text="Add Key" AnchorPane.rightAnchor="115.0" AnchorPane.topAnchor="5.0" />
-            <Button fx:id="btn_save" disable="true" font="$x1" mnemonicParsing="false" onAction="#save" prefWidth="68.0" text="Save" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="30.0" />
+            <Button fx:id="btn_save" disable="true" font="$x1" mnemonicParsing="false" onAction="#save" prefWidth="83.0" text="Save" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="30.0" />
           </children>
         </AnchorPane>
       </content>
@@ -111,7 +111,11 @@
         <AnchorPane prefHeight="200.0" prefWidth="200.0">
           <children>
             <Label fx:id="notifyLabel" layoutX="14.0" layoutY="6.0" prefHeight="38.0" prefWidth="174.0" />
-            <Hyperlink fx:id="errorLogHyperlink" disable="true" layoutX="21.0" layoutY="17.0" minHeight="16.0" onAction="#openErrorFile" prefHeight="24.0" prefWidth="160.0" />
+            <Hyperlink fx:id="errorLogHyperlink" disable="true" layoutX="21.0" layoutY="17.0" minHeight="16.0" onAction="#openErrorFile" prefHeight="24.0" prefWidth="160.0">
+              <tooltip>
+                <Tooltip text="Empty Tooltip" fx:id="errorTooltip" />
+              </tooltip>
+            </Hyperlink>
           </children>
         </AnchorPane>
       </content>
