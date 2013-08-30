@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.manager.SettingManager;
 import net.jan.keysaver.beans.Language_Singleton;
+import net.jan.keysaver.beans.Settings_Singelton;
 import net.jan.keysaver.sources.PageLoadHelper;
 
 /**
@@ -49,13 +50,14 @@ public class LoginDialogController implements Initializable {
     private Button loginButton;
     @FXML
     private Label errorLabel;
+    private Settings_Singelton settingsBean;
     
     private final String PATH_MAIN_FRAME = "src\\net\\jan\\keysaver\\mainpage\\Mainpage.fxml";
 
     @FXML
     private void login(ActionEvent actionEvent) {
         if (pwField.getText().equals(pw)) {
-            new PageLoadHelper(PATH_MAIN_FRAME, "KeySaver2.0", 612, 464);
+            new PageLoadHelper(PATH_MAIN_FRAME, "KeySaver2.0 " +"Version "+ settingsBean.getValue("VERSION"), 612, 464);
             //close the Window
             Node source = (Node) actionEvent.getSource();
             Stage stage = (Stage) source.getScene().getWindow();
@@ -67,13 +69,10 @@ public class LoginDialogController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        settingsBean = Settings_Singelton.getInstance();
         Image image = new Image(new File("AppData\\Images\\Logo_key.png").toURI().toString());
         imageView.setImage(image);
-        try {
-            pw = new SettingManager("settings.ini").returnProperty("MPW");
-        } catch (IOException ex) {
-            LoggingManager.writeToErrorFile(null, ex);
-        }
+        pw = settingsBean.getValue("MPW");
         pwField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent t) {

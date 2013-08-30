@@ -25,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -71,6 +72,8 @@ public class PropertiesController implements Initializable {
     private Label lb_image;
     @FXML
     private Label lb_debugmode;
+    @FXML
+    private Tooltip debugTooltip;
     private Image imageOK;
     private Image imageNOK;
     private String nameBuffer;
@@ -172,7 +175,7 @@ public class PropertiesController implements Initializable {
             Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-
+        debugTooltip.setText(language_singelton.getValue("DEBUGMODE"));
         try {
             imageOK = new Image(new FileInputStream("AppData\\Images\\intern\\Ok_32x32.png"));
             imageNOK = new Image(new FileInputStream("AppData\\Images\\intern\\NOk_32x32.png"));
