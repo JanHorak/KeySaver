@@ -1,20 +1,10 @@
 ---------------ERROR---------------
-Time: Sun Aug 18 15:52:41 CEST 2013
+Time: Wed Aug 28 15:01:24 CEST 2013
 
 Hint from Developer: 
-No Hint given 
+Init-Tree() -> Iconpath for Category
 
 Exception: 
-java.io.FileNotFoundException: AppData\Lang_EN.properties (Das System kann die angegebene Datei nicht finden)
-------------------------------------
-
----------------ERROR---------------
-Time: Sun Aug 18 15:52:41 CEST 2013
-
-Hint from Developer: 
-startNotification()
-
-Exception: 
-java.io.FileNotFoundException: AppData\Lang_EN.properties (Das System kann die angegebene Datei nicht finden)
+java.io.FileNotFoundException: 
 ------------------------------------
 

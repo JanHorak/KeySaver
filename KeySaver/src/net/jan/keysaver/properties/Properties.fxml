@@ -29,7 +29,7 @@
         <Label fx:id="lb_debugmode" text="DebugMode" GridPane.columnIndex="0" GridPane.rowIndex="4" />
         <CheckBox fx:id="chk_debug" mnemonicParsing="false" onAction="#proofDebug" text="enable" GridPane.columnIndex="1" GridPane.rowIndex="4">
           <tooltip>
-            <Tooltip text="TOOLTIP" />
+            <Tooltip text="TOOLTIP" fx:id="debugTooltip" />
           </tooltip>
         </CheckBox>
       </children>

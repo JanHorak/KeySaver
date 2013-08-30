@@ -9,16 +9,16 @@
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="366.0" xmlns:fx="http://javafx.com/fxml" fx:controller="net.jan.keysaver.icondialog.IcondialogController">
   <children>
     <ListView fx:id="dataList" layoutX="14.0" layoutY="14.0" prefHeight="186.0" prefWidth="338.0" />
-    <Label layoutX="14.0" layoutY="210.0" text="Filename:" />
-    <Label layoutX="14.0" layoutY="237.0" text="Preview:" />
-    <Label layoutX="14.0" layoutY="261.0" text="Size:" />
-    <Label layoutX="14.0" layoutY="288.0" text="Kind of File:" />
-    <Button layoutX="14.0" layoutY="365.0" mnemonicParsing="false" prefWidth="62.0" text="edit" />
-    <Button layoutX="296.0" layoutY="365.0" mnemonicParsing="false" prefWidth="51.0" text="Save" />
-    <Button layoutX="213.0" layoutY="365.0" mnemonicParsing="false" prefWidth="72.0" text="Cancel" />
-    <Label layoutX="104.0" layoutY="210.0" text="Label" />
-    <Label layoutX="104.0" layoutY="237.0" text="Label" />
-    <Label layoutX="104.0" layoutY="261.0" text="Label" />
-    <Label layoutX="104.0" layoutY="288.0" text="Label" />
+    <Label fx:id="lb_fileName" layoutX="14.0" layoutY="210.0" text="Filename:" />
+    <Label fx:id="lb_preview" layoutX="14.0" layoutY="237.0" text="Preview:" />
+    <Label fx:id="lb_size" layoutX="14.0" layoutY="261.0" text="Size:" />
+    <Label fx:id="lb_kindOfFile" layoutX="14.0" layoutY="288.0" text="Kind of File:" />
+    <Button fx:id="btn_edit" layoutX="14.0" layoutY="365.0" mnemonicParsing="false" onAction="#loadUpImage" prefWidth="82.0" text="edit" />
+    <Button fx:id="btn_save" layoutX="265.0" layoutY="365.0" mnemonicParsing="false" prefWidth="82.0" text="Save" />
+    <Button fx:id="btn_cancel" layoutX="162.0" layoutY="365.0" mnemonicParsing="false" onAction="#cancelEdit" prefWidth="92.0" text="Cancel" />
+    <Label id="lb_fileName" fx:id="dyn_lb_fileName" layoutX="104.0" layoutY="210.0" />
+    <Label id="lb_preview" fx:id="dyn_lb_preview" layoutX="104.0" layoutY="237.0" />
+    <Label id="lb_size" fx:id="dyn_lb_size" layoutX="104.0" layoutY="261.0" />
+    <Label id="lb_kindOfFile" fx:id="dyn_lb_kindOfFile" layoutX="104.0" layoutY="288.0" />
   </children>
 </AnchorPane>
