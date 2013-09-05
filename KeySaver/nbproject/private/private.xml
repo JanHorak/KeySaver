@@ -5,24 +5,30 @@
             <url>src/net/jan/keysaver/mainpage/MainpageController.java</url>
             <bookmark id="2">
                 <name/>
-                <line>482</line>
+                <line>504</line>
                 <key/>
             </bookmark>
             <bookmark id="1">
                 <name/>
-                <line>556</line>
+                <line>578</line>
                 <key/>
             </bookmark>
             <bookmark id="4">
                 <name/>
-                <line>658</line>
+                <line>680</line>
                 <key/>
             </bookmark>
             <bookmark id="3">
                 <name/>
-                <line>790</line>
+                <line>812</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/C:/Users/Jan%20Horak/Documents/Development/KeySaver/KeySaver/src/net/jan/keysaver/mainpage/MainpageController.java</file>
+        <file>file:/C:/Users/Jan%20Horak/Documents/Development/KeySaver/KeySaver/src/net/jan/keysaver/manager/FileManager.java</file>
+        <file>file:/C:/Users/Jan%20Horak/Documents/Development/KeySaver/KeySaver/test/net/jan/test/XMLtests/TestXMLFunctions.java</file>
+        <file>file:/C:/Users/Jan%20Horak/Documents/Development/KeySaver/KeySaver/src/net/jan/keysaver/main/KeySaver.java</file>
+    </open-files>
 </project-private>

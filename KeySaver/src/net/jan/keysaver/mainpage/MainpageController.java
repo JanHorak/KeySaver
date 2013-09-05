@@ -202,10 +202,17 @@ public class MainpageController implements Initializable {
         if (!selectedItem.isLeaf()) {
             lockTree();
             lockFields();
+            Category selectedLocalCat = new FileManager().returnSingleCategory(tmpBuffer);
             setControlVisible(lb_catName, tf_catName);
             disableControl(btn_addCat, btn_edit, btn_remove, btn_addKey);
+            setControlVisible(btn_browse, chk_useDefaultIcon);
+            chk_useDefaultIcon.setDisable(false);
+            iconPreview.setDisable(false);
             enableControl(btn_save, btn_cancel);
-            tf_catName.setText(tmpBuffer);
+            
+            tf_catName.setText(selectedLocalCat.getName());
+            pathLabel.setText(selectedLocalCat.getIconPath());
+            selectedLocalCat = null;
             editCat = true;
             System.out.println("editCat detected - " + editCat);
         }
@@ -263,6 +270,7 @@ public class MainpageController implements Initializable {
         chk_useDefaultIcon.setSelected(true);
         tf_catName.setText("");
         btn_browse.setDisable(true);
+        pathLabel.setDisable(true);
         pwImage.setImage(null);
     }
 
@@ -350,19 +358,20 @@ public class MainpageController implements Initializable {
     private void save() throws IOException {
         //new Category
         if (addCat) {
-            //VALIDATION IS MISSING
-            String catname = tf_catName.getText();
+            String catname = tf_catName.getText().trim();
+            
             Category cat = new Category();
             cat.setName(catname);
-
-
-
-            iconPreview.setVisible(true);
             if (chk_useDefaultIcon.isSelected()) {
                 cat.setIconPath(sm_icons.returnProperty("FOLDER_DEFAULT"));
             } else {
                 cat.setIconPath(pathLabel.getText());
             }
+            
+            //Validation of the Category
+            if ( new Validator().validateCategory(cat)){
+
+            iconPreview.setVisible(true);
             Key k = new Key();
             List<Key> keyList = new ArrayList<Key>();
             k.setKeyname("new Key");
@@ -379,11 +388,21 @@ public class MainpageController implements Initializable {
             initTree();
             editCancel();
             startNotification(EnumNotification.CAT_ADDED);
+            
+            //Category is invalid!
+            } else {
+             startNotification(EnumNotification.WARNING);
+             LoggingManager.writeToLogFile("Categoryname or Iconpath is invalid!"
+                     + " Please try again");
+            }
         }
         // Change existing name of Cat
         if (editCat) {
+            
             for (Category cat : catList.getCategoryList()) {
                 if (cat.getName().equals(tmpBuffer)) {
+                    //Validate
+//                    if ( new Validator().validateCategory(cat) )
                     cat.setName(tf_catName.getText());
                     new FileManager().saveStructure(catList);
                     initTree();
@@ -429,6 +448,7 @@ public class MainpageController implements Initializable {
                 //Key is Invalid
             } else {
                 startNotification(EnumNotification.WARNING);
+                LoggingManager.writeToLogFile("Key is invalid!");
             }
 
         }
@@ -464,6 +484,7 @@ public class MainpageController implements Initializable {
                 // new Key is invalid!
             } else {
                 startNotification(EnumNotification.WARNING);
+                LoggingManager.writeToLogFile("Key is invalid!");
             }
         }
     }
