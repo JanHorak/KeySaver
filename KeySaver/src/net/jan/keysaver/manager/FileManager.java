@@ -14,6 +14,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -42,7 +43,40 @@ public class FileManager {
     private Document doc = null;
     OutputStream outputStream = null;
     BufferedOutputStream bufferedOutputStream = null;
+    private SettingManager sm_icon;
+    private Properties iconProps;
+    
+    public FileManager(){
+        sm_icon = new SettingManager("AppData\\icons.properties");
+        try {
+            iconProps = sm_icon.initAndReturnProperties();
+        } catch (IOException ex) {
+            LoggingManager.writeToErrorFile(null, ex);
+        }
+        
+    }
 
+    
+    public Category returnSingleCategory(String name){
+        prepareSAX();
+        Category category = new Category();
+     
+        
+        NodeList listOfNodes = doc.getElementsByTagName("category");
+
+        for (int i = 0; i < listOfNodes.getLength(); i++) {
+            Element e = (Element) listOfNodes.item(i);
+            if ( e.getAttribute("name").equals(name) ){
+                category.setName(name);
+                category.setIconPath(e.getAttribute("icon"));
+                break;
+            }
+        }
+        return category;
+        
+
+    }
+    
     public void saveStructure(CategoryList categoryList) {
         prepareSAX();
         List<Category> catList = categoryList.getCategoryList();
@@ -107,7 +141,7 @@ public class FileManager {
                 out.writeAttribute("name", "categories");
                 out.writeStartElement("category");
                 out.writeAttribute("name", "default");
-                out.writeAttribute("icon", returnDefaultPath());
+                out.writeAttribute("icon", iconProps.getProperty("FOLDER_DEFAULT"));
                 out.writeStartElement("keys");
                 out.writeEmptyElement("key");
                 out.writeAttribute("keyname", "defaultKey");
@@ -187,13 +221,6 @@ public class FileManager {
         }
 
         return result;
-    }
-
-    private String returnDefaultPath() {
-        return "AppData\\" 
-                + "Images\\" 
-                + "intern\\"
-                + "Folder_default_16x16.png";
     }
 
     private void prepareSAX() {

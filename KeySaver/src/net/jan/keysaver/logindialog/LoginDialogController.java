@@ -5,7 +5,6 @@
 package net.jan.keysaver.logindialog;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -23,9 +22,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import net.jan.keysaver.manager.LoggingManager;
-import net.jan.keysaver.manager.SettingManager;
-import net.jan.keysaver.beans.Language_Singleton;
 import net.jan.keysaver.beans.Settings_Singelton;
 import net.jan.keysaver.sources.PageLoadHelper;
 
@@ -50,6 +46,8 @@ public class LoginDialogController implements Initializable {
     private Button loginButton;
     @FXML
     private Label errorLabel;
+    @FXML
+    private Label versionLabel;
     private Settings_Singelton settingsBean;
     
     private final String PATH_MAIN_FRAME = "src\\net\\jan\\keysaver\\mainpage\\Mainpage.fxml";
@@ -73,6 +71,7 @@ public class LoginDialogController implements Initializable {
         Image image = new Image(new File("AppData\\Images\\Logo_key.png").toURI().toString());
         imageView.setImage(image);
         pw = settingsBean.getValue("MPW");
+        versionLabel.setText(settingsBean.getValue("VERSION"));
         pwField.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent t) {
