@@ -50,7 +50,7 @@ public class LoginDialogController implements Initializable {
     private Label versionLabel;
     private Settings_Singelton settingsBean;
     
-    private final String PATH_MAIN_FRAME = "src\\net\\jan\\keysaver\\mainpage\\Mainpage.fxml";
+    private final String PATH_MAIN_FRAME = "src/net/jan/keysaver/mainpage/Mainpage.fxml";
 
     @FXML
     private void login(ActionEvent actionEvent) {
@@ -68,7 +68,7 @@ public class LoginDialogController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         settingsBean = Settings_Singelton.getInstance();
-        Image image = new Image(new File("AppData\\Images\\Logo_key.png").toURI().toString());
+        Image image = new Image(new File("AppData/Images/Logo_key.png").toURI().toString());
         imageView.setImage(image);
         pw = settingsBean.getValue("MPW");
         versionLabel.setText(settingsBean.getValue("VERSION"));

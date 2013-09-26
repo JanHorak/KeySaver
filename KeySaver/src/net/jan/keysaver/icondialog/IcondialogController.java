@@ -69,14 +69,14 @@ public class IcondialogController implements Initializable {
     private File selectedFile;
     private Language_Singleton langBean;
     private Settings_Singelton settingBean;
-    private SettingManager sm_icons = new SettingManager("AppData\\icons.properties");
+    private SettingManager sm_icons = new SettingManager("AppData/icons.properties");
 
     @FXML
     private void loadUpImage() {
         FileChooser chooser = new FileChooser();
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg"));
         chooser.setTitle(langBean.getValue("FILECHOOSERTITLE"));
-        chooser.setInitialDirectory(new File("AppData\\Images\\intern"));
+        chooser.setInitialDirectory(new File("AppData/Images/intern"));
 
 
 
@@ -150,7 +150,7 @@ public class IcondialogController implements Initializable {
         btn_cancel.setDisable(true);
 
         ObservableList<String> data = FXCollections.observableArrayList();
-        final SettingManager sm = new SettingManager("AppData\\icons.properties");
+        final SettingManager sm = new SettingManager("AppData/icons.properties");
         List<Object> obList = new ArrayList<>();
         try {
             obList = sm.returnAllProperties();

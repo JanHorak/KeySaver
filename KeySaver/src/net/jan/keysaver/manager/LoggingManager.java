@@ -17,8 +17,8 @@ import java.util.logging.Logger;
  */
 public class LoggingManager {
 
-    static String pathErrorFile = "AppData\\Error.log";
-    static String pathLoggingFile = "AppData\\Logging.log";
+    static String pathErrorFile = "AppData/Error.log";
+    static String pathLoggingFile = "AppData/Logging.log";
 
     public static void writeToErrorFile(String errorText, Exception inputEx) {
         Date date = new Date();

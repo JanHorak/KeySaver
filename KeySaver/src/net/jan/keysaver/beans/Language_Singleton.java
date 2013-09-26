@@ -38,7 +38,7 @@ public class Language_Singleton {
             Logger.getLogger(Language_Singleton.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            instanceProperties = new SettingManager("AppData\\Lang_"+lang+".properties").initAndReturnProperties();
+            instanceProperties = new SettingManager("AppData/Lang_"+lang+".properties").initAndReturnProperties();
             instanceProperties = setCharsetInNewPropertiesFile();
             System.out.println("Language-Values loaded in Singelton");
         } catch (IOException ex) {
@@ -48,7 +48,7 @@ public class Language_Singleton {
     
     public void setupNewLanguage(String lang){
         try {
-            instanceProperties = new SettingManager("AppData\\Lang_"+lang+".properties").initAndReturnProperties();
+            instanceProperties = new SettingManager("AppData/Lang_"+lang+".properties").initAndReturnProperties();
             System.out.println("New Language set in Lang-Bean!");
         } catch (IOException ex) {
             Logger.getLogger(Language_Singleton.class.getName()).log(Level.SEVERE, null, ex);
