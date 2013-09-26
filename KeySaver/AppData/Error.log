@@ -8,3 +8,43 @@ Exception:
 java.io.FileNotFoundException: 
 ------------------------------------
 
+---------------ERROR---------------
+Time: Thu Sep 26 15:08:45 CEST 2013
+
+Hint from Developer: 
+initialize() -> Loading Icons from icons.properties failed
+
+Exception: 
+[Ljava.lang.StackTraceElement;@4f2668
+------------------------------------
+
+---------------ERROR---------------
+Time: Thu Sep 26 15:09:58 CEST 2013
+
+Hint from Developer: 
+initialize() -> Loading Icons from icons.properties failed
+
+Exception: 
+[Ljava.lang.StackTraceElement;@18a92eb
+------------------------------------
+
+---------------ERROR---------------
+Time: Thu Sep 26 15:13:51 CEST 2013
+
+Hint from Developer: 
+IcondialogController: Failed to load ObjectList
+
+Exception: 
+[Ljava.lang.StackTraceElement;@52b14b
+------------------------------------
+
+---------------ERROR---------------
+Time: Thu Sep 26 15:13:59 CEST 2013
+
+Hint from Developer: 
+Error at loading Images
+
+Exception: 
+[Ljava.lang.StackTraceElement;@cda36b
+------------------------------------
+
