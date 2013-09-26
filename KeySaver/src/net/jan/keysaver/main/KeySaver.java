@@ -16,7 +16,7 @@ public class KeySaver extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {     
-        new PageLoadHelper("src\\net\\jan\\keysaver\\logindialog\\LoginDialog.fxml", "Login",255, 120);
+        new PageLoadHelper("src/net/jan/keysaver/logindialog/LoginDialog.fxml", "Login",255, 120);
     }
 
     /**

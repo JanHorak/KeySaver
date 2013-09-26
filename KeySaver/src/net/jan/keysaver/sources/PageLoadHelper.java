@@ -43,7 +43,7 @@ public class PageLoadHelper {
             Stage stage = new Stage();
             stage.setTitle(title);
             stage.setScene(new Scene(root, width, height));
-            stage.getIcons().add(new Image(new FileInputStream(new File("AppData\\Images\\Logo_icon_16x16.png"))));
+            stage.getIcons().add(new Image(new FileInputStream(new File("AppData/Images/Logo_icon_16x16.png"))));
             stage.show();
         } catch (IOException ex) {
             Logger.getLogger(PageLoadHelper.class.getName()).log(Level.SEVERE, null, ex);

@@ -37,7 +37,7 @@ import org.xml.sax.SAXException;
  */
 public class FileManager {
 
-    private final String path = "AppData\\structure.xml";
+    private final String path = "AppData/structure.xml";
     private DocumentBuilderFactory dbFactory;
     private DocumentBuilder dBuilder = null;
     private Document doc = null;
@@ -47,7 +47,7 @@ public class FileManager {
     private Properties iconProps;
     
     public FileManager(){
-        sm_icon = new SettingManager("AppData\\icons.properties");
+        sm_icon = new SettingManager("AppData/icons.properties");
         try {
             iconProps = sm_icon.initAndReturnProperties();
         } catch (IOException ex) {

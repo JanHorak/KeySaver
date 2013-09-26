@@ -77,7 +77,7 @@ public class PropertiesController implements Initializable {
     private Image imageOK;
     private Image imageNOK;
     private String nameBuffer;
-    private final String PATH_INFODIALOG = "src\\net\\jan\\keysaver\\infodialog\\InfoDialog.fxml";
+    private final String PATH_INFODIALOG = "src/net/jan/keysaver/infodialog/InfoDialog.fxml";
     private String selectedAvatar = "";
     private String selectedInitialAvatar = "";
     SettingManager sm_main = new SettingManager("settings.ini");
@@ -134,7 +134,7 @@ public class PropertiesController implements Initializable {
             if (selectedAvatar.equals("")) {
                 sm_main.storeProperty("AVATAR", selectedInitialAvatar);
             } else {
-                sm_main.storeProperty("AVATAR", "AppData\\Images\\Avatars\\" + selectedAvatar);
+                sm_main.storeProperty("AVATAR", "AppData/Images/Avatars/" + selectedAvatar);
             }
             sm_main.storeProperty("DEBUG", String.valueOf(debug));
         } catch (FileNotFoundException ex) {
@@ -177,8 +177,8 @@ public class PropertiesController implements Initializable {
 
         debugTooltip.setText(language_singelton.getValue("DEBUGMODE"));
         try {
-            imageOK = new Image(new FileInputStream("AppData\\Images\\intern\\Ok_32x32.png"));
-            imageNOK = new Image(new FileInputStream("AppData\\Images\\intern\\NOk_32x32.png"));
+            imageOK = new Image(new FileInputStream("AppData/Images/intern/Ok_32x32.png"));
+            imageNOK = new Image(new FileInputStream("AppData/Images/intern/NOk_32x32.png"));
         } catch (FileNotFoundException ex) {
             LoggingManager.writeToErrorFile("Error at loading Images", ex);
         }
@@ -203,18 +203,18 @@ public class PropertiesController implements Initializable {
         nameBuffer = tf_name.getText();
         ObservableList<Label> avatarList = FXCollections.observableArrayList();
 
-        File dir = new File("AppData\\Images\\Avatars");
+        File dir = new File("AppData/Images/Avatars");
         String[] files = dir.list();
         int tmpcounter = 0;
         int position = 0;
         for (String s : files) {
             Label l = new Label(s);
             try {
-                l.setGraphic(new ImageView(new Image(new FileInputStream("AppData\\Images\\Avatars\\" + s))));
+                l.setGraphic(new ImageView(new Image(new FileInputStream("AppData/Images/Avatars/" + s))));
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            if (("AppData\\Images\\Avatars\\" + s).equals(selectedInitialAvatar)) {
+            if (("AppData/Images/Avatars/" + s).equals(selectedInitialAvatar)) {
                 position = tmpcounter;
             }
             avatarList.add(l);
@@ -227,7 +227,7 @@ public class PropertiesController implements Initializable {
             @Override
             public void handle(MouseEvent t) {
                 selectedAvatar = iconList.getSelectionModel().getSelectedItem().getText();
-                if (("AppData\\Images\\Avatars\\" + selectedAvatar).equals(selectedInitialAvatar)) {
+                if (("AppData/Images/Avatars/" + selectedAvatar).equals(selectedInitialAvatar)) {
                     btn_save.setDisable(true);
                 } else {
                     proofName();

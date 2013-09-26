@@ -161,8 +161,8 @@ public class MainpageController implements Initializable {
     private TitledPane actionPane;
     private CategoryList catList = new CategoryList();
     private FileManager fileManager = new FileManager();
-    private final String PATH_PROPERTIES = "src\\net\\jan\\keysaver\\properties\\Properties.fxml";
-    private final String PATH_ICONMANAGEMENT = "src\\net\\jan\\keysaver\\icondialog\\Icondialog.fxml";
+    private final String PATH_PROPERTIES = "src/net/jan/keysaver/properties/Properties.fxml";
+    private final String PATH_ICONMANAGEMENT = "src/net/jan/keysaver/icondialog/Icondialog.fxml";
     private SelectionModel model;
     private Key selectedKey = new Key();
     private TreeItem selectedItem = new TreeItem();
@@ -760,7 +760,7 @@ public class MainpageController implements Initializable {
     @FXML
     private void openErrorFile() {
         try {
-            Desktop.getDesktop().open(new File("AppData\\Error.log"));
+            Desktop.getDesktop().open(new File("AppData/Error.log"));
         } catch (IOException ex) {
             LoggingManager.writeToErrorFile("openErrorFile()", ex);
             startNotification(EnumNotification.ERROR);
@@ -770,7 +770,7 @@ public class MainpageController implements Initializable {
     @FXML
     private void browseImage() {
         FileChooser chooser = new FileChooser();
-        chooser.setInitialDirectory(new File("AppData\\Images\\intern"));
+        chooser.setInitialDirectory(new File("AppData/Images/intern"));
         chooser.setTitle("Choose an own Image for the Category");
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ImageFiles", "*.png", "*.jpg"));
         File path = chooser.showOpenDialog(null);
@@ -835,7 +835,7 @@ public class MainpageController implements Initializable {
 
         //Load the ini-Files and provide data
 
-        sm_icons = new SettingManager("AppData\\icons.properties");
+        sm_icons = new SettingManager("AppData/icons.properties");
         languageBean = Language_Singleton.getInstance();
 
         debugLog("Property and Ini- Files are loaded");
