@@ -33,6 +33,7 @@ import javafx.stage.Stage;
 import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.manager.SettingManager;
 import net.jan.keysaver.beans.Language_Singleton;
+import net.jan.keysaver.infodialog.InfoDialogController;
 
 import net.jan.keysaver.sources.PageLoadHelper;
 
@@ -77,7 +78,7 @@ public class PropertiesController implements Initializable {
     private Image imageOK;
     private Image imageNOK;
     private String nameBuffer;
-    private final String PATH_INFODIALOG = "src/net/jan/keysaver/infodialog/InfoDialog.fxml";
+    private final String PATH_INFODIALOG = "InfoDialog.fxml";
     private String selectedAvatar = "";
     private String selectedInitialAvatar = "";
     SettingManager sm_main = new SettingManager("settings.ini");
@@ -148,7 +149,7 @@ public class PropertiesController implements Initializable {
         Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
 
-        new PageLoadHelper(PATH_INFODIALOG, "Information", 343, 59);
+        new PageLoadHelper(PATH_INFODIALOG, "Information", 343, 59, InfoDialogController.class).loadPage();
     }
 
     @FXML

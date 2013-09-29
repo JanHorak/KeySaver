@@ -23,6 +23,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import net.jan.keysaver.beans.Settings_Singelton;
+import net.jan.keysaver.mainpage.MainpageController;
 import net.jan.keysaver.sources.PageLoadHelper;
 
 /**
@@ -50,12 +51,12 @@ public class LoginDialogController implements Initializable {
     private Label versionLabel;
     private Settings_Singelton settingsBean;
     
-    private final String PATH_MAIN_FRAME = "src/net/jan/keysaver/mainpage/Mainpage.fxml";
+    private final String PATH_MAIN_FRAME = "Mainpage.fxml";
 
     @FXML
     private void login(ActionEvent actionEvent) {
         if (pwField.getText().equals(pw)) {
-            new PageLoadHelper(PATH_MAIN_FRAME, "KeySaver2.0 " +"Version "+ settingsBean.getValue("VERSION"), 612, 464);
+            new PageLoadHelper(PATH_MAIN_FRAME, "KeySaver2.0 " +"Version "+ settingsBean.getValue("VERSION"), 612, 464, MainpageController.class).loadPage();
             //close the Window
             Node source = (Node) actionEvent.getSource();
             Stage stage = (Stage) source.getScene().getWindow();
