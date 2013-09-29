@@ -25,21 +25,20 @@ public class PageLoadHelper {
     private String title;
     private double width;
     private double height;
-    private Parent root = null;
-    private Stage stage;
+    Class c;
 
-    public PageLoadHelper(String pathString, String title, double width, double height) {
+    public PageLoadHelper(String pathString, String title, double width, double height, Class c) {
         this.height = height;
         this.pathString = pathString;
         this.title = title;
         this.width = width;
-        loadPage();
+        this.c = c;
     }
 
-    private void loadPage() {
+    public void loadPage() {
         try {
             Parent root;
-            root = FXMLLoader.load(new File(pathString).toURL());
+            root = FXMLLoader.load(c.getResource(pathString));
             Stage stage = new Stage();
             stage.setTitle(title);
             stage.setScene(new Scene(root, width, height));

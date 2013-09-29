@@ -47,6 +47,8 @@ import net.jan.keysaver.sources.EnumNotification;
 import net.jan.keysaver.sources.Key;
 import net.jan.keysaver.beans.Language_Singleton;
 import net.jan.keysaver.beans.Settings_Singelton;
+import net.jan.keysaver.icondialog.IcondialogController;
+import net.jan.keysaver.properties.PropertiesController;
 import net.jan.keysaver.sources.PageLoadHelper;
 import net.jan.keysaver.validators.Validator;
 
@@ -161,8 +163,8 @@ public class MainpageController implements Initializable {
     private TitledPane actionPane;
     private CategoryList catList = new CategoryList();
     private FileManager fileManager = new FileManager();
-    private final String PATH_PROPERTIES = "src/net/jan/keysaver/properties/Properties.fxml";
-    private final String PATH_ICONMANAGEMENT = "src/net/jan/keysaver/icondialog/Icondialog.fxml";
+    private final String PATH_PROPERTIES = "Properties.fxml";
+    private final String PATH_ICONMANAGEMENT = "Icondialog.fxml";
     private SelectionModel model;
     private Key selectedKey = new Key();
     private TreeItem selectedItem = new TreeItem();
@@ -749,12 +751,12 @@ public class MainpageController implements Initializable {
 
     @FXML
     private void open_Properties() {
-        new PageLoadHelper(PATH_PROPERTIES, "Properties", 428, 241);
+        new PageLoadHelper(PATH_PROPERTIES, "Properties", 428, 241, PropertiesController.class).loadPage();
     }
 
     @FXML
     private void open_Iconsite() {
-        new PageLoadHelper(PATH_ICONMANAGEMENT, "Iconmanagement", 366, 400);
+        new PageLoadHelper(PATH_ICONMANAGEMENT, "Iconmanagement", 366, 400, IcondialogController.class).loadPage();
     }
 
     @FXML
