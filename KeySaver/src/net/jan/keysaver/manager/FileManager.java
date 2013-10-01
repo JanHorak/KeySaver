@@ -23,6 +23,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import net.jan.aes.decryption.Decryption;
+import net.jan.aes.encryption.Encryption;
 import net.jan.keysaver.sources.Category;
 import net.jan.keysaver.sources.CategoryList;
 import net.jan.keysaver.sources.Key;
@@ -37,7 +39,7 @@ import org.xml.sax.SAXException;
  */
 public class FileManager {
 
-    private final String path = "AppData/structure.xml";
+    private String structureFilePath = "AppData/structure.xml";
     private DocumentBuilderFactory dbFactory;
     private DocumentBuilder dBuilder = null;
     private Document doc = null;
@@ -53,7 +55,6 @@ public class FileManager {
         } catch (IOException ex) {
             LoggingManager.writeToErrorFile(null, ex);
         }
-        
     }
 
     
@@ -72,6 +73,7 @@ public class FileManager {
                 break;
             }
         }
+        encryptStructureFile();
         return category;
         
 
@@ -83,7 +85,7 @@ public class FileManager {
         categoryList.printStructure();
         try {
             try {
-                outputStream = new FileOutputStream(new File(path));
+                outputStream = new FileOutputStream(new File(structureFilePath));
             } catch (FileNotFoundException ex) {
                 LoggingManager.writeToErrorFile("File not found! XML", ex);
             }
@@ -123,13 +125,14 @@ public class FileManager {
         } catch (IOException ex) {
             Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
         }
+        encryptStructureFile();
     }
 
     public void checkAvailibility() {
-        if (!new File(path).exists()) {
+        if (!new File(structureFilePath).exists()) {
             try {
                 try {
-                    outputStream = new FileOutputStream(new File(path));
+                    outputStream = new FileOutputStream(new File(structureFilePath));
                 } catch (FileNotFoundException ex) {
                     LoggingManager.writeToErrorFile("File not found! XML", ex);
                 }
@@ -160,6 +163,7 @@ public class FileManager {
                     LoggingManager.writeToErrorFile("Cant close XMLOutWriter or OutputStream", ex);
                 }
                 System.out.println("First Start: List of Categories not existing. Created and initialized it!");
+                encryptStructureFile();
             } catch (XMLStreamException ex) {
                 LoggingManager.writeToErrorFile(null, ex);
             } catch (UnsupportedEncodingException ex) {
@@ -200,7 +204,7 @@ public class FileManager {
         }
 
         categoryList.setCategoryList(list);
-
+        encryptStructureFile();
         return categoryList;
     }
 
@@ -216,26 +220,35 @@ public class FileManager {
                 result.setUsername(e.getAttribute("username"));
                 result.setDescription(e.getAttribute("description"));
                 result.setPassword(e.getAttribute("password"));
+                encryptStructureFile();
                 return result;
             }
         }
-
+        encryptStructureFile();
         return result;
     }
 
     private void prepareSAX() {
+        File strucure = new File(structureFilePath);
         dbFactory = DocumentBuilderFactory.newInstance();
+        strucure = new Decryption().returnDecryptedFile(new File(structureFilePath), structureFilePath, "AppData/private.key");
         try {
             dBuilder = dbFactory.newDocumentBuilder();
         } catch (ParserConfigurationException ex) {
             LoggingManager.writeToErrorFile("SAX: Cant load db-Factory!", ex);
         }
         try {
-            doc = dBuilder.parse(path);
+            doc = dBuilder.parse(strucure);
         } catch (SAXException ex) {
             LoggingManager.writeToErrorFile("SAX-Parse-Exception!", ex);
         } catch (IOException ex) {
             LoggingManager.writeToErrorFile("SAX: Cant load XML-File", ex);
         }
+    }
+    
+    
+    private void encryptStructureFile(){
+        File strucure = new File(structureFilePath);
+        strucure = new Encryption().returnEncryptedFile(strucure, structureFilePath, "AppData/private.key");
     }
 }
