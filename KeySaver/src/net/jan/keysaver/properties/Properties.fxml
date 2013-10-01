@@ -7,11 +7,11 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="241.0" prefWidth="428.0" xmlns:fx="http://javafx.com/fxml" fx:controller="net.jan.keysaver.properties.PropertiesController">
+<AnchorPane id="AnchorPane" prefHeight="282.0" prefWidth="428.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.jan.keysaver.properties.PropertiesController">
   <children>
-    <Button id="saveButton" fx:id="btn_save" disable="true" layoutX="367.0" layoutY="217.0" mnemonicParsing="false" onAction="#save" text="Save" />
-    <Button fx:id="btn_cancel" cancelButton="true" layoutX="286.0" layoutY="217.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
-    <GridPane layoutX="2.0" layoutY="4.0" prefHeight="202.0" prefWidth="424.0">
+    <Button id="saveButton" fx:id="btn_save" disable="true" layoutX="335.0" layoutY="247.0" mnemonicParsing="false" onAction="#save" prefWidth="79.0" text="Save" />
+    <Button fx:id="btn_cancel" cancelButton="true" layoutX="234.0" layoutY="247.0" mnemonicParsing="false" onAction="#cancel" prefWidth="87.0" text="Cancel" />
+    <GridPane layoutX="2.0" layoutY="4.0" prefHeight="235.0" prefWidth="424.0">
       <children>
         <Label fx:id="lb_username" text="Username" GridPane.columnIndex="0" GridPane.rowIndex="0" />
         <Label fx:id="lb_pw" text="Masterpassword" GridPane.columnIndex="0" GridPane.rowIndex="1" />
@@ -20,7 +20,7 @@
         <PasswordField fx:id="pwfield" onKeyReleased="#proofPW" prefWidth="248.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
         <PasswordField fx:id="confirm_pwfield" onKeyReleased="#proofPW" prefWidth="206.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
         <ImageView fx:id="statusImage" fitHeight="31.5" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-        <TextField fx:id="tf_name" onKeyReleased="#proofName" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <TextField fx:id="tf_name" onKeyReleased="#proofName" prefWidth="235.0001220703125" GridPane.columnIndex="1" GridPane.rowIndex="0" />
         <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" GridPane.columnIndex="1" GridPane.rowIndex="3">
           <content>
             <ListView fx:id="iconList" prefHeight="117.0" prefWidth="235.0" />
@@ -32,10 +32,16 @@
             <Tooltip text="TOOLTIP" fx:id="debugTooltip" />
           </tooltip>
         </CheckBox>
+        <Label fx:id="lb_createNewKey" text="Create new encryptionkey" GridPane.columnIndex="0" GridPane.rowIndex="5">
+          <tooltip>
+            <Tooltip text="Empty Tooltip" fx:id="encKeyTooltip" />
+          </tooltip>
+        </Label>
+        <Button fx:id="btn_createNewKey" mnemonicParsing="false" text="Create" GridPane.columnIndex="1" GridPane.rowIndex="5" />
       </children>
       <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="262.0" minWidth="10.0" prefWidth="147.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="320.0" minWidth="10.0" prefWidth="235.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="262.0" minWidth="10.0" prefWidth="184.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="320.0" minWidth="10.0" prefWidth="198.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="296.0" minWidth="10.0" prefWidth="42.0" />
       </columnConstraints>
       <rowConstraints>
@@ -43,6 +49,7 @@
         <RowConstraints maxHeight="58.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="18.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="138.0" minHeight="10.0" prefHeight="113.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="117.0" minHeight="10.0" prefHeight="19.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="117.0" minHeight="10.0" prefHeight="19.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
