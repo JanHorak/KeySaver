@@ -185,7 +185,6 @@ public class MainpageController implements Initializable {
     private String addString2 = "";
     Language_Singleton languageBean;
     Settings_Singelton settingsBean;
-    
     @FXML
     private Tooltip errorTooltip;
 
@@ -211,7 +210,7 @@ public class MainpageController implements Initializable {
             chk_useDefaultIcon.setDisable(false);
             iconPreview.setDisable(false);
             enableControl(btn_save, btn_cancel);
-            
+
             tf_catName.setText(selectedLocalCat.getName());
             pathLabel.setText(selectedLocalCat.getIconPath());
             selectedLocalCat = null;
@@ -273,6 +272,7 @@ public class MainpageController implements Initializable {
         tf_catName.setText("");
         btn_browse.setDisable(true);
         pathLabel.setDisable(true);
+        pathLabel.setText("");
         pwImage.setImage(null);
     }
 
@@ -305,30 +305,22 @@ public class MainpageController implements Initializable {
 
     @FXML
     private void remove() {
-        boolean stop = false;
+        boolean live = true;
         if (isKeySelected) {
             List<Category> cat = catList.getCategoryList();
 
             for (Category c : cat) {
                 List<Key> keyList = c.getKeylist();
-                for (Key k : keyList) {
-                    if (stop) {
-                        break;
-                    }
-                    if (k.getKeyname().equals(selectedKey.getKeyname())) {
+                for (int i = 0; i < keyList.size() && live; i++) {
+                    if (keyList.get(i).getKeyname().equals(selectedKey.getKeyname())) {
                         if (keyList.size() == 1) {
                             cat.remove(c);
-
-                            stop = true;
-                            break;
                         } else {
-                            keyList.remove(k);
+                            keyList.remove(i);
                             c.setKeylist(keyList);
+                            live = false;
                         }
                     }
-                }
-                if (stop) {
-                    break;
                 }
             }
             catList.setCategoryList(cat);
@@ -339,20 +331,17 @@ public class MainpageController implements Initializable {
         }
         if (isCatSelected) {
             List<Category> cat = catList.getCategoryList();
-            for (Category c : cat) {
-                if (stop) {
-                    break;
-                }
-                if (c.getName().equals(selectedCat)) {
-                    cat.remove(c);
-                    stop = true;
-                    break;
+            for (int i = 0; i < cat.size() && live; i++) {
+                Category currentCategory = cat.get(i);
+                if (currentCategory.getName().equals(selectedCat)) {
+                    cat.remove(currentCategory);
+                    new FileManager().saveStructure(catList);
+                    initTree();
+                    editCancel();
+                    startNotification(EnumNotification.CAT_REMOVED);
+                    live = false;
                 }
             }
-            new FileManager().saveStructure(catList);
-            initTree();
-            editCancel();
-            startNotification(EnumNotification.CAT_REMOVED);
         }
     }
 
@@ -361,7 +350,7 @@ public class MainpageController implements Initializable {
         //new Category
         if (addCat) {
             String catname = tf_catName.getText().trim();
-            
+
             Category cat = new Category();
             cat.setName(catname);
             if (chk_useDefaultIcon.isSelected()) {
@@ -369,47 +358,46 @@ public class MainpageController implements Initializable {
             } else {
                 cat.setIconPath(pathLabel.getText());
             }
-            
-            //Validation of the Category
-            if ( new Validator().validateCategory(cat)){
 
-            iconPreview.setVisible(true);
-            Key k = new Key();
-            List<Key> keyList = new ArrayList<Key>();
-            k.setKeyname("new Key");
-            k.setDescription("unknown");
-            k.setPassword("unknown");
-            k.setUsername("unknown");
-            keyList.add(k);
-            cat.setKeylist(keyList);
-            List<Category> categoryList = new ArrayList<>();
-            categoryList = catList.getCategoryList();
-            categoryList.add(cat);
-            catList.setCategoryList(categoryList);
-            new FileManager().saveStructure(catList);
-            initTree();
-            editCancel();
-            startNotification(EnumNotification.CAT_ADDED);
-            
-            //Category is invalid!
+            //Validation of the Category
+            if (new Validator().validateCategory(cat)) {
+
+                iconPreview.setVisible(true);
+                Key k = new Key();
+                List<Key> keyList = new ArrayList<Key>();
+                k.setKeyname("new Key");
+                k.setDescription("unknown");
+                k.setPassword("unknown");
+                k.setUsername("unknown");
+                keyList.add(k);
+                cat.setKeylist(keyList);
+                List<Category> categoryList = new ArrayList<>();
+                categoryList = catList.getCategoryList();
+                categoryList.add(cat);
+                catList.setCategoryList(categoryList);
+                new FileManager().saveStructure(catList);
+                initTree();
+                editCancel();
+                startNotification(EnumNotification.CAT_ADDED);
+
+                //Category is invalid!
             } else {
-             startNotification(EnumNotification.WARNING);
-             LoggingManager.writeToLogFile("Categoryname or Iconpath is invalid!"
-                     + " Please try again");
+                startNotification(EnumNotification.WARNING);
+                LoggingManager.writeToLogFile("Categoryname or Iconpath is invalid!"
+                        + " Please try again");
             }
         }
         // Change existing name of Cat
         if (editCat) {
-            
-            for (Category cat : catList.getCategoryList()) {
-                if (cat.getName().equals(tmpBuffer)) {
-                    //Validate
-//                    if ( new Validator().validateCategory(cat) )
-                    cat.setName(tf_catName.getText());
+            boolean live = true;
+            for (int i = 0; i < catList.getCategoryList().size() && live; i++) {
+                Category currentCategory = catList.getCategoryList().get(i);
+                if (currentCategory.getName().equals(tmpBuffer)) {
+                    currentCategory.setName(tf_catName.getText());
                     new FileManager().saveStructure(catList);
                     initTree();
                     editCancel();
-                    break;
+                    live = false;
                 }
             }
 
@@ -427,26 +415,23 @@ public class MainpageController implements Initializable {
 
             //Validation of the Key
             if (new Validator().validateKey(editedKey)) {
-
-                for (Category c : cat) {
-                    List<Key> keyList = c.getKeylist();
-                    for (Key k : keyList) {
-                        if (stop) {
-                            break;
-                        }
-                        if (k.getKeyname().equals(oldKey.getKeyname())) {
-                            k.overwriteKey(editedKey);
-                            c.setKeylist(keyList);
-                            stop = true;
+                boolean live = true;
+                for (int i = 0; i < cat.size() && live; i++) {
+                    Category currentCategory = cat.get(i);
+                    List<Key> keyList = currentCategory.getKeylist();
+                    for (int j = 0; j < keyList.size() && live; j++) {
+                        Key currentKey = keyList.get(j);
+                        if (currentKey.getKeyname().equals(oldKey.getKeyname())) {
+                            currentKey.overwriteKey(editedKey);
+                            currentCategory.setKeylist(keyList);
+                            catList.setCategoryList(cat);
+                            new FileManager().saveStructure(catList);
+                            initTree();
+                            editCancel();
+                            live = false;
                         }
                     }
-
                 }
-                catList.setCategoryList(cat);
-                new FileManager().saveStructure(catList);
-                initTree();
-                editCancel();
-
                 //Key is Invalid
             } else {
                 startNotification(EnumNotification.WARNING);
@@ -625,12 +610,12 @@ public class MainpageController implements Initializable {
         notificationPane.setText(languageBean.getValue("NOTIFICATION"));
         actionPane.setText(languageBean.getValue("ACTIONS"));
         debugLog("  ...Panes done");
-        
+
         //Special
         chk_useDefaultIcon.setText(languageBean.getValue("USEDEFAULTICON"));
         errorTooltip.setText(languageBean.getValue("ERRORBOX"));
         debugLog("  ...Specials done");
-        
+
         debugLog("");
         debugLog("...Language is changed!");
     }

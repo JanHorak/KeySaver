@@ -60,6 +60,8 @@ public class PropertiesController implements Initializable {
     @FXML
     private Button btn_cancel;
     @FXML
+    private Button btn_createNewKey;
+    @FXML
     private ListView<Label> iconList;
     @FXML
     private CheckBox chk_debug;
@@ -74,7 +76,11 @@ public class PropertiesController implements Initializable {
     @FXML
     private Label lb_debugmode;
     @FXML
+    private Label lb_createNewKey;
+    @FXML
     private Tooltip debugTooltip;
+    @FXML
+    private Tooltip encKeyTooltip;
     private Image imageOK;
     private Image imageNOK;
     private String nameBuffer;
@@ -248,5 +254,9 @@ public class PropertiesController implements Initializable {
         chk_debug.setText(language_singelton.getValue("ACTIVATE"));
         btn_save.setText(language_singelton.getValue("SAVE"));
         btn_cancel.setText(language_singelton.getValue("CANCEL"));
+        btn_createNewKey.setText(language_singelton.getValue("CREATE"));
+        lb_createNewKey.setText(language_singelton.getValue("CREATENEWENCKEY"));
+        encKeyTooltip.setText(language_singelton.getValue("ENCKEY"));
+        debugTooltip.setText(language_singelton.getValue("DEBUGMODE"));
     }
 }
