@@ -30,12 +30,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import net.jan.aes.decryption.Decryption;
+import net.jan.aes.encryption.Encryption;
+import net.jan.aes.keygenerationmanager.KeyGenerationManager;
 import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.manager.SettingManager;
 import net.jan.keysaver.beans.Language_Singleton;
-import net.jan.keysaver.infodialog.InfoDialogController;
 
 import net.jan.keysaver.sources.PageLoadHelper;
+import net.jan.keysaver.sources.Utilities;
 
 /**
  * FXML Controller class
@@ -84,13 +87,11 @@ public class PropertiesController implements Initializable {
     private Image imageOK;
     private Image imageNOK;
     private String nameBuffer;
-    private final String PATH_INFODIALOG = "InfoDialog.fxml";
     private String selectedAvatar = "";
     private String selectedInitialAvatar = "";
     SettingManager sm_main = new SettingManager("settings.ini");
     private int debug = 0;
     private int debugBuffer = 0;
-    private String lang = "";
     Language_Singleton language_singelton;
 
     @FXML
@@ -137,7 +138,7 @@ public class PropertiesController implements Initializable {
         try {
             sm_main = new SettingManager("settings.ini");
             sm_main.storeProperty("USERNAME", tf_name.getText());
-            sm_main.storeProperty("MPW", confirm_pwfield.getText());
+            sm_main.storeProperty("MPW", Utilities.getHash(confirm_pwfield.getText()).trim());
             if (selectedAvatar.equals("")) {
                 sm_main.storeProperty("AVATAR", selectedInitialAvatar);
             } else {
@@ -155,7 +156,7 @@ public class PropertiesController implements Initializable {
         Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
 
-        new PageLoadHelper(PATH_INFODIALOG, "Information", 343, 59, InfoDialogController.class).loadPage();
+        new PageLoadHelper().loadInfoRestartDialog();
     }
 
     @FXML
@@ -181,7 +182,7 @@ public class PropertiesController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         debugTooltip.setText(language_singelton.getValue("DEBUGMODE"));
         try {
             imageOK = new Image(new FileInputStream("AppData/Images/intern/Ok_32x32.png"));
@@ -243,6 +244,14 @@ public class PropertiesController implements Initializable {
                 }
             }
         });
+        SettingManager sm_icon = new SettingManager("AppData/icons.properties");
+        try {
+            lb_createNewKey.setGraphic(new ImageView(new Image(new FileInputStream(new File(sm_icon.returnProperty("RECREATEKEY"))))));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void initLanguage() {
@@ -258,5 +267,19 @@ public class PropertiesController implements Initializable {
         lb_createNewKey.setText(language_singelton.getValue("CREATENEWENCKEY"));
         encKeyTooltip.setText(language_singelton.getValue("ENCKEY"));
         debugTooltip.setText(language_singelton.getValue("DEBUGMODE"));
+    }
+    
+    @FXML
+    public void recreateKey(){
+        File structure = new File("AppData/structure.xml");
+        File key = new File("AppData/private.key");
+
+        structure = new Decryption().returnDecryptedFile(structure, structure.getAbsolutePath(), key.getAbsolutePath());
+
+        KeyGenerationManager keyGenManager = new KeyGenerationManager();
+        keyGenManager.generateAndStoreKey("AppData/private.key");
+        
+        structure = new Encryption().returnEncryptedFile(structure, structure.getAbsolutePath(), key.getAbsolutePath());
+        new PageLoadHelper().loadRecreateKeyDialog();
     }
 }

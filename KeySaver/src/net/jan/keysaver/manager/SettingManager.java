@@ -51,6 +51,7 @@ public class SettingManager {
     
     public void storeProperty(String key, String value) throws FileNotFoundException, IOException {
         initProperty();
+        value = new String(value.getBytes(), Charset.forName("UTF-8"));
         property.setProperty(key, value);
         property.store(new FileOutputStream(new File(filePathINI)), "");
     }
@@ -65,7 +66,7 @@ public class SettingManager {
     
     private void initProperty() throws IOException{
         property = new Properties();
-        Reader r = new InputStreamReader(new FileInputStream(new File(filePathINI)), "UTF8");
+        Reader r = new InputStreamReader(new FileInputStream(new File(filePathINI)), "UTF-8");
         property.load(r);
     }
     
