@@ -37,12 +37,12 @@
             <Tooltip text="Empty Tooltip" fx:id="encKeyTooltip" />
           </tooltip>
         </Label>
-        <Button fx:id="btn_createNewKey" mnemonicParsing="false" text="Create" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+        <Button fx:id="btn_createNewKey" mnemonicParsing="false" onAction="#recreateKey" text="Create" GridPane.columnIndex="1" GridPane.rowIndex="5" />
       </children>
       <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="262.0" minWidth="10.0" prefWidth="184.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="262.0" minWidth="10.0" prefWidth="213.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="320.0" minWidth="10.0" prefWidth="198.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="296.0" minWidth="10.0" prefWidth="42.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="296.0" minWidth="10.0" prefWidth="13.0" />
       </columnConstraints>
       <rowConstraints>
         <RowConstraints maxHeight="39.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
