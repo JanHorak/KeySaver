@@ -198,7 +198,6 @@ public class MainpageController implements Initializable {
             enableControl(btn_cancel, btn_save);
             keyBuffer = new FileManager().returnKey(tmpBuffer);
             editKey = true;
-            System.out.println("editKey detected - " + editKey);
         }
         if (!selectedItem.isLeaf()) {
             lockTree();
@@ -215,7 +214,6 @@ public class MainpageController implements Initializable {
             pathLabel.setText(selectedLocalCat.getIconPath());
             selectedLocalCat = null;
             editCat = true;
-            System.out.println("editCat detected - " + editCat);
         }
     }
 
@@ -736,7 +734,7 @@ public class MainpageController implements Initializable {
 
     @FXML
     private void open_Properties() {
-        new PageLoadHelper(PATH_PROPERTIES, "Properties", 428, 241, PropertiesController.class).loadPage();
+        new PageLoadHelper(PATH_PROPERTIES, "Properties", 428, 282, PropertiesController.class).loadPage();
     }
 
     @FXML
