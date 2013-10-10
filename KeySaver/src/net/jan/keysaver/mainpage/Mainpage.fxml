@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="464.0" prefWidth="612.0" xmlns:fx="http://javafx.com/fxml" fx:controller="net.jan.keysaver.mainpage.MainpageController">
+<AnchorPane id="AnchorPane" prefHeight="464.0" prefWidth="612.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.jan.keysaver.mainpage.MainpageController">
   <children>
     <TitledPane fx:id="keyPane" animated="false" collapsible="false" layoutY="24.0" prefHeight="356.0" text="Keys">
       <content>
@@ -60,7 +60,9 @@
       <menus>
         <Menu mnemonicParsing="false" text="File" fx:id="fileMenu">
           <items>
-            <MenuItem mnemonicParsing="false" text="Close" />
+            <MenuItem mnemonicParsing="false" text="Import" fx:id="import_fileItem" />
+            <MenuItem mnemonicParsing="false" onAction="#exportFile" text="Export" fx:id="export_fileItem" />
+            <MenuItem mnemonicParsing="false" text="Exit" fx:id="exitItem" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Edit" fx:id="editMenu">

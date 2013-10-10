@@ -6,7 +6,7 @@ package net.jan.keysaver.main;
  */
 import javafx.application.Application;
 import javafx.stage.Stage;
-import net.jan.keysaver.logindialog.LoginDialogController;
+import net.jan.keysaver.dialogs.logindialog.LoginDialogController;
 import net.jan.keysaver.sources.PageLoadHelper;
 
 /**

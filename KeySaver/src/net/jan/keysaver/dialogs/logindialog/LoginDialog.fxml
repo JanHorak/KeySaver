@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" fx:id="mainpane" prefHeight="120.0" prefWidth="255.0" xmlns:fx="http://javafx.com/fxml" fx:controller="net.jan.keysaver.logindialog.LoginDialogController">
+<AnchorPane id="AnchorPane" fx:id="mainpane" prefHeight="120.0" prefWidth="255.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.jan.keysaver.dialogs.logindialog.LoginDialogController">
   <children>
     <Label layoutX="14.0" layoutY="51.0" text="Password:" />
     <PasswordField fx:id="pwField" layoutX="81.0" layoutY="51.0" prefWidth="156.0" />

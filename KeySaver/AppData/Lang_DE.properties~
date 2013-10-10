@@ -55,4 +55,6 @@ ENCKEY=Erstellt einen neuen Schlüssel für die Verschlüsselung
 #DIALOGS
 INFODIALOG_TEXT=Änderungen werden nach einem Neustart wirksam
 INFODIALOG_TITLE=Information
+RECREATEKEY_TEXT=Die Daten wurden neu verschlüsselt
+RECREATEKEY_TITLE=Schlüsselerneuerung
 
