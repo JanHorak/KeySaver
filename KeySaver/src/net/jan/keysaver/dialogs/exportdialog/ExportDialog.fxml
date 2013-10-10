@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="193.0" prefWidth="359.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.jan.keysaver.dialogs.exportdialog.ExportDialogController">
+  <children>
+    <CheckBox fx:id="chk_exportDecrypted" layoutX="14.0" layoutY="15.0" mnemonicParsing="false" text="Export decrypted" />
+    <CheckBox fx:id="chk_exportKey" layoutX="14.0" layoutY="46.0" mnemonicParsing="false" text="Export the key" />
+    <Label fx:id="lb_pathLabel" layoutX="14.0" layoutY="102.0" text="Path for Export:" />
+    <Label id="pathLabel" fx:id="lb_path" layoutX="129.0" layoutY="102.0" prefWidth="216.0" text="" />
+    <Button fx:id="btn_browse" layoutX="14.0" layoutY="128.0" mnemonicParsing="false" onAction="#browse" text="Browse" />
+    <CheckBox fx:id="chk_exportZipped" layoutX="14.0" layoutY="77.0" mnemonicParsing="false" text="Export zipped" />
+    <Button fx:id="btn_export" disable="false" layoutX="279.0" layoutY="159.0" mnemonicParsing="false" onAction="#export" text="Export" underline="false" />
+    <Button fx:id="btn_cancel" layoutX="200.0" layoutY="160.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+  </children>
+</AnchorPane>
