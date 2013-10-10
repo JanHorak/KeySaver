@@ -12,4 +12,4 @@ SETTINGS=AppData/Images/intern/Settings_16x16.png
 INFO=AppData/Images/intern/Info_32x32.png
 FILEIMPORT=AppData/Images/intern/File_import_16x16.png
 FILEEXPORT=AppData/Images/intern/File_export_16x16.png
-RECREATEKEY=AppData/Images/intern/recreateKey_32x32.png
+RECREATEKEY=AppData/Images/intern/recreateKey_16x16.png

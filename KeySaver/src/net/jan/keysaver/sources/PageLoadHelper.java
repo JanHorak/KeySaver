@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import net.jan.keysaver.beans.Language_Singleton;
+import net.jan.keysaver.dialogs.exportdialog.ExportDialogController;
 import net.jan.keysaver.dialogs.infodialog.InfoDialogController;
 import net.jan.keysaver.dialogs.recreatedialog.RecreateKeyDialogController;
 
@@ -73,6 +74,15 @@ public class PageLoadHelper {
         title = langSingleton.getValue("RECREATEKEY_TITLE");
         height = 59;
         width = 403;
+        loadPage();
+    }
+    
+    public void loadExportDialog(){
+        pathString = "ExportDialog.fxml";
+        c = ExportDialogController.class;
+        title = langSingleton.getValue("RECREATEKEY_TITLE");
+        height = 193;
+        width = 359;
         loadPage();
     }
 

@@ -47,7 +47,8 @@ import net.jan.keysaver.sources.EnumNotification;
 import net.jan.keysaver.sources.Key;
 import net.jan.keysaver.beans.Language_Singleton;
 import net.jan.keysaver.beans.Settings_Singelton;
-import net.jan.keysaver.icondialog.IcondialogController;
+import net.jan.keysaver.dialogs.exportdialog.ExportDialogController;
+import net.jan.keysaver.dialogs.icondialog.IcondialogController;
 import net.jan.keysaver.properties.PropertiesController;
 import net.jan.keysaver.sources.PageLoadHelper;
 import net.jan.keysaver.validators.Validator;
@@ -126,9 +127,15 @@ public class MainpageController implements Initializable {
     @FXML
     private MenuItem settingsItem;
     @FXML
+    private MenuItem import_fileItem;
+    @FXML
+    private MenuItem export_fileItem;
+    @FXML
     private MenuItem iconsItem;
     @FXML
     private MenuItem languageItem;
+    @FXML
+    private MenuItem exitItem;
     @FXML
     private CheckBox chk_englishLang;
     @FXML
@@ -601,6 +608,9 @@ public class MainpageController implements Initializable {
         chk_germanLang.setText(languageBean.getValue("GERMAN"));
         iconsItem.setText(languageBean.getValue("ICONMAN"));
         settingsItem.setText(languageBean.getValue("PROP"));
+        import_fileItem.setText(languageBean.getValue("IMPORT"));
+        export_fileItem.setText(languageBean.getValue("EXPORT"));
+        exitItem.setText(languageBean.getValue("EXIT"));
         debugLog("  ...Menus and Items done");
 
         //Panes
@@ -771,6 +781,11 @@ public class MainpageController implements Initializable {
             }
         }
     }
+    
+    @FXML
+    private void exportFile(){
+        new PageLoadHelper().loadExportDialog();
+    }
 
     ////////////////////////////////
     //
@@ -847,6 +862,8 @@ public class MainpageController implements Initializable {
             okImage = new Image(new FileInputStream(sm_icons.returnProperty("OK")));
             nokImage = new Image(new FileInputStream(sm_icons.returnProperty("NOK")));
             warningImage = new Image(new FileInputStream(sm_icons.returnProperty("WARNING")));
+            import_fileItem.setGraphic(new ImageView(new Image(new FileInputStream(new File(sm_icons.returnProperty("FILEIMPORT"))))));
+            export_fileItem.setGraphic(new ImageView(new Image(new FileInputStream(new File(sm_icons.returnProperty("FILEEXPORT"))))));
         } catch (FileNotFoundException ex) {
             LoggingManager.writeToErrorFile("initialize() -> Loading Icons from icons.properties failed", ex);
             startNotification(EnumNotification.ERROR);
