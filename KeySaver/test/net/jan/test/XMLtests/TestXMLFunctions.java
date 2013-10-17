@@ -6,6 +6,8 @@ package net.jan.test.XMLtests;
  */
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import net.jan.aes.decryption.Decryption;
 import net.jan.aes.encryption.Encryption;
 import net.jan.aes.keygenerationmanager.KeyGenerationManager;
@@ -62,8 +64,6 @@ public class TestXMLFunctions {
     public void shouldReturnSingleCategoryListFromXML(){
         Category cat = new Category();
         cat = new FileManager().returnSingleCategory("default");
-        System.out.println(cat.getName());
-        System.out.println(cat.getIconPath());
         assertNotNull(cat);
     }
     
@@ -91,5 +91,10 @@ public class TestXMLFunctions {
         
     }
     
-    
+    @Test
+    public void testShouldReturnAllIconPathes(){
+        List<String> list = new ArrayList<>();
+        list = new FileManager().returnIconCategoryPathes();
+        assertTrue(!list.isEmpty());
+    }
 }

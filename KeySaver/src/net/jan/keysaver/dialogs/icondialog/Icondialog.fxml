@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="366.0" xmlns:fx="http://javafx.com/fxml" fx:controller="net.jan.keysaver.icondialog.IcondialogController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="366.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.jan.keysaver.dialogs.icondialog.IcondialogController">
   <children>
     <ListView fx:id="dataList" layoutX="14.0" layoutY="14.0" prefHeight="186.0" prefWidth="338.0" />
     <Label fx:id="lb_fileName" layoutX="14.0" layoutY="210.0" text="Filename:" />

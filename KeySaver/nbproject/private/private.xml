@@ -5,24 +5,31 @@
             <url>src/net/jan/keysaver/mainpage/MainpageController.java</url>
             <bookmark id="2">
                 <name/>
-                <line>498</line>
+                <line>499</line>
                 <key/>
             </bookmark>
             <bookmark id="1">
                 <name/>
-                <line>572</line>
+                <line>573</line>
                 <key/>
             </bookmark>
             <bookmark id="4">
                 <name/>
-                <line>677</line>
+                <line>678</line>
                 <key/>
             </bookmark>
             <bookmark id="3">
                 <name/>
-                <line>814</line>
+                <line>832</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/home/janhorak/Development/Projects/KeySaver/KeySaver/KeySaver/src/net/jan/keysaver/dialogs/importdialog/ImportDialogController.java</file>
+        <file>file:/home/janhorak/Development/Projects/KeySaver/KeySaver/KeySaver/src/net/jan/keysaver/dialogs/exportdialog/ExportDialogController.java</file>
+        <file>file:/home/janhorak/Development/Projects/KeySaver/KeySaver/KeySaver/src/net/jan/keysaver/validators/Validator.java</file>
+        <file>file:/home/janhorak/Development/Projects/KeySaver/KeySaver/KeySaver/src/net/jan/keysaver/manager/FileManager.java</file>
+        <file>file:/home/janhorak/Development/Projects/KeySaver/KeySaver/KeySaver/test/net/jan/test/XMLtests/TestXMLFunctions.java</file>
+    </open-files>
 </project-private>

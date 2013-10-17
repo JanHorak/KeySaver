@@ -23,7 +23,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import net.jan.keysaver.beans.Settings_Singelton;
-import net.jan.keysaver.dialogs.infodialog.InfoDialogController;
 import net.jan.keysaver.mainpage.MainpageController;
 import net.jan.keysaver.sources.PageLoadHelper;
 import net.jan.keysaver.sources.Utilities;
