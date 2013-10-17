@@ -6,6 +6,8 @@ package net.jan.test.utilities;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipException;
@@ -39,8 +41,11 @@ public class TestUtilities {
         
         File structure = new File("AppData/structure.xml");
         File key = new File("AppData/private.key");
+        List<String> fileList = new ArrayList<String>();
+        fileList.add(key.getAbsolutePath());
+        fileList.add(structure.getAbsolutePath());
         
-        new Utilities().generateZip(path, structure, key);
+        new Utilities().generateZip(path, fileList);
         ZipFile file = null;
         try {
             file = new ZipFile(new File(path));
@@ -56,4 +61,28 @@ public class TestUtilities {
         File f = new File(path);
         f.delete();
     }
+    
+    
+    @Test
+    public void shouldReturnedTheFilesFromFolderAndCreateZip(){
+        List<String> resultList = new ArrayList<String>();
+        resultList = Utilities.getFilePathesFromFolder("AppData/Images/intern");
+        assertTrue(!resultList.isEmpty());
+        Utilities.generateZip("images.zip", resultList);
+        ZipFile file = null;
+        try {
+            file = new ZipFile(new File("images.zip"));
+        } catch (ZipException ex) {
+            Logger.getLogger(TestUtilities.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(TestUtilities.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        assertTrue(file.entries().hasMoreElements());
+        
+        File f = new File("images.zip");
+        f.delete();
+    }
+    
+    
 }

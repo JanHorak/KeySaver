@@ -4,24 +4,28 @@
  */
 package net.jan.keysaver.dialogs.exportdialog;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import net.jan.aes.decryption.Decryption;
 import net.jan.aes.encryption.Encryption;
-import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.sources.Utilities;
 
 /**
@@ -37,8 +41,6 @@ public class ExportDialogController implements Initializable {
     @FXML
     private CheckBox chk_exportDecrypted;
     @FXML
-    private CheckBox chk_exportKey;
-    @FXML
     private CheckBox chk_exportZipped;
     @FXML
     private Label lb_pathLabel;
@@ -50,7 +52,18 @@ public class ExportDialogController implements Initializable {
     private Button btn_export;
     @FXML
     private Button btn_browse;
+    @FXML
+    private Hyperlink hyper_help;
     private File placeForExport;
+
+    @FXML
+    private void getHelp() {
+        try {
+            Desktop.getDesktop().open(new File("AppData/Help/HelpMainpage.html"));
+        } catch (IOException ex) {
+            Logger.getLogger(ExportDialogController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     @FXML
     private void cancel(ActionEvent actionEvent) {
@@ -67,36 +80,39 @@ public class ExportDialogController implements Initializable {
     }
 
     @FXML
-    public void export() {
-        File structure = new File("AppData/structure.xml");
-        File keyFile = new File("AppData/private.key");
-        String exportPath_zip = placeForExport + File.separator + "KeySaver_export.zip";
+    public void export(ActionEvent actionEvent) {
+        File file_structure = new File("AppData/structure.xml");
+        File file_key = new File("AppData/private.key");
+        File file_ini = new File("settings.ini");
+        File file_iconProp = new File("AppData/icons.properties");
+
+        List<String> listOfImages = Utilities.getFilePathesFromFolder("AppData/Images/intern");
+        Utilities.generateZip("images.zip", listOfImages);
+
+        String exportPath_zip = placeForExport + File.separator + "KeySaver2.0_export.zip";
+
         if (chk_exportDecrypted.isSelected()) {
-            structure = new Decryption().returnDecryptedFile(structure, structure.getAbsolutePath(), keyFile.getAbsolutePath());
+            file_structure = new Decryption().returnDecryptedFile(file_structure, file_structure.getAbsolutePath(), file_key.getAbsolutePath());
         }
+        // Collecting Data
+        List<String> files2Zip = new ArrayList<>();
+        files2Zip.add(file_structure.getAbsolutePath());
+        files2Zip.add(file_key.getAbsolutePath());
+        files2Zip.add(file_ini.getAbsolutePath());
+        files2Zip.add(file_iconProp.getAbsolutePath());
+        files2Zip.add("images.zip");
         if (chk_exportZipped.isSelected()) {
-            if (chk_exportKey.isSelected()) {
-                Utilities.generateZip(exportPath_zip, structure, keyFile);
-            } else {
-                Utilities.generateZip(exportPath_zip, structure);
-            }
-            structure = new Encryption().returnEncryptedFile(structure, structure.getAbsolutePath(), keyFile.getAbsolutePath());
+            Utilities.generateZip(exportPath_zip, files2Zip);
         } else {
-            if (chk_exportKey.isSelected()) {
-                try {
-                    Files.copy(keyFile.toPath(), new File(placeForExport + File.separator + "private.key").toPath(), StandardCopyOption.COPY_ATTRIBUTES);
-                } catch (IOException ex) {
-                    LoggingManager.writeToErrorFile("ExportDialogController: export failed (copy of Files)", ex);
-                }
-            }
-            try {
-                Files.copy(structure.toPath(), new File(placeForExport + File.separator + "structure.xml").toPath(), StandardCopyOption.COPY_ATTRIBUTES);
-                structure = new Encryption().returnEncryptedFile(structure, structure.getAbsolutePath(), keyFile.getAbsolutePath());
-            } catch (IOException ex) {
-                LoggingManager.writeToErrorFile("ExportDialogController: export failed (copy of Files)", ex);
-            }
+            Utilities.copyFiles(files2Zip, placeForExport.toString(), StandardCopyOption.REPLACE_EXISTING);
         }
 
+        if (chk_exportDecrypted.isSelected()) {
+            file_structure = new Encryption().returnEncryptedFile(file_structure, file_structure.getAbsolutePath(), file_key.getAbsolutePath());
+        }
+        new File("images.zip").delete();
+
+        cancel(actionEvent);
     }
 
     @Override

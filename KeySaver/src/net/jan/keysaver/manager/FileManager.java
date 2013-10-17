@@ -25,6 +25,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import net.jan.aes.decryption.Decryption;
 import net.jan.aes.encryption.Encryption;
+import net.jan.aes.keygenerationmanager.KeyGenerationManager;
 import net.jan.keysaver.sources.Category;
 import net.jan.keysaver.sources.CategoryList;
 import net.jan.keysaver.sources.Key;
@@ -130,6 +131,7 @@ public class FileManager {
 
     public void checkAvailibility() {
         if (!new File(structureFilePath).exists()) {
+            new KeyGenerationManager().generateAndStoreKey("AppData/private.key");
             try {
                 try {
                     outputStream = new FileOutputStream(new File(structureFilePath));
@@ -227,11 +229,37 @@ public class FileManager {
         encryptStructureFile();
         return result;
     }
+    
+    public List<String> returnIconCategoryPathes(){
+        List<String> results = returnAttributeListFromElements("category", "icon");
+        return results;
+    }
+    
+    public List<String> returnIconKeyPathes(){
+        List<String> results = returnAttributeListFromElements("key", "icon");
+        return results;
+    }
+    
+    private List<String> returnAttributeListFromElements(String elements, String attribute){
+        List<String> results = new ArrayList<>();
+        File structure = new File (structureFilePath);
+        prepareSAX();
+        NodeList listOfNodes = doc.getElementsByTagName(elements);
+        for (int i = 0; i < listOfNodes.getLength(); i++ ){
+            Element e = (Element) listOfNodes.item(i);
+            results.add(e.getAttribute(attribute));
+        }
+        encryptStructureFile();
+        return results;
+    }
+    
+    
+    
 
     private void prepareSAX() {
         File strucure = new File(structureFilePath);
         dbFactory = DocumentBuilderFactory.newInstance();
-        strucure = new Decryption().returnDecryptedFile(new File(structureFilePath), structureFilePath, "AppData/private.key");
+        decryptStructureFile();
         try {
             dBuilder = dbFactory.newDocumentBuilder();
         } catch (ParserConfigurationException ex) {
@@ -250,5 +278,10 @@ public class FileManager {
     private void encryptStructureFile(){
         File strucure = new File(structureFilePath);
         strucure = new Encryption().returnEncryptedFile(strucure, structureFilePath, "AppData/private.key");
+    }
+    
+    private void decryptStructureFile(){
+        File strucure = new File(structureFilePath);
+        strucure = new Decryption().returnDecryptedFile(strucure, structureFilePath, "AppData/private.key");
     }
 }
