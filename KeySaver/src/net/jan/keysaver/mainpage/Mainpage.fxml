@@ -60,7 +60,7 @@
       <menus>
         <Menu mnemonicParsing="false" text="File" fx:id="fileMenu">
           <items>
-            <MenuItem mnemonicParsing="false" text="Import" fx:id="import_fileItem" />
+            <MenuItem mnemonicParsing="false" onAction="#importFile" text="Import" fx:id="import_fileItem" />
             <MenuItem mnemonicParsing="false" onAction="#exportFile" text="Export" fx:id="export_fileItem" />
             <MenuItem mnemonicParsing="false" text="Exit" fx:id="exitItem" />
           </items>
@@ -85,7 +85,7 @@
         </Menu>
         <Menu mnemonicParsing="false" text="Help" fx:id="helpMenu">
           <items>
-            <MenuItem mnemonicParsing="false" text="About" />
+            <MenuItem mnemonicParsing="false" onAction="#openHelpFile" text="Help" fx:id="helpItem" />
           </items>
         </Menu>
       </menus>

@@ -47,7 +47,6 @@ import net.jan.keysaver.sources.EnumNotification;
 import net.jan.keysaver.sources.Key;
 import net.jan.keysaver.beans.Language_Singleton;
 import net.jan.keysaver.beans.Settings_Singelton;
-import net.jan.keysaver.dialogs.exportdialog.ExportDialogController;
 import net.jan.keysaver.dialogs.icondialog.IcondialogController;
 import net.jan.keysaver.properties.PropertiesController;
 import net.jan.keysaver.sources.PageLoadHelper;
@@ -126,6 +125,8 @@ public class MainpageController implements Initializable {
     //MenuItems
     @FXML
     private MenuItem settingsItem;
+    @FXML
+    private MenuItem helpItem;
     @FXML
     private MenuItem import_fileItem;
     @FXML
@@ -761,6 +762,26 @@ public class MainpageController implements Initializable {
             startNotification(EnumNotification.ERROR);
         }
     }
+    
+    @FXML
+    private void exportFile(){
+        new PageLoadHelper().loadExportDialog();
+    }
+    
+    @FXML
+    private void importFile(){
+        new PageLoadHelper().loadImportDialog();
+    }
+    
+    @FXML
+    private void openHelpFile() {
+        try {
+            Desktop.getDesktop().open(new File("AppData/Help/HelpMainpage.html"));
+        } catch (IOException ex) {
+            LoggingManager.writeToErrorFile("openHelpFile()", ex);
+            startNotification(EnumNotification.ERROR);
+        }
+    }
 
     @FXML
     private void browseImage() {
@@ -782,11 +803,7 @@ public class MainpageController implements Initializable {
         }
     }
     
-    @FXML
-    private void exportFile(){
-        new PageLoadHelper().loadExportDialog();
-    }
-
+    
     ////////////////////////////////
     //
     // ***** END of Utility- Methods  ******

@@ -28,4 +28,13 @@ public class SimpleEncryptionTest {
         
     }
     
+    @Test
+    public void shouldDecryptTheini(){
+        File structureFile = new File("settings.ini");
+        
+        structureFile = new Encryption().returnEncryptedFile(structureFile, structureFile.getAbsolutePath(), "AppData/private.key");
+
+        
+    }
+    
 }
