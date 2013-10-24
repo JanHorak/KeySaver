@@ -37,6 +37,7 @@ public class CategoryList implements Serializable{
                 for ( Key k : keyList ){
                     System.out.println("Key");
                     System.out.println("------");
+                    System.out.println("IconPath: " +k.getIconPath());
                     System.out.println("Name: " + k.getKeyname());
                     System.out.println("Username: " +k.getUsername());
                     System.out.println("Dec: " + k.getDescription());

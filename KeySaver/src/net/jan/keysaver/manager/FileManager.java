@@ -6,6 +6,7 @@ package net.jan.keysaver.manager;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,6 +18,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -48,8 +51,8 @@ public class FileManager {
     BufferedOutputStream bufferedOutputStream = null;
     private SettingManager sm_icon;
     private Properties iconProps;
-    
-    public FileManager(){
+
+    public FileManager() {
         sm_icon = new SettingManager("AppData/icons.properties");
         try {
             iconProps = sm_icon.initAndReturnProperties();
@@ -58,17 +61,16 @@ public class FileManager {
         }
     }
 
-    
-    public Category returnSingleCategory(String name){
+    public Category returnSingleCategory(String name) {
         prepareSAX();
         Category category = new Category();
-     
-        
+
+
         NodeList listOfNodes = doc.getElementsByTagName("category");
 
         for (int i = 0; i < listOfNodes.getLength(); i++) {
             Element e = (Element) listOfNodes.item(i);
-            if ( e.getAttribute("name").equals(name) ){
+            if (e.getAttribute("name").equals(name)) {
                 category.setName(name);
                 category.setIconPath(e.getAttribute("icon"));
                 break;
@@ -76,10 +78,10 @@ public class FileManager {
         }
         encryptStructureFile();
         return category;
-        
+
 
     }
-    
+
     public void saveStructure(CategoryList categoryList) {
         prepareSAX();
         List<Category> catList = categoryList.getCategoryList();
@@ -107,6 +109,7 @@ public class FileManager {
                     out.writeStartElement("keys");
                     for (Key k : keyList) {
                         out.writeEmptyElement("key");
+                        out.writeAttribute("icon", k.getIconPath());
                         out.writeAttribute("keyname", k.getKeyname());
                         out.writeAttribute("username", k.getUsername());
                         out.writeAttribute("description", k.getDescription());
@@ -149,6 +152,7 @@ public class FileManager {
                 out.writeAttribute("icon", iconProps.getProperty("FOLDER_DEFAULT"));
                 out.writeStartElement("keys");
                 out.writeEmptyElement("key");
+                out.writeAttribute("icon", iconProps.getProperty("KEYINTREE"));
                 out.writeAttribute("keyname", "defaultKey");
                 out.writeAttribute("username", "defaultName");
                 out.writeAttribute("description", "This is a default-Key");
@@ -195,6 +199,7 @@ public class FileManager {
                 Key k = new Key();
                 Element e2 = (Element) keys.item(j);
                 k.setKeyname(e2.getAttribute("keyname"));
+                k.setIconPath(e2.getAttribute("icon"));
                 k.setUsername(e2.getAttribute("username"));
                 k.setDescription(e2.getAttribute("description"));
                 k.setPassword(e2.getAttribute("password"));
@@ -220,6 +225,7 @@ public class FileManager {
             if (e.getAttribute("keyname").endsWith(keyName)) {
                 result.setKeyname(keyName);
                 result.setUsername(e.getAttribute("username"));
+                result.setIconPath(e.getAttribute("icon"));
                 result.setDescription(e.getAttribute("description"));
                 result.setPassword(e.getAttribute("password"));
                 encryptStructureFile();
@@ -229,32 +235,29 @@ public class FileManager {
         encryptStructureFile();
         return result;
     }
-    
-    public List<String> returnIconCategoryPathes(){
+
+    public List<String> returnIconCategoryPathes() {
         List<String> results = returnAttributeListFromElements("category", "icon");
         return results;
     }
-    
-    public List<String> returnIconKeyPathes(){
+
+    public List<String> returnIconKeyPathes() {
         List<String> results = returnAttributeListFromElements("key", "icon");
         return results;
     }
-    
-    private List<String> returnAttributeListFromElements(String elements, String attribute){
+
+    private List<String> returnAttributeListFromElements(String elements, String attribute) {
         List<String> results = new ArrayList<>();
-        File structure = new File (structureFilePath);
+        File structure = new File(structureFilePath);
         prepareSAX();
         NodeList listOfNodes = doc.getElementsByTagName(elements);
-        for (int i = 0; i < listOfNodes.getLength(); i++ ){
+        for (int i = 0; i < listOfNodes.getLength(); i++) {
             Element e = (Element) listOfNodes.item(i);
             results.add(e.getAttribute(attribute));
         }
         encryptStructureFile();
         return results;
     }
-    
-    
-    
 
     private void prepareSAX() {
         File strucure = new File(structureFilePath);
@@ -273,15 +276,48 @@ public class FileManager {
             LoggingManager.writeToErrorFile("SAX: Cant load XML-File", ex);
         }
     }
-    
-    
-    private void encryptStructureFile(){
+
+    private void encryptStructureFile() {
         File strucure = new File(structureFilePath);
         strucure = new Encryption().returnEncryptedFile(strucure, structureFilePath, "AppData/private.key");
     }
-    
-    private void decryptStructureFile(){
+
+    private void decryptStructureFile() {
         File strucure = new File(structureFilePath);
         strucure = new Decryption().returnDecryptedFile(strucure, structureFilePath, "AppData/private.key");
+    }
+
+    public static ImageView getImageViewFromPath(String path) {
+        ImageView iv = new ImageView();
+        FileInputStream inStream = null;
+        try {
+            inStream = new FileInputStream(new File(path));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Image image = new Image(inStream);
+        try {
+            inStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        iv.setImage(image);
+        return iv;
+    }
+    
+    public static Image getImageFromPath(String path) {
+        FileInputStream inStream = null;
+        try {
+            inStream = new FileInputStream(new File(path));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Image image = new Image(inStream);
+        try {
+            inStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return image;
     }
 }

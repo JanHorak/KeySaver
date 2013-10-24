@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.jan.keysaver.validators;
+package net.jan.keysaver.validation;
 
 import java.io.File;
 import net.jan.keysaver.sources.Category;

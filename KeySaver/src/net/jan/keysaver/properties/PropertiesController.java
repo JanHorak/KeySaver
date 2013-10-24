@@ -36,6 +36,7 @@ import net.jan.aes.keygenerationmanager.KeyGenerationManager;
 import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.manager.SettingManager;
 import net.jan.keysaver.beans.Language_Singleton;
+import net.jan.keysaver.manager.FileManager;
 
 import net.jan.keysaver.sources.PageLoadHelper;
 import net.jan.keysaver.sources.Utilities;
@@ -184,12 +185,8 @@ public class PropertiesController implements Initializable {
         }
         
         debugTooltip.setText(language_singelton.getValue("DEBUGMODE"));
-        try {
-            imageOK = new Image(new FileInputStream("AppData/Images/intern/Ok_32x32.png"));
-            imageNOK = new Image(new FileInputStream("AppData/Images/intern/NOk_32x32.png"));
-        } catch (FileNotFoundException ex) {
-            LoggingManager.writeToErrorFile("Error at loading Images", ex);
-        }
+        imageOK = FileManager.getImageFromPath("AppData/Images/intern/Ok_32x32.png");
+        imageNOK = FileManager.getImageFromPath("AppData/Images/intern/NOk_32x32.png");
         try {
             tf_name.setText(sm_main.returnProperty("USERNAME"));
         } catch (IOException ex) {
@@ -217,11 +214,7 @@ public class PropertiesController implements Initializable {
         int position = 0;
         for (String s : files) {
             Label l = new Label(s);
-            try {
-                l.setGraphic(new ImageView(new Image(new FileInputStream("AppData/Images/Avatars/" + s))));
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            l.setGraphic(FileManager.getImageViewFromPath("AppData/Images/Avatars/" + s));
             if (("AppData/Images/Avatars/" + s).equals(selectedInitialAvatar)) {
                 position = tmpcounter;
             }
@@ -246,9 +239,7 @@ public class PropertiesController implements Initializable {
         });
         SettingManager sm_icon = new SettingManager("AppData/icons.properties");
         try {
-            lb_createNewKey.setGraphic(new ImageView(new Image(new FileInputStream(new File(sm_icon.returnProperty("RECREATEKEY"))))));
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
+            lb_createNewKey.setGraphic(FileManager.getImageViewFromPath(sm_icon.returnProperty("RECREATEKEY")));
         } catch (IOException ex) {
             Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -17,7 +17,7 @@ public class KeySaver extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        new PageLoadHelper("LoginDialog.fxml", "Login",255, 120, LoginDialogController.class).loadPage();
+        new PageLoadHelper("LoginDialog.fxml", "Login",285, 151, LoginDialogController.class).loadPage();
     }
 
     /**

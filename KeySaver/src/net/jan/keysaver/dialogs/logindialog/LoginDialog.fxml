@@ -8,21 +8,47 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" fx:id="mainpane" prefHeight="120.0" prefWidth="255.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.jan.keysaver.dialogs.logindialog.LoginDialogController">
+<AnchorPane id="AnchorPane" fx:id="mainpane" minHeight="141.0" prefHeight="143.0" prefWidth="285.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.jan.keysaver.dialogs.logindialog.LoginDialogController">
   <children>
     <Label layoutX="14.0" layoutY="51.0" text="Password:" />
-    <PasswordField fx:id="pwField" layoutX="81.0" layoutY="51.0" prefWidth="156.0" />
-    <Button fx:id="loginButton" layoutX="187.0" layoutY="80.0" mnemonicParsing="false" onAction="#login" text="Login" />
-    <ImageView fx:id="imageView" fitHeight="35.0" fitWidth="153.0" layoutX="10.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-      <image>
-        <Image url="@../../../../../AppData/Images/Logo_key.png" preserveRatio="false" smooth="false" />
-      </image>
-    </ImageView>
-    <Label fx:id="errorLabel" layoutX="14.0" layoutY="83.0" textFill="RED" />
-    <Label fx:id="versionLabel" layoutX="202.0" layoutY="6.0" opacity="0.59" prefWidth="53.0" text="{Version}">
-      <font>
-        <Font size="9.0" />
-      </font>
-    </Label>
+    <PasswordField fx:id="pwField" layoutX="81.0" layoutY="48.0" prefWidth="195.0" />
+    <Button fx:id="loginButton" layoutX="218.0" layoutY="73.0" mnemonicParsing="false" onAction="#login" text="Login" />
+    <ImageView fx:id="imageView" fitHeight="35.0" fitWidth="153.0" layoutX="10.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+    <Label fx:id="errorLabel" layoutX="14.0" layoutY="76.0" prefWidth="162.0" textFill="RED" />
+    <Button fx:id="btn_import" layoutX="239.0" layoutY="11.0" mnemonicParsing="false" onAction="#loadImportDialog" text="" />
+    <Separator layoutX="10.0" layoutY="103.0" prefWidth="270.0" />
+    <TitledPane fx:id="checkUppane" animated="false" collapsible="true" expanded="false" layoutX="14.0" layoutY="113.0" onMouseClicked="#updateSize" prefHeight="198.0" prefWidth="263.0" text="Program- Checkup">
+      <content>
+        <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="181.0" prefWidth="259.0">
+          <children>
+            <GridPane layoutX="0.0" layoutY="0.0" prefHeight="172.0" prefWidth="258.0">
+              <children>
+                <Button fx:id="btn_checkUp" mnemonicParsing="false" onAction="#checkUp" text="Button" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <ProgressIndicator fx:id="indicator" prefHeight="21.999908447265625" prefWidth="76.0" progress="0.0" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <ProgressBar fx:id="bar" prefWidth="179.0" progress="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <content>
+                    <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                      <children>
+                        <TextArea fx:id="checkupArea" layoutX="-4.0" layoutY="-1.0" prefHeight="200.0" prefWidth="182.0" wrapText="true" />
+                      </children>
+                    </AnchorPane>
+                  </content>
+                </ScrollPane>
+              </children>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="76.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="182.0" minWidth="10.0" prefWidth="182.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="37.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="70.0" minHeight="5.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="109.0" minHeight="5.0" prefHeight="109.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+            </GridPane>
+          </children>
+        </AnchorPane>
+      </content>
+    </TitledPane>
   </children>
 </AnchorPane>

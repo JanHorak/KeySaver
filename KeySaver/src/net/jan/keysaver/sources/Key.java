@@ -3,6 +3,8 @@ package net.jan.keysaver.sources;
 import java.io.Serializable;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /*
  * To change this template, choose Tools | Templates
@@ -15,14 +17,34 @@ import javafx.scene.input.KeyEvent;
  */
 public class Key{
     
+    @NotNull
+    @NotEmpty
     private String keyname;
     
+    @NotNull
+    @NotEmpty
     private String username;
     
+    @NotNull
+    @NotEmpty
     private String description;
     
+    @NotNull
+    @NotEmpty
     private String password;
+    
+    @NotNull
+    @NotEmpty
+    private String iconPath;
 
+    public String getIconPath() {
+        return iconPath;
+    }
+
+    public void setIconPath(String iconPath) {
+        this.iconPath = iconPath;
+    }
+    
     public String getKeyname() {
         return keyname;
     }
@@ -61,6 +83,7 @@ public class Key{
         this.description = newKey.getDescription();
         this.password = newKey.getPassword();
         this.username = newKey.getUsername();
+        this.iconPath = newKey.getIconPath();
     }
     
 }
