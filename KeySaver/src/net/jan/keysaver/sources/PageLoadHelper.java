@@ -19,6 +19,7 @@ import net.jan.keysaver.dialogs.exportdialog.ExportDialogController;
 import net.jan.keysaver.dialogs.importdialog.ImportDialogController;
 import net.jan.keysaver.dialogs.infodialog.InfoDialogController;
 import net.jan.keysaver.dialogs.recreatedialog.RecreateKeyDialogController;
+import net.jan.keysaver.manager.FileManager;
 
 /**
  *
@@ -34,7 +35,6 @@ public class PageLoadHelper {
     Class c;
 
     public PageLoadHelper(String pathString, String title, double width, double height, Class c) {
-        langSingleton = Language_Singleton.getInstance();
         this.height = height;
         this.pathString = pathString;
         this.title = title;
@@ -53,7 +53,7 @@ public class PageLoadHelper {
             Stage stage = new Stage();
             stage.setTitle(title);
             stage.setScene(new Scene(root, width, height));
-            stage.getIcons().add(new Image(new FileInputStream(new File("AppData/Images/Logo_icon_16x16.png"))));
+            stage.getIcons().add(FileManager.getImageFromPath("AppData/Images/Logo_icon_16x16.png"));
             stage.show();
         } catch (IOException ex) {
             Logger.getLogger(PageLoadHelper.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,7 +91,7 @@ public class PageLoadHelper {
         pathString = "ImportDialog.fxml";
         c = ImportDialogController.class;
         title = langSingleton.getValue("IMPORTDIALOG_TITLE");
-        height = 116.1;
+        height = 193.1;
         width = 573;
         loadPage();
     }

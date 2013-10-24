@@ -6,7 +6,6 @@ package net.jan.keysaver.mainpage;
 
 import java.awt.Desktop;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -50,7 +49,7 @@ import net.jan.keysaver.beans.Settings_Singelton;
 import net.jan.keysaver.dialogs.icondialog.IcondialogController;
 import net.jan.keysaver.properties.PropertiesController;
 import net.jan.keysaver.sources.PageLoadHelper;
-import net.jan.keysaver.validators.Validator;
+import net.jan.keysaver.validation.Validator;
 
 /**
  *
@@ -79,7 +78,9 @@ public class MainpageController implements Initializable {
     @FXML
     private Label notifyLabel;
     @FXML
-    private Label pathLabel;
+    private Label pathLabelCatIcon;
+    @FXML
+    private Label pathLabelKeyIcon;
     ////////
     //Textfields
     @FXML
@@ -96,10 +97,14 @@ public class MainpageController implements Initializable {
     @FXML
     private TreeView tree;
     @FXML
-    private CheckBox chk_useDefaultIcon;
+    private CheckBox chk_useDefaultCatIcon;
+    @FXML
+    private CheckBox chk_useDefaultKeyIcon;
     //Buttons
     @FXML
-    private Button btn_browse;
+    private Button btn_browseCatIcon;
+    @FXML
+    private Button btn_browseKeyIcon;
     @FXML
     private Button btn_save;
     @FXML
@@ -128,8 +133,6 @@ public class MainpageController implements Initializable {
     @FXML
     private MenuItem helpItem;
     @FXML
-    private MenuItem import_fileItem;
-    @FXML
     private MenuItem export_fileItem;
     @FXML
     private MenuItem iconsItem;
@@ -147,7 +150,9 @@ public class MainpageController implements Initializable {
     @FXML
     private ImageView avatarIV;
     @FXML
-    private ImageView iconPreview;
+    private ImageView iconCatPreview;
+    @FXML
+    private ImageView iconKeyPreview;
     @FXML
     private ImageView notifyImageView;
     @FXML
@@ -213,13 +218,13 @@ public class MainpageController implements Initializable {
             Category selectedLocalCat = new FileManager().returnSingleCategory(tmpBuffer);
             setControlVisible(lb_catName, tf_catName);
             disableControl(btn_addCat, btn_edit, btn_remove, btn_addKey);
-            setControlVisible(btn_browse, chk_useDefaultIcon);
-            chk_useDefaultIcon.setDisable(false);
-            iconPreview.setDisable(false);
+            setControlVisible(btn_browseCatIcon, chk_useDefaultCatIcon);
+            chk_useDefaultCatIcon.setDisable(false);
+            iconCatPreview.setDisable(false);
             enableControl(btn_save, btn_cancel);
 
             tf_catName.setText(selectedLocalCat.getName());
-            pathLabel.setText(selectedLocalCat.getIconPath());
+            pathLabelCatIcon.setText(selectedLocalCat.getIconPath());
             selectedLocalCat = null;
             editCat = true;
         }
@@ -227,14 +232,14 @@ public class MainpageController implements Initializable {
 
     @FXML
     private void prepareAddCat() {
-        setControlVisible(lb_catName, tf_catName, chk_useDefaultIcon, btn_browse);
+        setControlVisible(lb_catName, tf_catName, chk_useDefaultCatIcon, btn_browseCatIcon);
         disableControl(btn_edit, btn_addCat, btn_remove, btn_addKey);
         enableControl(btn_cancel, btn_save);
         btn_save.setText(addString2);
         addCat = true;
-        if (iconPreview.getImage() == null) {
+        if (iconCatPreview.getImage() == null) {
             try {
-                iconPreview.setImage(new Image(new FileInputStream(sm_icons.returnProperty("FOLDER_DEFAULT"))));
+                iconCatPreview.setImage(FileManager.getImageFromPath(sm_icons.returnProperty("FOLDER_DEFAULT")));
 
             } catch (FileNotFoundException ex) {
                 LoggingManager.writeToErrorFile("initialize() -> Failed to load Folder_default_16x16.png", ex);
@@ -243,7 +248,7 @@ public class MainpageController implements Initializable {
                 Logger.getLogger(MainpageController.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            iconPreview.setVisible(true);
+            iconCatPreview.setVisible(true);
         }
         lockTree();
     }
@@ -254,7 +259,19 @@ public class MainpageController implements Initializable {
         // Buttons
         enableControl(btn_cancel, btn_save);
         // Textfields
-        enableControl(tf_keyname, tf_description, tf_password, tf_passwordConfirm, tf_username);
+        enableControl(tf_keyname, tf_description, tf_password, tf_passwordConfirm, 
+                tf_username, chk_useDefaultKeyIcon);
+        chk_useDefaultKeyIcon.setSelected(true);
+        try {
+            String prop = sm_icons.returnProperty("KEYINTREE");
+            iconKeyPreview.setImage(FileManager.getImageFromPath(prop));
+            pathLabelKeyIcon.setText(prop);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MainpageController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MainpageController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         btn_save.setText(addString);
         addKey = true;
         System.out.println("AddKey detected - " + addKey);
@@ -265,7 +282,7 @@ public class MainpageController implements Initializable {
     private void editCancel() {
         lockFields();
         unlockTree();
-        setControlUnvisible(lb_catName, tf_catName, btn_browse, chk_useDefaultIcon);
+        setControlUnvisible(lb_catName, tf_catName, btn_browseCatIcon, chk_useDefaultCatIcon);
         disableControl(btn_edit, btn_save, btn_addCat, btn_addKey, btn_cancel, btn_remove);
         btn_save.setText(addString);
         tf_catName.setText("");
@@ -273,33 +290,28 @@ public class MainpageController implements Initializable {
         editKey = false;
         addKey = false;
         editCat = false;
-        iconPreview.setVisible(false);
-        chk_useDefaultIcon.setSelected(true);
+        chk_useDefaultCatIcon.setSelected(true);
         tf_catName.setText("");
-        btn_browse.setDisable(true);
-        pathLabel.setDisable(true);
-        pathLabel.setText("");
+        btn_browseCatIcon.setDisable(true);
+        pathLabelCatIcon.setText("");
+        pathLabelCatIcon.setDisable(true);
+        btn_browseKeyIcon.setDisable(true);
+        pathLabelKeyIcon.setText("");
+        pathLabelKeyIcon.setDisable(true);
         pwImage.setImage(null);
+        iconCatPreview.setImage(null);
+        iconKeyPreview.setImage(null);
     }
 
     private void initTree() {
         TreeItem<String> rootItem = new TreeItem<String>("Categories", null);
         rootItem.setExpanded(true);
-
         for (Category cat : catList.getCategoryList()) {
-            ImageView iViewTmp = new ImageView();
-            Image image = null;
             TreeItem<String> categoryItem = new TreeItem<String>(cat.getName());
-            try {
-                image = new Image(new FileInputStream(cat.getIconPath()));
-            } catch (FileNotFoundException ex) {
-                LoggingManager.writeToErrorFile("Init-Tree() -> Iconpath for Category", ex);
-                startNotification(EnumNotification.ERROR);
-            }
-            iViewTmp.setImage(image);
-            categoryItem.setGraphic(iViewTmp);
+            categoryItem.setGraphic(FileManager.getImageViewFromPath(cat.getIconPath()));
             for (Key k : cat.getKeylist()) {
                 TreeItem<String> keyItem = new TreeItem<String>(k.getKeyname());
+                keyItem.setGraphic(FileManager.getImageViewFromPath(k.getIconPath()));
                 categoryItem.getChildren().add(keyItem);
             }
             rootItem.getChildren().add(categoryItem);
@@ -359,16 +371,16 @@ public class MainpageController implements Initializable {
 
             Category cat = new Category();
             cat.setName(catname);
-            if (chk_useDefaultIcon.isSelected()) {
+            if (chk_useDefaultCatIcon.isSelected()) {
                 cat.setIconPath(sm_icons.returnProperty("FOLDER_DEFAULT"));
             } else {
-                cat.setIconPath(pathLabel.getText());
+                cat.setIconPath(pathLabelCatIcon.getText());
             }
 
             //Validation of the Category
             if (new Validator().validateCategory(cat)) {
 
-                iconPreview.setVisible(true);
+                iconCatPreview.setVisible(true);
                 Key k = new Key();
                 List<Key> keyList = new ArrayList<Key>();
                 k.setKeyname("new Key");
@@ -412,6 +424,7 @@ public class MainpageController implements Initializable {
         if (editKey) {
             Key oldKey = keyBuffer;
             editedKey.setKeyname(tf_keyname.getText().trim());
+            editedKey.setIconPath(pathLabelKeyIcon.getText());
             editedKey.setDescription(tf_description.getText().trim());
             editedKey.setPassword(tf_passwordConfirm.getText().trim());
             editedKey.setUsername(tf_username.getText().trim());
@@ -452,8 +465,7 @@ public class MainpageController implements Initializable {
             newKey.setDescription(tf_description.getText().trim());
             newKey.setPassword(tf_passwordConfirm.getText().trim());
             newKey.setUsername(tf_username.getText().trim());
-
-
+            newKey.setIconPath(pathLabelKeyIcon.getText());
             // Validate new Key
             if (new Validator().validateKey(newKey)) {
 
@@ -593,7 +605,7 @@ public class MainpageController implements Initializable {
         //Buttons
         btn_addCat.setText(languageBean.getValue("ADDCAT"));
         btn_addKey.setText(languageBean.getValue("ADDKEY"));
-        btn_browse.setText(languageBean.getValue("BROWSE"));
+        btn_browseCatIcon.setText(languageBean.getValue("BROWSE"));
         btn_cancel.setText(languageBean.getValue("CANCEL"));
         btn_edit.setText(languageBean.getValue("EDIT"));
         btn_save.setText(addString);
@@ -609,7 +621,6 @@ public class MainpageController implements Initializable {
         chk_germanLang.setText(languageBean.getValue("GERMAN"));
         iconsItem.setText(languageBean.getValue("ICONMAN"));
         settingsItem.setText(languageBean.getValue("PROP"));
-        import_fileItem.setText(languageBean.getValue("IMPORT"));
         export_fileItem.setText(languageBean.getValue("EXPORT"));
         exitItem.setText(languageBean.getValue("EXIT"));
         debugLog("  ...Menus and Items done");
@@ -621,7 +632,8 @@ public class MainpageController implements Initializable {
         debugLog("  ...Panes done");
 
         //Special
-        chk_useDefaultIcon.setText(languageBean.getValue("USEDEFAULTICON"));
+        chk_useDefaultCatIcon.setText(languageBean.getValue("USEDEFAULTICON"));
+        chk_useDefaultKeyIcon.setText(languageBean.getValue("USEDEFAULTICON"));
         errorTooltip.setText(languageBean.getValue("ERRORBOX"));
         debugLog("  ...Specials done");
 
@@ -678,20 +690,37 @@ public class MainpageController implements Initializable {
     //
     ///////////////////////////////
     @FXML
-    private void selectDefaultCheckBox() {
-        if (chk_useDefaultIcon.isSelected()) {
-            disableControl(btn_browse);
+    private void selectDefaultCatIconCheckBox() {
+        if (chk_useDefaultCatIcon.isSelected()) {
+            disableControl(btn_browseCatIcon);
             try {
-                iconPreview.setImage(new Image(new FileInputStream(sm_icons.returnProperty("FOLDER_DEFAULT"))));
+                iconCatPreview.setImage(FileManager.getImageFromPath(sm_icons.returnProperty("FOLDER_DEFAULT")));
+            } catch (IOException ex) {
+                Logger.getLogger(MainpageController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            pathLabelCatIcon.setText("");
+        } else {
+            enableControl(btn_browseCatIcon);
+        }
+    }
+    
+    @FXML
+    private void selectDefaultKeyIconCheckBox() {
+        if (chk_useDefaultKeyIcon.isSelected()) {
+            disableControl(btn_browseKeyIcon);
+            try {
+                String prop = sm_icons.returnProperty("KEYINTREE");
+                iconKeyPreview.setImage(FileManager.getImageFromPath(prop));
+                pathLabelKeyIcon.setText(prop);
             } catch (FileNotFoundException ex) {
-                LoggingManager.writeToErrorFile("selectDefaultCheckBox()", ex);
+                LoggingManager.writeToErrorFile("selectDefaultKeyCheckBox()", ex);
                 startNotification(EnumNotification.ERROR);
             } catch (IOException ex) {
                 Logger.getLogger(MainpageController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            pathLabel.setText("");
         } else {
-            enableControl(btn_browse);
+            enableControl(btn_browseKeyIcon);
+            pathLabelKeyIcon.setText("");
         }
     }
 
@@ -725,14 +754,21 @@ public class MainpageController implements Initializable {
         tf_description.setText("");
         tf_password.setText("");
         tf_passwordConfirm.setText("");
+        pathLabelKeyIcon.setText("");
+        iconKeyPreview.setImage(null);
+        chk_useDefaultKeyIcon.setSelected(false);
+        btn_browseKeyIcon.setDisable(true);
     }
 
     private void lockFields() {
-        disableControl(tf_keyname, tf_username, tf_description, tf_password, tf_passwordConfirm);
+        disableControl(tf_keyname, tf_username, tf_description, tf_password, tf_passwordConfirm,
+                chk_useDefaultKeyIcon);
+        disableControl(btn_browseKeyIcon);
     }
 
     private void unlockFields() {
-        enableControl(tf_keyname, tf_username, tf_description, tf_password, tf_passwordConfirm);
+        enableControl(tf_keyname, tf_username, tf_description, tf_password, tf_passwordConfirm, chk_useDefaultKeyIcon);
+        enableControl(btn_browseKeyIcon);
     }
 
     private void lockTree() {
@@ -769,11 +805,6 @@ public class MainpageController implements Initializable {
     }
     
     @FXML
-    private void importFile(){
-        new PageLoadHelper().loadImportDialog();
-    }
-    
-    @FXML
     private void openHelpFile() {
         try {
             Desktop.getDesktop().open(new File("AppData/Help/HelpMainpage.html"));
@@ -784,7 +815,24 @@ public class MainpageController implements Initializable {
     }
 
     @FXML
-    private void browseImage() {
+    private void browseImageCatIcon() {
+        File path = browseFile();
+        if (path != null) {
+            pathLabelCatIcon.setText(path.getAbsolutePath());
+            iconCatPreview.setImage(FileManager.getImageFromPath(path.getAbsolutePath()));
+        }
+    }
+    
+    @FXML
+    private void browseImageKeyIcon() {
+        File path = browseFile();
+        if (path != null) {
+            pathLabelKeyIcon.setText(path.getAbsolutePath());
+            iconKeyPreview.setImage(FileManager.getImageFromPath(path.getAbsolutePath()));
+        }
+    }
+    
+    private File browseFile(){
         FileChooser chooser = new FileChooser();
         chooser.setInitialDirectory(new File("AppData/Images/intern"));
         chooser.setTitle("Choose an own Image for the Category");
@@ -793,14 +841,14 @@ public class MainpageController implements Initializable {
 
         debugLog("Filechooser opened...");
         if (path != null) {
-            pathLabel.setText(path.getAbsolutePath());
-            try {
-                iconPreview.setImage(new Image(new FileInputStream(path)));
-            } catch (FileNotFoundException ex) {
-                LoggingManager.writeToErrorFile("browseImage()", ex);
-                startNotification(EnumNotification.ERROR);
-            }
+            return path;
         }
+        
+        return path;
+    }
+    
+    private void updateKeyIcon(Key key){
+       iconKeyPreview.setImage(FileManager.getImageFromPath(key.getIconPath()));
     }
     
     
@@ -870,17 +918,16 @@ public class MainpageController implements Initializable {
 
 
         try {
-            avatarIV.setImage(new Image(new FileInputStream(userAvatar)));
-            addCatImage = new Image(new FileInputStream(sm_icons.returnProperty("ADDCAT")));
-            trashImage = new Image(new FileInputStream(sm_icons.returnProperty("TRASH")));
-            keyImage = new Image(new FileInputStream(sm_icons.returnProperty("ADDKEY")));
-            settingImage = new Image(new FileInputStream(sm_icons.returnProperty("SETTINGS")));
-            iconsImage = new Image(new FileInputStream(sm_icons.returnProperty("ICONS")));
-            okImage = new Image(new FileInputStream(sm_icons.returnProperty("OK")));
-            nokImage = new Image(new FileInputStream(sm_icons.returnProperty("NOK")));
-            warningImage = new Image(new FileInputStream(sm_icons.returnProperty("WARNING")));
-            import_fileItem.setGraphic(new ImageView(new Image(new FileInputStream(new File(sm_icons.returnProperty("FILEIMPORT"))))));
-            export_fileItem.setGraphic(new ImageView(new Image(new FileInputStream(new File(sm_icons.returnProperty("FILEEXPORT"))))));
+            avatarIV.setImage(FileManager.getImageFromPath((userAvatar)));
+            addCatImage = FileManager.getImageFromPath((sm_icons.returnProperty("ADDCAT")));
+            trashImage = FileManager.getImageFromPath((sm_icons.returnProperty("TRASH")));
+            keyImage = FileManager.getImageFromPath((sm_icons.returnProperty("ADDKEY")));
+            settingImage = FileManager.getImageFromPath((sm_icons.returnProperty("SETTINGS")));
+            iconsImage = FileManager.getImageFromPath((sm_icons.returnProperty("ICONS")));
+            okImage = FileManager.getImageFromPath((sm_icons.returnProperty("OK")));
+            nokImage = FileManager.getImageFromPath((sm_icons.returnProperty("NOK")));
+            warningImage = FileManager.getImageFromPath((sm_icons.returnProperty("WARNING")));
+            export_fileItem.setGraphic(FileManager.getImageViewFromPath(sm_icons.returnProperty("FILEEXPORT")));
         } catch (FileNotFoundException ex) {
             LoggingManager.writeToErrorFile("initialize() -> Loading Icons from icons.properties failed", ex);
             startNotification(EnumNotification.ERROR);
@@ -910,6 +957,8 @@ public class MainpageController implements Initializable {
                             tf_description.setText(selectedKey.getDescription());
                             tf_password.setText(selectedKey.getPassword());
                             tf_passwordConfirm.setText(selectedKey.getPassword());
+                            pathLabelKeyIcon.setText(selectedKey.getIconPath());
+                            updateKeyIcon(selectedKey);
                             btn_edit.setDisable(false);
                             btn_addCat.setDisable(true);
                             btn_addKey.setDisable(true);

@@ -13,7 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
 import net.jan.keysaver.beans.Language_Singleton;
-import net.jan.keysaver.validators.Validator;
+import net.jan.keysaver.validation.Validator;
 
 /**
  * FXML Controller class
@@ -104,17 +104,6 @@ public class ImportDialogController implements Initializable {
     }
     
     private void setUpLanguage(){
-        lb_error.setText(languageBean.getValue("ERROR_FILEINVALID"));
-        lb_mainFile.setText(languageBean.getValue("MAINPATH"));
-        lb_zip.setText(languageBean.getValue("ZIPPATH"));
-        
-        btn_browse_zip.setText(languageBean.getValue("BROWSE"));
-        btn_browse_mainFile.setText(languageBean.getValue("BROWSE"));
-        btn_cancel_zip.setText(languageBean.getValue("CANCEL"));
-        btn_cancel_mainFile.setText(languageBean.getValue("CANCEL"));
-        btn_cancel.setText(languageBean.getValue("CANCEL"));
-        
-        btn_import.setText(languageBean.getValue("IMPORT"));
     }
     
     @Override
