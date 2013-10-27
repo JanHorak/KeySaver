@@ -16,8 +16,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import net.jan.keysaver.manager.LoggingManager;
@@ -135,6 +133,14 @@ public class Utilities {
                 LoggingManager.writeToErrorFile("Utilities: Failed to copy File: "+ s, ex);
             }
         }
+    }
+    
+    public static List<String> getPathesFromFileList(List<File> fileList){
+        List<String> resultList = new ArrayList<>();
+        for ( File f : fileList ){
+            resultList.add(f.getAbsolutePath());
+        }
+        return resultList;
     }
     
 }
