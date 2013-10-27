@@ -88,6 +88,8 @@ public class ExportDialogController implements Initializable {
 
         List<String> listOfImages = Utilities.getFilePathesFromFolder("AppData/Images/intern");
         Utilities.generateZip("images.zip", listOfImages);
+        List<String> listOfAvatars = Utilities.getFilePathesFromFolder("AppData/Images/Avatars");
+        Utilities.generateZip("avatars.zip", listOfAvatars);
 
         String exportPath_zip = placeForExport + File.separator + "KeySaver2.0_export.zip";
 
@@ -101,6 +103,7 @@ public class ExportDialogController implements Initializable {
         files2Zip.add(file_ini.getAbsolutePath());
         files2Zip.add(file_iconProp.getAbsolutePath());
         files2Zip.add("images.zip");
+        files2Zip.add("avatars.zip");
         if (chk_exportZipped.isSelected()) {
             Utilities.generateZip(exportPath_zip, files2Zip);
         } else {
@@ -111,7 +114,7 @@ public class ExportDialogController implements Initializable {
             file_structure = new Encryption().returnEncryptedFile(file_structure, file_structure.getAbsolutePath(), file_key.getAbsolutePath());
         }
         new File("images.zip").delete();
-
+        new File("avatars.zip").delete();
         cancel(actionEvent);
     }
 

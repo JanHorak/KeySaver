@@ -18,11 +18,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TitledPane;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.Reflection;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -51,32 +47,19 @@ public class LoginDialogController implements Initializable {
     @FXML
     private ImageView imageView;
     @FXML
-    private AnchorPane mainpane;
-    @FXML
     private PasswordField pwField;
     private String pw = "";
-    @FXML
-    private Button loginButton;
     @FXML
     private Label errorLabel;
     private Settings_Singelton settingsBean;
     @FXML
     private TitledPane checkUppane;
     private final String PATH_MAIN_FRAME = "Mainpage.fxml";
-
     @FXML
     private Button btn_import;
     
-    @FXML
-    private Button btn_checkUp;
     
-    @FXML
-    private ProgressIndicator indicator;
-    @FXML
-    private ProgressBar bar;
-    @FXML
-    private TextArea checkupArea;
-    
+
     @FXML
     private void login(ActionEvent actionEvent) {
         settingsBean = Settings_Singelton.getInstance();
@@ -91,9 +74,9 @@ public class LoginDialogController implements Initializable {
             errorLabel.setText("Not the right password!");
         }
     }
-    
+
     @FXML
-    private void loadImportDialog(){
+    private void loadImportDialog() {
         new PageLoadHelper().loadImportDialog();
     }
 
@@ -131,17 +114,7 @@ public class LoginDialogController implements Initializable {
             stage.setHeight(346);
         }
     }
+
     
-    @FXML
-    private void checkUp(){
-        indicator.setBlendMode(BlendMode.DARKEN);
-        bar.setProgress(-1);
-        indicator.setProgress(-1);
-        btn_checkUp.setDisable(true);
-        checkupArea.appendText("Collecting data...");
-        
-        
-        
-        
-    }
+    
 }

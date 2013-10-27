@@ -1,0 +1,70 @@
+---------------ERROR---------------
+Time: Fri Oct 25 00:10:11 CEST 2013
+
+Hint from Developer: 
+Utilities: generateZip- File not found: /home/janhorak/Development/Projects/KeySaver/KeySaver/KeySaver/AppData
+
+Exception: 
+[Ljava.lang.StackTraceElement;@17986ac
+------------------------------------
+
+---------------ERROR---------------
+Time: Fri Oct 25 19:19:43 CEST 2013
+
+Hint from Developer: 
+Utilities: generateZip- File not found: AppData/Help
+
+Exception: 
+[Ljava.lang.StackTraceElement;@1073255
+------------------------------------
+
+---------------ERROR---------------
+Time: Fri Oct 25 19:20:22 CEST 2013
+
+Hint from Developer: 
+Utilities: generateZip- File not found: AppData/Help
+
+Exception: 
+[Ljava.lang.StackTraceElement;@4b187e
+------------------------------------
+
+---------------ERROR---------------
+Time: Fri Oct 25 19:21:51 CEST 2013
+
+Hint from Developer: 
+Utilities: generateZip- File not found: AppData/Images/Avatars
+
+Exception: 
+[Ljava.lang.StackTraceElement;@19cc605
+------------------------------------
+
+---------------ERROR---------------
+Time: Fri Oct 25 19:25:55 CEST 2013
+
+Hint from Developer: 
+Utilities: generateZip- File not found: /home/janhorak/Development/Projects/KeySaver/KeySaver/KeySaver/AppData/Images/Avatars
+
+Exception: 
+[Ljava.lang.StackTraceElement;@8639cf
+------------------------------------
+
+---------------ERROR---------------
+Time: Sun Oct 27 09:18:03 CET 2013
+
+Hint from Developer: 
+Utilities: generateZip- File not found: /home/janhorak/Development/Projects/KeySaver/KeySaver/KeySaver/AppData/Images/Avatars
+
+Exception: 
+[Ljava.lang.StackTraceElement;@17c1b64
+------------------------------------
+
+---------------ERROR---------------
+Time: Sun Oct 27 09:25:03 CET 2013
+
+Hint from Developer: 
+Utilities: generateZip- File not found: /home/janhorak/Development/Projects/KeySaver/KeySaver/KeySaver/AppData/Images/Avatars
+
+Exception: 
+[Ljava.lang.StackTraceElement;@1a7a72b
+------------------------------------
+
