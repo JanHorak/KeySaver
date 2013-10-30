@@ -5,7 +5,6 @@
 package net.jan.keysaver.properties;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -26,7 +25,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
+import javafx.scene.effect.Reflection;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -37,9 +36,11 @@ import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.manager.SettingManager;
 import net.jan.keysaver.beans.Language_Singleton;
 import net.jan.keysaver.manager.FileManager;
+import net.jan.keysaver.manager.ValidationManager;
 
 import net.jan.keysaver.sources.PageLoadHelper;
 import net.jan.keysaver.sources.Utilities;
+import net.jan.keysaver.validationentities.PropertiesEntity;
 
 /**
  * FXML Controller class
@@ -48,27 +49,26 @@ import net.jan.keysaver.sources.Utilities;
  */
 public class PropertiesController implements Initializable {
 
-    /**
-     * Initializes the controller class.
-     */
-    @FXML
-    private TextField tf_name;
-    @FXML
-    private PasswordField pwfield;
-    @FXML
-    private PasswordField confirm_pwfield;
-    @FXML
-    private ImageView statusImage;
+    // ==== Attributes =====
+    //Buttons
     @FXML
     private Button btn_save;
     @FXML
     private Button btn_cancel;
     @FXML
     private Button btn_createNewKey;
+    
+    //TextFields
     @FXML
-    private ListView<Label> iconList;
+    public TextField tf_name;
+    
+    //PasswordFields
     @FXML
-    private CheckBox chk_debug;
+    public PasswordField confirm_pwfield;
+    @FXML
+    public PasswordField pwfield;
+    
+    //Labels
     @FXML
     private Label lb_username;
     @FXML
@@ -82,82 +82,69 @@ public class PropertiesController implements Initializable {
     @FXML
     private Label lb_createNewKey;
     @FXML
+    public Label errorLabel;
+    
+    //Others
+    @FXML
+    private ImageView statusImage;
+    @FXML
+    private ListView<Label> iconList;
+    @FXML
+    private CheckBox chk_debug;
+    @FXML
     private Tooltip debugTooltip;
     @FXML
+    
+    //NotFX- Components
     private Tooltip encKeyTooltip;
-    private Image imageOK;
-    private Image imageNOK;
-    private String nameBuffer;
     private String selectedAvatar = "";
     private String selectedInitialAvatar = "";
     SettingManager sm_main = new SettingManager("settings.ini");
     private int debug = 0;
-    private int debugBuffer = 0;
     Language_Singleton language_singelton;
 
-    @FXML
-    private void proofPW() {
-        if (pwfield.getText().equals(confirm_pwfield.getText())) {
-            statusImage.setImage(imageOK);
-            btn_save.setDisable(false);
-        } else {
-            statusImage.setImage(imageNOK);
-            btn_save.setDisable(true);
-        }
-    }
-
-    @FXML
-    private void proofName() {
-        if (nameBuffer.equals(tf_name.getText())) {
-            btn_save.setDisable(true);
-        } else {
-            btn_save.setDisable(false);
-        }
-    }
-
-    @FXML
-    private void proofDebug() {
-        if (chk_debug.isSelected()) {
-            debug = 1;
-        } else {
-            debug = 0;
-        }
-        if (debugBuffer == debug) {
-            btn_save.setDisable(true);
-        } else {
-            btn_save.setDisable(false);
-        }
-    }
-
+    // ==== END OF ATTRIBUTES ====
+    
     @FXML
     private void save(ActionEvent actionEvent) {
-        if (chk_debug.isSelected()) {
-            debug = 1;
-        } else {
-            debug = 0;
-        }
-        try {
-            sm_main = new SettingManager("settings.ini");
-            sm_main.storeProperty("USERNAME", tf_name.getText());
-            sm_main.storeProperty("MPW", Utilities.getHash(confirm_pwfield.getText()).trim());
-            if (selectedAvatar.equals("")) {
-                sm_main.storeProperty("AVATAR", selectedInitialAvatar);
+
+        PropertiesEntity validationObject = new PropertiesEntity();
+        validationObject.setUserName(tf_name.getText());
+        validationObject.setPassword(pwfield.getText());
+        validationObject.setPassword_confirm(confirm_pwfield.getText());
+
+        if (ValidationManager.isValid(validationObject)) {
+            errorLabel.setVisible(false);
+            if (chk_debug.isSelected()) {
+                debug = 1;
             } else {
-                sm_main.storeProperty("AVATAR", "AppData/Images/Avatars/" + selectedAvatar);
+                debug = 0;
             }
-            sm_main.storeProperty("DEBUG", String.valueOf(debug));
-        } catch (FileNotFoundException ex) {
-            LoggingManager.writeToErrorFile("Cant find Error-File", ex);
-        } catch (IOException ex) {
-            LoggingManager.writeToErrorFile(null, ex);
+            try {
+                sm_main = new SettingManager("settings.ini");
+                sm_main.storeProperty("USERNAME", tf_name.getText());
+                sm_main.storeProperty("MPW", Utilities.getHash(confirm_pwfield.getText()).trim());
+                if (selectedAvatar.equals("")) {
+                    sm_main.storeProperty("AVATAR", selectedInitialAvatar);
+                } else {
+                    sm_main.storeProperty("AVATAR", "AppData/Images/Avatars/" + selectedAvatar);
+                }
+                sm_main.storeProperty("DEBUG", String.valueOf(debug));
+            } catch (FileNotFoundException ex) {
+                LoggingManager.writeToErrorFile("Cant find Error-File", ex);
+            } catch (IOException ex) {
+                LoggingManager.writeToErrorFile(null, ex);
+            }
+
+            //closeEvent
+            Node source = (Node) actionEvent.getSource();
+            Stage stage = (Stage) source.getScene().getWindow();
+            stage.close();
+
+            new PageLoadHelper().loadInfoRestartDialog();
+        } else {
+            errorLabel.setVisible(true);
         }
-
-        //close
-        Node source = (Node) actionEvent.getSource();
-        Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
-
-        new PageLoadHelper().loadInfoRestartDialog();
     }
 
     @FXML
@@ -169,32 +156,22 @@ public class PropertiesController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        Reflection r = new Reflection();
+        r.setFraction(0.7f);
+        errorLabel.setEffect(r);
+        errorLabel.setVisible(false);
         language_singelton = Language_Singleton.getInstance();
         initLanguage();
         try {
             debug = Integer.decode(sm_main.returnProperty("DEBUG"));
-            debugBuffer = debug;
-            if (debug == 0) {
-                chk_debug.setSelected(false);
-            }
-            if (debug == 1) {
-                chk_debug.setSelected(true);
-            }
+            chk_debug.setSelected(getSelectedDebug(debug));
         } catch (IOException ex) {
             Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         debugTooltip.setText(language_singelton.getValue("DEBUGMODE"));
-        imageOK = FileManager.getImageFromPath("AppData/Images/intern/Ok_32x32.png");
-        imageNOK = FileManager.getImageFromPath("AppData/Images/intern/NOk_32x32.png");
         try {
             tf_name.setText(sm_main.returnProperty("USERNAME"));
-        } catch (IOException ex) {
-            LoggingManager.writeToErrorFile(null, ex);
-        }
-        String mpw = "";
-        try {
-            mpw = sm_main.returnProperty("MPW");
         } catch (IOException ex) {
             LoggingManager.writeToErrorFile(null, ex);
         }
@@ -203,9 +180,6 @@ public class PropertiesController implements Initializable {
         } catch (IOException ex) {
             LoggingManager.writeToErrorFile(null, ex);
         }
-        pwfield.setText(mpw);
-        confirm_pwfield.setText(mpw);
-        nameBuffer = tf_name.getText();
         ObservableList<Label> avatarList = FXCollections.observableArrayList();
 
         File dir = new File("AppData/Images/Avatars");
@@ -230,10 +204,6 @@ public class PropertiesController implements Initializable {
                 selectedAvatar = iconList.getSelectionModel().getSelectedItem().getText();
                 if (("AppData/Images/Avatars/" + selectedAvatar).equals(selectedInitialAvatar)) {
                     btn_save.setDisable(true);
-                } else {
-                    proofName();
-                    proofPW();
-                    proofDebug();
                 }
             }
         });
@@ -258,10 +228,11 @@ public class PropertiesController implements Initializable {
         lb_createNewKey.setText(language_singelton.getValue("CREATENEWENCKEY"));
         encKeyTooltip.setText(language_singelton.getValue("ENCKEY"));
         debugTooltip.setText(language_singelton.getValue("DEBUGMODE"));
+        errorLabel.setText(language_singelton.getValue("ERROR_PROPERTIESINVALID"));
     }
-    
+
     @FXML
-    public void recreateKey(){
+    public void recreateKey() {
         File structure = new File("AppData/structure.xml");
         File key = new File("AppData/private.key");
 
@@ -269,8 +240,25 @@ public class PropertiesController implements Initializable {
 
         KeyGenerationManager keyGenManager = new KeyGenerationManager();
         keyGenManager.generateAndStoreKey("AppData/private.key");
-        
+
         structure = new Encryption().returnEncryptedFile(structure, structure.getAbsolutePath(), key.getAbsolutePath());
         new PageLoadHelper().loadRecreateKeyDialog();
+    }
+
+    private boolean getSelectedDebug(int debugValue) {
+        if (debugValue == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @FXML
+    private void changeStyle() {
+        if (confirm_pwfield.getText().equals(pwfield.getText())) {
+            confirm_pwfield.setStyle("-fx-background-color: #00FF00");
+        } else {
+            confirm_pwfield.setStyle("-fx-background-color: #FE2E2E");
+        }
     }
 }

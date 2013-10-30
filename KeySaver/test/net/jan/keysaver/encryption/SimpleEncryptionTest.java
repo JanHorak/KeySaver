@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.jan.test.encryption;
+package net.jan.keysaver.encryption;
 
 import java.io.File;
 import net.jan.aes.decryption.Decryption;

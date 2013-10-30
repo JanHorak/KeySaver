@@ -4,6 +4,8 @@
  */
 package net.jan.keysaver.manager;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -23,8 +25,25 @@ public class ValidationManager {
     public static void validate(Object ob) {
         Set<ConstraintViolation<Object>> constraintViolations = returnConstraintViolantionSet(ob);
         for (ConstraintViolation<Object> violation : constraintViolations) {
-            System.out.println(violation.getPropertyPath() + " " + violation.getMessage());
+            System.err.println(violation.getPropertyPath() + " " + violation.getMessage());
         }
+    }
+    
+    /**
+     * This static method validates an Object
+     * @param ob - the Object we want to validate
+     */
+    public static List<String> returnInvalidFields(Object ob) {
+        List<String> errorFields = new ArrayList<>();
+        Set<ConstraintViolation<Object>> constraintViolations = returnConstraintViolantionSet(ob);
+        for (ConstraintViolation<Object> violation : constraintViolations) {
+            if ( violation.getPropertyPath().toString().isEmpty() ){
+                errorFields.add("Error in global Constraint!");
+            } else {
+                errorFields.add(violation.getPropertyPath().toString());
+            }
+        }
+        return errorFields;
     }
     
     /**
@@ -38,7 +57,6 @@ public class ValidationManager {
         Set<ConstraintViolation<Object>> constraintViolations = validator.validate(ob);
         return constraintViolations;
     }
-    
     
     /**
      * Returns the validation of the passed Object
