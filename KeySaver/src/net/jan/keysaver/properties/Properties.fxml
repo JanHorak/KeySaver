@@ -9,7 +9,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="282.0" prefWidth="428.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.jan.keysaver.properties.PropertiesController">
   <children>
-    <Button id="saveButton" fx:id="btn_save" disable="true" layoutX="335.0" layoutY="247.0" mnemonicParsing="false" onAction="#save" prefWidth="79.0" text="Save" />
+    <Button id="saveButton" fx:id="btn_save" disable="false" layoutX="335.0" layoutY="247.0" mnemonicParsing="false" onAction="#save" prefWidth="79.0" text="Save" />
     <Button fx:id="btn_cancel" cancelButton="true" layoutX="234.0" layoutY="247.0" mnemonicParsing="false" onAction="#cancel" prefWidth="87.0" text="Cancel" />
     <GridPane layoutX="2.0" layoutY="4.0" prefHeight="235.0" prefWidth="424.0">
       <children>
@@ -17,17 +17,17 @@
         <Label fx:id="lb_pw" text="Masterpassword" GridPane.columnIndex="0" GridPane.rowIndex="1" />
         <Label fx:id="lb_confirmPW" text="Confirm Masterpassword" GridPane.columnIndex="0" GridPane.rowIndex="2" />
         <Label fx:id="lb_image" text="Image" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-        <PasswordField fx:id="pwfield" onKeyReleased="#proofPW" prefWidth="248.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-        <PasswordField fx:id="confirm_pwfield" onKeyReleased="#proofPW" prefWidth="206.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <PasswordField fx:id="pwfield" prefWidth="248.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <PasswordField fx:id="confirm_pwfield" onKeyReleased="#changeStyle" prefWidth="206.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
         <ImageView fx:id="statusImage" fitHeight="31.5" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-        <TextField fx:id="tf_name" onKeyReleased="#proofName" prefWidth="235.0001220703125" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <TextField fx:id="tf_name" prefWidth="235.0001220703125" GridPane.columnIndex="1" GridPane.rowIndex="0" />
         <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" GridPane.columnIndex="1" GridPane.rowIndex="3">
           <content>
             <ListView fx:id="iconList" prefHeight="117.0" prefWidth="235.0" />
           </content>
         </ScrollPane>
         <Label fx:id="lb_debugmode" text="DebugMode" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-        <CheckBox fx:id="chk_debug" mnemonicParsing="false" onAction="#proofDebug" text="enable" GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <CheckBox fx:id="chk_debug" mnemonicParsing="false" text="enable" GridPane.columnIndex="1" GridPane.rowIndex="4">
           <tooltip>
             <Tooltip text="TOOLTIP" fx:id="debugTooltip" />
           </tooltip>
@@ -53,5 +53,6 @@
         <RowConstraints maxHeight="117.0" minHeight="10.0" prefHeight="19.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
+    <Label fx:id="errorLabel" layoutX="7.0" layoutY="252.0" prefWidth="207.0" text="" textFill="RED" />
   </children>
 </AnchorPane>

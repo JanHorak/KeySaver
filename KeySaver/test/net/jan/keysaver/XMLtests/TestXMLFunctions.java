@@ -1,4 +1,4 @@
-package net.jan.test.XMLtests;
+package net.jan.keysaver.XMLtests;
 
 /*
  * To change this template, choose Tools | Templates
