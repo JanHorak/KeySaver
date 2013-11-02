@@ -47,6 +47,7 @@ import net.jan.keysaver.sources.Key;
 import net.jan.keysaver.beans.Language_Singleton;
 import net.jan.keysaver.beans.Settings_Singelton;
 import net.jan.keysaver.dialogs.icondialog.IcondialogController;
+import net.jan.keysaver.manager.ValidationManager;
 import net.jan.keysaver.properties.PropertiesController;
 import net.jan.keysaver.sources.PageLoadHelper;
 import net.jan.keysaver.validation.Validator;
@@ -145,8 +146,6 @@ public class MainpageController implements Initializable {
     @FXML
     private CheckBox chk_germanLang;
     /////////
-    @FXML
-    private ImageView pwImage;
     @FXML
     private ImageView avatarIV;
     @FXML
@@ -259,7 +258,7 @@ public class MainpageController implements Initializable {
         // Buttons
         enableControl(btn_cancel, btn_save);
         // Textfields
-        enableControl(tf_keyname, tf_description, tf_password, tf_passwordConfirm, 
+        enableControl(tf_keyname, tf_description, tf_password, tf_passwordConfirm,
                 tf_username, chk_useDefaultKeyIcon);
         chk_useDefaultKeyIcon.setSelected(true);
         try {
@@ -298,9 +297,10 @@ public class MainpageController implements Initializable {
         btn_browseKeyIcon.setDisable(true);
         pathLabelKeyIcon.setText("");
         pathLabelKeyIcon.setDisable(true);
-        pwImage.setImage(null);
         iconCatPreview.setImage(null);
         iconKeyPreview.setImage(null);
+        //EmptyString resets to Default 
+        tf_passwordConfirm.setStyle("");
     }
 
     private void initTree() {
@@ -367,28 +367,26 @@ public class MainpageController implements Initializable {
     private void save() throws IOException {
         //new Category
         if (addCat) {
-            String catname = tf_catName.getText().trim();
-
             Category cat = new Category();
-            cat.setName(catname);
+            cat.setName(tf_catName.getText().trim());
             if (chk_useDefaultCatIcon.isSelected()) {
                 cat.setIconPath(sm_icons.returnProperty("FOLDER_DEFAULT"));
             } else {
                 cat.setIconPath(pathLabelCatIcon.getText());
             }
-
+            iconCatPreview.setVisible(true);
+            Key k = new Key();
+            List<Key> keyList = new ArrayList<Key>();
+            k.setKeyname("new Key");
+            k.setDescription("unknown");
+            k.setIconPath(sm_icons.returnProperty("KEYINTREE"));
+            k.setPassword("unknown");
+            k.setUsername("unknown");
+            keyList.add(k);
+            cat.setKeylist(keyList);
+            
             //Validation of the Category
-            if (new Validator().validateCategory(cat)) {
-
-                iconCatPreview.setVisible(true);
-                Key k = new Key();
-                List<Key> keyList = new ArrayList<Key>();
-                k.setKeyname("new Key");
-                k.setDescription("unknown");
-                k.setPassword("unknown");
-                k.setUsername("unknown");
-                keyList.add(k);
-                cat.setKeylist(keyList);
+            if (ValidationManager.isValid(cat)) {
                 List<Category> categoryList = new ArrayList<>();
                 categoryList = catList.getCategoryList();
                 categoryList.add(cat);
@@ -412,6 +410,7 @@ public class MainpageController implements Initializable {
                 Category currentCategory = catList.getCategoryList().get(i);
                 if (currentCategory.getName().equals(tmpBuffer)) {
                     currentCategory.setName(tf_catName.getText());
+                    currentCategory.setIconPath(pathLabelCatIcon.getText());
                     new FileManager().saveStructure(catList);
                     initTree();
                     editCancel();
@@ -433,7 +432,7 @@ public class MainpageController implements Initializable {
             boolean stop = false;
 
             //Validation of the Key
-            if (new Validator().validateKey(editedKey)) {
+            if (ValidationManager.isValid(editedKey)) {
                 boolean live = true;
                 for (int i = 0; i < cat.size() && live; i++) {
                     Category currentCategory = cat.get(i);
@@ -467,7 +466,7 @@ public class MainpageController implements Initializable {
             newKey.setUsername(tf_username.getText().trim());
             newKey.setIconPath(pathLabelKeyIcon.getText());
             // Validate new Key
-            if (new Validator().validateKey(newKey)) {
+            if (ValidationManager.isValid(newKey)) {
 
                 List<Category> cat = catList.getCategoryList();
                 boolean stop = false;
@@ -486,7 +485,6 @@ public class MainpageController implements Initializable {
                 editCancel();
                 startNotification(EnumNotification.KEY_ADDED);
 
-                // new Key is invalid!
             } else {
                 startNotification(EnumNotification.WARNING);
                 LoggingManager.writeToLogFile("Key is invalid!");
@@ -497,10 +495,10 @@ public class MainpageController implements Initializable {
     @FXML
     private void validatePW() {
         if (tf_password.getText().equals(tf_passwordConfirm.getText())) {
-            pwImage.setImage(okImage);
+            tf_passwordConfirm.setStyle("-fx-background-color: #00FF00");
             enableControl(btn_save);
         } else {
-            pwImage.setImage(nokImage);
+            tf_passwordConfirm.setStyle("-fx-background-color: #FE2E2E");
             disableControl(btn_save);
         }
     }
@@ -517,9 +515,6 @@ public class MainpageController implements Initializable {
         String removeKeyMessage = languageBean.getValue("NOTIFIREMOVEKEY");
         String errorMessage = languageBean.getValue("NOTIFIERROR");
         String warningMessage = languageBean.getValue("NOTIFIWARNING");
-
-
-
 
         if (eNotification.equals(EnumNotification.ERROR)) {
             errorLogHyperlink.setGraphic(new ImageView(nokImage));
@@ -703,7 +698,7 @@ public class MainpageController implements Initializable {
             enableControl(btn_browseCatIcon);
         }
     }
-    
+
     @FXML
     private void selectDefaultKeyIconCheckBox() {
         if (chk_useDefaultKeyIcon.isSelected()) {
@@ -798,12 +793,12 @@ public class MainpageController implements Initializable {
             startNotification(EnumNotification.ERROR);
         }
     }
-    
+
     @FXML
-    private void exportFile(){
+    private void exportFile() {
         new PageLoadHelper().loadExportDialog();
     }
-    
+
     @FXML
     private void openHelpFile() {
         try {
@@ -822,7 +817,7 @@ public class MainpageController implements Initializable {
             iconCatPreview.setImage(FileManager.getImageFromPath(path.getAbsolutePath()));
         }
     }
-    
+
     @FXML
     private void browseImageKeyIcon() {
         File path = browseFile();
@@ -831,8 +826,8 @@ public class MainpageController implements Initializable {
             iconKeyPreview.setImage(FileManager.getImageFromPath(path.getAbsolutePath()));
         }
     }
-    
-    private File browseFile(){
+
+    private File browseFile() {
         FileChooser chooser = new FileChooser();
         chooser.setInitialDirectory(new File("AppData/Images/intern"));
         chooser.setTitle("Choose an own Image for the Category");
@@ -843,15 +838,14 @@ public class MainpageController implements Initializable {
         if (path != null) {
             return path;
         }
-        
+
         return path;
     }
-    
-    private void updateKeyIcon(Key key){
-       iconKeyPreview.setImage(FileManager.getImageFromPath(key.getIconPath()));
+
+    private void updateKeyIcon(Key key) {
+        iconKeyPreview.setImage(FileManager.getImageFromPath(key.getIconPath()));
     }
-    
-    
+
     ////////////////////////////////
     //
     // ***** END of Utility- Methods  ******
