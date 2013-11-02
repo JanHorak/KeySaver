@@ -6,6 +6,8 @@ package net.jan.keysaver.sources;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -13,10 +15,16 @@ import java.util.List;
  */
 public class Category implements Serializable{
  
+    @NotNull
+    @NotEmpty
     private List<Key> keylist;
     
+    @NotNull
+    @NotEmpty
     private String name;
     
+    @NotNull
+    @NotEmpty
     private String iconPath;
 
     public String getIconPath() {
@@ -35,8 +43,6 @@ public class Category implements Serializable{
         this.name = name;
     }
     
-    
-
     public List<Key> getKeylist() {
         return keylist;
     }

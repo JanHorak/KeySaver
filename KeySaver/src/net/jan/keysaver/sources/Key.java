@@ -1,8 +1,5 @@
 package net.jan.keysaver.sources;
 
-import java.io.Serializable;
-import javafx.event.EventHandler;
-import javafx.scene.input.KeyEvent;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -15,6 +12,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  *
  * @author Jan Horak
  */
+@net.jan.keysaver.validation.Key
 public class Key{
     
     @NotNull
