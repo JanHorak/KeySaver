@@ -27,9 +27,9 @@ public class TestUtilities {
     
     @Test
     public void testHash(){
-        String test = "test";
+        String test = "123";
         String hashedTest = new Utilities().getHash(test);
-        String test2 = "test2";
+        String test2 = "123";
         assertTrue(new Utilities().getHash(test).equals(hashedTest));
         assertTrue(!test2.equals(hashedTest));
     }

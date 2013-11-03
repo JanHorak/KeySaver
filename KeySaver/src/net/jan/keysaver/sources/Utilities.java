@@ -9,17 +9,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.manager.SettingManager;
@@ -34,15 +30,17 @@ public class Utilities {
         MessageDigest md = null;
         try {
             md = MessageDigest.getInstance("MD5");
+            md.update(input.getBytes());
         } catch (NoSuchAlgorithmException ex) {
             LoggingManager.writeToErrorFile("Utilities - getHash(): ", ex);
         }
-        try {
-            return new String(md.digest(input.getBytes()), "UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            LoggingManager.writeToErrorFile("Encoding failed:  ", ex);
+        byte byteData[] = md.digest();
+
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < byteData.length; i++) {
+         sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
         }
-        return "error occured!";
+        return sb.toString();
     }
 
     public static void generateZip(String pathOfZip, List<String> filePathes) {
