@@ -10,6 +10,6 @@ package net.jan.keysaver.sources;
  */
 public enum EnumNotification {
     
-    ERROR, WARNING, KEY_ADDED, KEY_REMOVED, CAT_ADDED, CAT_REMOVED
+    ERROR, WARNING, WARNING_LASTCAT, KEY_ADDED, KEY_REMOVED, CAT_ADDED, CAT_REMOVED
     
 }

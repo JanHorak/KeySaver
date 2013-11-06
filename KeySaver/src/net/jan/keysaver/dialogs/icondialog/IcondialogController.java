@@ -77,11 +77,7 @@ public class IcondialogController implements Initializable {
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg"));
         chooser.setTitle(langBean.getValue("FILECHOOSERTITLE"));
         chooser.setInitialDirectory(new File("AppData/Images/intern"));
-
-
-
         selectedFile = chooser.showOpenDialog(null);
-
         if (selectedFile != null) {
             dyn_lb_fileName.setText(selectedFile.getName());
             dyn_lb_kindOfFile.setText(returnEnd(lb_fileName.getText()));

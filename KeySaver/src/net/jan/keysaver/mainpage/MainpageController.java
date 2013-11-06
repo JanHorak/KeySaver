@@ -50,7 +50,6 @@ import net.jan.keysaver.dialogs.icondialog.IcondialogController;
 import net.jan.keysaver.manager.ValidationManager;
 import net.jan.keysaver.properties.PropertiesController;
 import net.jan.keysaver.sources.PageLoadHelper;
-import net.jan.keysaver.validation.Validator;
 
 /**
  *
@@ -326,7 +325,6 @@ public class MainpageController implements Initializable {
         boolean live = true;
         if (isKeySelected) {
             List<Category> cat = catList.getCategoryList();
-
             for (Category c : cat) {
                 List<Key> keyList = c.getKeylist();
                 for (int i = 0; i < keyList.size() && live; i++) {
@@ -349,16 +347,21 @@ public class MainpageController implements Initializable {
         }
         if (isCatSelected) {
             List<Category> cat = catList.getCategoryList();
-            for (int i = 0; i < cat.size() && live; i++) {
-                Category currentCategory = cat.get(i);
-                if (currentCategory.getName().equals(selectedCat)) {
-                    cat.remove(currentCategory);
-                    new FileManager().saveStructure(catList);
-                    initTree();
-                    editCancel();
-                    startNotification(EnumNotification.CAT_REMOVED);
-                    live = false;
+            if (cat.size() > 1) {
+                for (int i = 0; i < cat.size() && live; i++) {
+                    Category currentCategory = cat.get(i);
+                    if (currentCategory.getName().equals(selectedCat)) {
+                        cat.remove(currentCategory);
+                        new FileManager().saveStructure(catList);
+                        initTree();
+                        editCancel();
+                        startNotification(EnumNotification.CAT_REMOVED);
+                        live = false;
+                    }
                 }
+            } else {
+                startNotification(EnumNotification.WARNING_LASTCAT);
+                LoggingManager.writeToErrorFile("WARNING!! \nList of Categories may not be empty!", null);
             }
         }
     }
@@ -384,7 +387,7 @@ public class MainpageController implements Initializable {
             k.setUsername("unknown");
             keyList.add(k);
             cat.setKeylist(keyList);
-            
+
             //Validation of the Category
             if (ValidationManager.isValid(cat)) {
                 List<Category> categoryList = new ArrayList<>();
@@ -429,7 +432,6 @@ public class MainpageController implements Initializable {
             editedKey.setUsername(tf_username.getText().trim());
 
             List<Category> cat = catList.getCategoryList();
-            boolean stop = false;
 
             //Validation of the Key
             if (ValidationManager.isValid(editedKey)) {
@@ -515,6 +517,7 @@ public class MainpageController implements Initializable {
         String removeKeyMessage = languageBean.getValue("NOTIFIREMOVEKEY");
         String errorMessage = languageBean.getValue("NOTIFIERROR");
         String warningMessage = languageBean.getValue("NOTIFIWARNING");
+        String warningMessage_lastCat = languageBean.getValue("NOTIFIWARNINGCAT");
 
         if (eNotification.equals(EnumNotification.ERROR)) {
             errorLogHyperlink.setGraphic(new ImageView(nokImage));
@@ -550,6 +553,12 @@ public class MainpageController implements Initializable {
         if (eNotification.equals(EnumNotification.WARNING)) {
             notifyLabel.setGraphic(new ImageView(warningImage));
             notifyLabel.setText(warningMessage);
+            fadeIn(notifyLabel, 500);
+            fadeOut(notifyLabel, 5500);
+        }
+        if (eNotification.equals(EnumNotification.WARNING_LASTCAT)) {
+            notifyLabel.setGraphic(new ImageView(warningImage));
+            notifyLabel.setText(warningMessage_lastCat);
             fadeIn(notifyLabel, 500);
             fadeOut(notifyLabel, 5500);
         }

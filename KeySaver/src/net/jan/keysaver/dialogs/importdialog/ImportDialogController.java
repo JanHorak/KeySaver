@@ -17,6 +17,8 @@ import javafx.scene.control.TitledPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import net.jan.keysaver.beans.Language_Singleton;
+import net.jan.keysaver.manager.ValidationManager;
+import net.jan.keysaver.validationentities.ImportEntity;
 
 /**
  * FXML Controller class
@@ -199,6 +201,7 @@ public class ImportDialogController implements Initializable {
         lb_keyFile.setText(languageBean.getValue("KEYFILE"));
         lb_mainFile.setText(languageBean.getValue("MAINFILE"));
         lb_zip.setText(languageBean.getValue("ZIPHEADER"));
+        lb_error.setText(languageBean.getValue("ERROR_IMPORTINVALID"));
         //Buttons
         btn_browse_Iconproperties.setText(languageBean.getValue("BROWSE"));
         btn_browse_avatars.setText(languageBean.getValue("BROWSE"));
@@ -226,6 +229,26 @@ public class ImportDialogController implements Initializable {
         stage.close();
     }
 
+    @FXML
+    private void importData(){
+        ImportEntity im = new ImportEntity();
+        im.setAvatarZip(lb_avatarsPath.getText());
+        im.setIconProps(lb_iconPropPath.getText());
+        im.setImagesZip(lb_imagesZipPath.getText());
+        im.setIniFile(lb_iniFilePath.getText());
+        im.setKey(lb_keyFilePath.getText());
+        im.setXml(lb_mainFilePath.getText());
+        
+        im.setGlobalZip(lb_zipPath.getText());
+        
+        if ( ValidationManager.isValid(im) ){
+            
+            
+        } else {
+            lb_error.setVisible(true);
+        }
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         languageBean = Language_Singleton.getInstance();
