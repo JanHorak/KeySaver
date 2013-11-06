@@ -6,6 +6,7 @@ package net.jan.keysaver.validationtests;
 
 import net.jan.keysaver.manager.ValidationManager;
 import net.jan.keysaver.sources.Key;
+import net.jan.keysaver.validationentities.ImportEntity;
 import net.jan.keysaver.validationentities.PropertiesEntity;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -64,4 +65,28 @@ public class TestValidation {
 
         assertTrue(!ValidationManager.isValid(k));
     }
+    
+    @Test
+    public void testKeyShouldBeValidateImport(){
+        ImportEntity ie = new ImportEntity();
+        
+        ie.setAvatarZip("das");
+        ie.setImagesZip("ff");
+        ie.setIconProps("uzu");
+        ie.setIniFile("asdasd");
+        ie.setKey("d");
+        ie.setXml("ddd");
+
+        
+        ie.setGlobalZip("");
+        assertTrue(ValidationManager.isValid(ie));
+        
+        ie.setGlobalZip("dd");
+        assertTrue(!ValidationManager.isValid(ie));
+        
+        ie.setIniFile("");
+        ie.setGlobalZip("");
+        assertTrue(!ValidationManager.isValid(ie));
+    }
+    
 }

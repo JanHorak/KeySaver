@@ -118,7 +118,11 @@
       <content>
         <AnchorPane prefHeight="200.0" prefWidth="200.0">
           <children>
-            <Label fx:id="notifyLabel" layoutX="14.0" layoutY="6.0" prefHeight="38.0" prefWidth="174.0" />
+            <Label fx:id="notifyLabel" layoutX="0.0" layoutY="6.0" prefHeight="38.0" prefWidth="188.0">
+              <font>
+                <Font size="10.0" />
+              </font>
+            </Label>
             <Hyperlink fx:id="errorLogHyperlink" disable="true" layoutX="21.0" layoutY="17.0" minHeight="16.0" onAction="#openErrorFile" prefHeight="24.0" prefWidth="160.0">
               <tooltip>
                 <Tooltip text="Empty Tooltip" fx:id="errorTooltip" />

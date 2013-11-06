@@ -9,7 +9,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="193.1328125" prefWidth="573.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.jan.keysaver.dialogs.importdialog.ImportDialogController">
   <children>
-    <Button fx:id="btn_import" disable="true" layoutX="498.0" layoutY="164.0" mnemonicParsing="false" text="Import" />
+    <Button fx:id="btn_import" disable="false" layoutX="498.0" layoutY="164.0" mnemonicParsing="false" onAction="#importData" text="Import" />
     <Label fx:id="lb_error" layoutX="4.0" layoutY="169.0" prefWidth="344.0" text="" textFill="RED">
       <font>
         <Font name="System Bold" size="13.0" />
@@ -18,7 +18,35 @@
     <Button fx:id="btn_cancel" layoutX="399.0" layoutY="163.0" mnemonicParsing="false" onAction="#close" text="Cancel" />
     <Accordion layoutX="0.0" layoutY="0.0" prefHeight="149.0" prefWidth="573.0">
       <expandedPane>
-        <TitledPane fx:id="singlePane" animated="false" expanded="true" text="Single Files">
+        <TitledPane id="x1" fx:id="zipPane" animated="true" prefHeight="67.0" text="Zip- File">
+          <content>
+            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="32.0" prefWidth="570.0">
+              <children>
+                <GridPane layoutX="0.0" layoutY="0.0" prefWidth="569.0">
+                  <children>
+                    <Label fx:id="lb_zip" text="Zip- File" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <Button fx:id="btn_browse_zip" mnemonicParsing="false" onAction="#browseZip" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                    <Label fx:id="lb_zipPath" text="" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                    <Button fx:id="btn_cancel_zip" mnemonicParsing="false" onAction="#clearZip" text="Button" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                  </children>
+                  <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="143.0" minWidth="10.0" prefWidth="143.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="77.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="280.0" minWidth="10.0" prefWidth="280.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="141.0" minWidth="10.0" prefWidth="69.0" />
+                  </columnConstraints>
+                  <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  </rowConstraints>
+                </GridPane>
+              </children>
+            </AnchorPane>
+          </content>
+        </TitledPane>
+      </expandedPane>
+      <panes>
+        <fx:reference source="zipPane" />
+        <TitledPane fx:id="singlePane" animated="true" expanded="false" text="Single Files">
           <content>
             <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
               <children>
@@ -77,34 +105,6 @@
             </AnchorPane>
           </content>
         </TitledPane>
-      </expandedPane>
-      <panes>
-        <TitledPane id="x1" fx:id="zipPane" animated="false" prefHeight="67.0" text="Zip- File">
-          <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="32.0" prefWidth="570.0">
-              <children>
-                <GridPane layoutX="0.0" layoutY="0.0" prefWidth="569.0">
-                  <children>
-                    <Label fx:id="lb_zip" text="Zip- File" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                    <Button fx:id="btn_browse_zip" mnemonicParsing="false" onAction="#browseZip" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                    <Label fx:id="lb_zipPath" text="" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                    <Button fx:id="btn_cancel_zip" mnemonicParsing="false" onAction="#clearZip" text="Button" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-                  </children>
-                  <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="143.0" minWidth="10.0" prefWidth="143.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="77.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="280.0" minWidth="10.0" prefWidth="280.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="141.0" minWidth="10.0" prefWidth="69.0" />
-                  </columnConstraints>
-                  <rowConstraints>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  </rowConstraints>
-                </GridPane>
-              </children>
-            </AnchorPane>
-          </content>
-        </TitledPane>
-        <fx:reference source="singlePane" />
       </panes>
     </Accordion>
   </children>
