@@ -46,17 +46,18 @@ public class NotEmptyOrValidator implements ConstraintValidator<NotEmptyOR, Obje
             Logger.getLogger(NotEmptyOrValidator.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        if (orField.isEmpty() && fieldList.isEmpty()) {
-            isValid = false;
-        }
-        if (!fieldList.isEmpty() && !orField.isEmpty()) {
-            isValid = false;
-        }
-
         if (orField.isEmpty()) {
             for (String s : fieldList) {
                 if (s.isEmpty()) {
                     isValid = false;
+                    break;
+                }
+            }
+        } else {
+            for (String s : fieldList) {
+                if (!s.isEmpty()) {
+                    isValid = false;
+                    break;
                 }
             }
         }
