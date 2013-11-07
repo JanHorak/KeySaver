@@ -15,7 +15,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.manager.SettingManager;
@@ -38,7 +41,7 @@ public class Utilities {
 
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < byteData.length; i++) {
-         sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+            sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
         }
         return sb.toString();
     }
@@ -92,6 +95,42 @@ public class Utilities {
             fos.close();
         } catch (IOException ex) {
             LoggingManager.writeToErrorFile("Utilities: generateZip- Cannot close Streams (MainStreams):", ex);
+        }
+    }
+
+    public static void decompressZip(File zipFile, String pathForUnzip) {
+        byte[] buffer = new byte[1024];
+        ZipInputStream zis = null;
+        try {
+            File folder = new File(pathForUnzip);
+            if (!folder.exists()) {
+                folder.mkdir();
+            }
+            zis = new ZipInputStream(new FileInputStream(zipFile));
+            ZipEntry ze = zis.getNextEntry();
+
+            while (ze != null) {
+                String fileName = ze.getName();
+                File newFile = new File(pathForUnzip + File.separator + fileName);
+                new File(newFile.getParent()).mkdirs();
+                FileOutputStream fos = new FileOutputStream(newFile);
+                int len;
+                while ((len = zis.read(buffer)) > 0) {
+                    fos.write(buffer, 0, len);
+                }
+                fos.close();
+                ze = zis.getNextEntry();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                zis.closeEntry();
+                zis.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         }
     }
 

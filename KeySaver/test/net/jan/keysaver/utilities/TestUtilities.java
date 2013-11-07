@@ -45,7 +45,7 @@ public class TestUtilities {
         fileList.add(key.getAbsolutePath());
         fileList.add(structure.getAbsolutePath());
         
-        new Utilities().generateZip(path, fileList);
+        Utilities.generateZip(path, fileList);
         ZipFile file = null;
         try {
             file = new ZipFile(new File(path));
@@ -61,6 +61,25 @@ public class TestUtilities {
         File f = new File(path);
         f.delete();
     }
+    
+    @Test
+    public void shouldUnzip(){
+        String path = "test.zip";
+        
+        File structure = new File("AppData/structure.xml");
+        File key = new File("AppData/private.key");
+        List<String> fileList = new ArrayList<String>();
+        fileList.add(key.getAbsolutePath());
+        fileList.add(structure.getAbsolutePath());
+        
+        Utilities.generateZip(path, fileList);
+        File testFolder = new File("Testfolder");
+        
+        Utilities.decompressZip(new File(path), testFolder.getAbsolutePath());
+    
+        testFolder.delete();
+    }
+    
     
     
     @Test

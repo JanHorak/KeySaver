@@ -325,26 +325,32 @@ public class MainpageController implements Initializable {
         boolean live = true;
         if (isKeySelected) {
             List<Category> cat = catList.getCategoryList();
-            for (Category c : cat) {
-                List<Key> keyList = c.getKeylist();
-                for (int i = 0; i < keyList.size() && live; i++) {
-                    if (keyList.get(i).getKeyname().equals(selectedKey.getKeyname())) {
-                        if (keyList.size() == 1) {
-                            cat.remove(c);
-                        } else {
-                            keyList.remove(i);
-                            c.setKeylist(keyList);
-                            live = false;
+            if (cat.size() > 1) {
+                for (Category c : cat) {
+                    List<Key> keyList = c.getKeylist();
+                    for (int i = 0; i < keyList.size() && live; i++) {
+                        if (keyList.get(i).getKeyname().equals(selectedKey.getKeyname())) {
+                            if (keyList.size() == 1) {
+                                cat.remove(c);
+                            } else {
+                                keyList.remove(i);
+                                c.setKeylist(keyList);
+                                live = false;
+                            }
                         }
                     }
                 }
+                catList.setCategoryList(cat);
+                new FileManager().saveStructure(catList);
+                initTree();
+                editCancel();
+                startNotification(EnumNotification.KEY_REMOVED);
+            } else {
+                startNotification(EnumNotification.WARNING_LASTCAT);
+                LoggingManager.writeToErrorFile("WARNING!! \nList of Categories may not be empty!", null);
             }
-            catList.setCategoryList(cat);
-            new FileManager().saveStructure(catList);
-            initTree();
-            editCancel();
-            startNotification(EnumNotification.KEY_REMOVED);
         }
+        
         if (isCatSelected) {
             List<Category> cat = catList.getCategoryList();
             if (cat.size() > 1) {
