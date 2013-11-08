@@ -23,8 +23,6 @@ public class Key{
     @NotEmpty
     private String username;
     
-    @NotNull
-    @NotEmpty
     private String description;
     
     @NotNull
