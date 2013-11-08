@@ -19,7 +19,7 @@ import net.jan.keysaver.validator.EqualsValidator;
  * @author janhorak
  */
 @Constraint( validatedBy = EqualsValidator.class )
-@Target({ ElementType.ANNOTATION_TYPE, ElementType.TYPE})
+@Target({ ElementType.ANNOTATION_TYPE, ElementType.TYPE, ElementType.FIELD})
 @Retention( RetentionPolicy.RUNTIME )
 @Documented
 public @interface Equals

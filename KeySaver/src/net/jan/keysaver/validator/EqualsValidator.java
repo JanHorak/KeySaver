@@ -12,17 +12,15 @@ import javax.validation.ConstraintValidatorContext;
 import net.jan.keysaver.validation.Equals;
 import org.apache.commons.beanutils.BeanUtils;
 
-
-
 /**
  *
  * @author janhorak
  */
-public class EqualsValidator implements ConstraintValidator<Equals, Object>{
+public class EqualsValidator implements ConstraintValidator<Equals, Object> {
 
     private String first;
     private String second;
-    
+
     @Override
     public void initialize(Equals a) {
         first = a.first();
@@ -40,11 +38,15 @@ public class EqualsValidator implements ConstraintValidator<Equals, Object>{
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             Logger.getLogger(EqualsValidator.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        if (!valueOfFirst.equals(valueOfSecond)){
-            isValid = false;
+
+
+
+        if (valueOfFirst == null && valueOfSecond == null) {
+        } else {
+            if (!valueOfFirst.equals(valueOfSecond)) {
+                isValid = false;
+            }
         }
         return isValid;
     }
-
 }

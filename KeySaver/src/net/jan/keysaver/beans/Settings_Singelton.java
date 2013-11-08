@@ -22,6 +22,12 @@ public class Settings_Singelton {
 
     private static Settings_Singelton instance = null;
     private static Properties propertiesOfInstance = new Properties();
+    
+    private static final String PROGRAMVERSION = "V.0.9.9 Beta";
+    
+    public String getVersion(){
+        return PROGRAMVERSION;
+    }
 
     public static Settings_Singelton getInstance() {
         if (instance == null) {
