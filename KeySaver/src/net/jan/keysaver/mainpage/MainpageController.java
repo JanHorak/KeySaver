@@ -611,7 +611,7 @@ public class MainpageController implements Initializable {
         //Labels
         lb_catName.setText(languageBean.getValue("CATNAME"));
         lb_confpw.setText(languageBean.getValue("CONFPASSWORD"));
-        lb_username.setText(languageBean.getValue("USERNAME"));
+        lb_username.setText(languageBean.getValue("USERNAMEMAIL"));
         lb_description.setText(languageBean.getValue("DESCRIPTION"));
         lb_password.setText(languageBean.getValue("PASSWORD"));
         lb_confpw.setText(languageBean.getValue("CONFPASSWORD"));
