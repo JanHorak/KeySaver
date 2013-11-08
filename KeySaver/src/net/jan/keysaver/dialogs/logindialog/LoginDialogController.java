@@ -10,7 +10,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,7 +25,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import net.jan.keysaver.beans.Settings_Singelton;
 import net.jan.keysaver.mainpage.MainpageController;
@@ -57,22 +56,24 @@ public class LoginDialogController implements Initializable {
     private final String PATH_MAIN_FRAME = "Mainpage.fxml";
     @FXML
     private Button btn_import;
-    
-    
 
     @FXML
-    private void login(ActionEvent actionEvent) {
+    private void login(Event actionEvent) {
         settingsBean = Settings_Singelton.getInstance();
         pw = settingsBean.getValue("MPW");
         if ((Utilities.getHash(pwField.getText()).trim()).equals(pw)) {
-            new PageLoadHelper(PATH_MAIN_FRAME, "KeySaver2.0 " + "Version " + settingsBean.getValue("VERSION"), 612, 464, MainpageController.class).loadPage();
+            new PageLoadHelper(PATH_MAIN_FRAME, "KeySaver2.0 " + "Version " + settingsBean.getVersion(), 612, 464, MainpageController.class).loadPage();
             //close the Window
-            Node source = (Node) actionEvent.getSource();
-            Stage stage = (Stage) source.getScene().getWindow();
-            stage.close();
+            close(actionEvent);
         } else {
             errorLabel.setText("Not the right password!");
         }
+    }
+
+    private void close(Event e) {
+        Node source = (Node) e.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
@@ -94,6 +95,7 @@ public class LoginDialogController implements Initializable {
             @Override
             public void handle(KeyEvent t) {
                 if (t.getCode().equals(KeyCode.ENTER)) {
+                    login(t);
                 }
             }
         });
@@ -114,7 +116,4 @@ public class LoginDialogController implements Initializable {
             stage.setHeight(346);
         }
     }
-
-    
-    
 }

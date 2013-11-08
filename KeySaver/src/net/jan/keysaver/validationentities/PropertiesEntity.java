@@ -12,19 +12,15 @@ import org.hibernate.validator.constraints.NotEmpty;
  *
  * @author janhorak
  */
-@Equals(first = "password", second = "password_confirm", message = "Passwords not equals!")
+@Equals(first = "password", second = "password_confirm")
 public class PropertiesEntity {
     
     @NotNull
     @NotEmpty
     private String userName;
     
-    @NotNull
-    @NotEmpty
     private String password;
     
-    @NotNull
-    @NotEmpty
     private String password_confirm;
 
     public String getUserName() {

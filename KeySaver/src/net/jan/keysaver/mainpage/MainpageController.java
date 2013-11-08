@@ -8,6 +8,8 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -137,6 +140,8 @@ public class MainpageController implements Initializable {
     @FXML
     private MenuItem iconsItem;
     @FXML
+    private MenuItem devSiteItem;
+    @FXML
     private MenuItem languageItem;
     @FXML
     private MenuItem exitItem;
@@ -237,8 +242,9 @@ public class MainpageController implements Initializable {
         addCat = true;
         if (iconCatPreview.getImage() == null) {
             try {
-                iconCatPreview.setImage(FileManager.getImageFromPath(sm_icons.returnProperty("FOLDER_DEFAULT")));
-
+                String pathDefaultIcon = sm_icons.returnProperty("FOLDER_DEFAULT");
+                iconCatPreview.setImage(FileManager.getImageFromPath(pathDefaultIcon));
+                pathLabelCatIcon.setText(pathDefaultIcon);
             } catch (FileNotFoundException ex) {
                 LoggingManager.writeToErrorFile("initialize() -> Failed to load Folder_default_16x16.png", ex);
                 startNotification(EnumNotification.ERROR);
@@ -325,12 +331,12 @@ public class MainpageController implements Initializable {
         boolean live = true;
         if (isKeySelected) {
             List<Category> cat = catList.getCategoryList();
-            if (cat.size() > 1) {
-                for (Category c : cat) {
-                    List<Key> keyList = c.getKeylist();
+            for (Category c : cat) {
+                List<Key> keyList = c.getKeylist();
+                if (cat.size() >= 1 && keyList.size() > 1) {
                     for (int i = 0; i < keyList.size() && live; i++) {
                         if (keyList.get(i).getKeyname().equals(selectedKey.getKeyname())) {
-                            if (keyList.size() == 1) {
+                            if (keyList.size() == 1 && cat.size() > 1) {
                                 cat.remove(c);
                             } else {
                                 keyList.remove(i);
@@ -339,35 +345,34 @@ public class MainpageController implements Initializable {
                             }
                         }
                     }
+                    catList.setCategoryList(cat);
+                    new FileManager().saveStructure(catList);
+                    initTree();
+                    editCancel();
+                    startNotification(EnumNotification.KEY_REMOVED);
+                } else {
+                    startNotification(EnumNotification.WARNING_LASTCAT);
+                    LoggingManager.writeToErrorFile("WARNING!! \nList of Categories may not be empty!", null);
                 }
-                catList.setCategoryList(cat);
-                new FileManager().saveStructure(catList);
-                initTree();
-                editCancel();
-                startNotification(EnumNotification.KEY_REMOVED);
-            } else {
-                startNotification(EnumNotification.WARNING_LASTCAT);
-                LoggingManager.writeToErrorFile("WARNING!! \nList of Categories may not be empty!", null);
-            }
-        }
-        
-        if (isCatSelected) {
-            List<Category> cat = catList.getCategoryList();
-            if (cat.size() > 1) {
-                for (int i = 0; i < cat.size() && live; i++) {
-                    Category currentCategory = cat.get(i);
-                    if (currentCategory.getName().equals(selectedCat)) {
-                        cat.remove(currentCategory);
-                        new FileManager().saveStructure(catList);
-                        initTree();
-                        editCancel();
-                        startNotification(EnumNotification.CAT_REMOVED);
-                        live = false;
+
+                if (isCatSelected) {
+                    if (cat.size() > 1) {
+                        for (int i = 0; i < cat.size() && live; i++) {
+                            Category currentCategory = cat.get(i);
+                            if (currentCategory.getName().equals(selectedCat)) {
+                                cat.remove(currentCategory);
+                                new FileManager().saveStructure(catList);
+                                initTree();
+                                editCancel();
+                                startNotification(EnumNotification.CAT_REMOVED);
+                                live = false;
+                            }
+                        }
+                    } else {
+                        startNotification(EnumNotification.WARNING_LASTCAT);
+                        LoggingManager.writeToErrorFile("WARNING!! \nList of Categories may not be empty!", null);
                     }
                 }
-            } else {
-                startNotification(EnumNotification.WARNING_LASTCAT);
-                LoggingManager.writeToErrorFile("WARNING!! \nList of Categories may not be empty!", null);
             }
         }
     }
@@ -620,6 +625,7 @@ public class MainpageController implements Initializable {
         btn_edit.setText(languageBean.getValue("EDIT"));
         btn_save.setText(addString);
         btn_remove.setText(languageBean.getValue("REMOVE"));
+        btn_browseKeyIcon.setText(languageBean.getValue("BROWSE"));
         debugLog("  ...Buttons done");
 
         //Menu / MenuItems
@@ -633,6 +639,8 @@ public class MainpageController implements Initializable {
         settingsItem.setText(languageBean.getValue("PROP"));
         export_fileItem.setText(languageBean.getValue("EXPORT"));
         exitItem.setText(languageBean.getValue("EXIT"));
+        helpItem.setText(languageBean.getValue("HELP"));
+        devSiteItem.setText(languageBean.getValue("VISIT"));
         debugLog("  ...Menus and Items done");
 
         //Panes
@@ -810,6 +818,16 @@ public class MainpageController implements Initializable {
     }
 
     @FXML
+    private void openGitHub() {
+        try {
+            Desktop.getDesktop().browse(new URI("https://github.com/janhorak/keysaver2.0"));
+        } catch (IOException | URISyntaxException ex) {
+            Logger.getLogger(MainpageController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    @FXML
     private void exportFile() {
         new PageLoadHelper().loadExportDialog();
     }
@@ -859,6 +877,11 @@ public class MainpageController implements Initializable {
 
     private void updateKeyIcon(Key key) {
         iconKeyPreview.setImage(FileManager.getImageFromPath(key.getIconPath()));
+    }
+
+    @FXML
+    private void close(Event e) {
+        System.exit(0);
     }
 
     ////////////////////////////////

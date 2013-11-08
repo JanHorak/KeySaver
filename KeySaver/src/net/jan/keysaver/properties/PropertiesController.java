@@ -57,17 +57,14 @@ public class PropertiesController implements Initializable {
     private Button btn_cancel;
     @FXML
     private Button btn_createNewKey;
-    
     //TextFields
     @FXML
     public TextField tf_name;
-    
     //PasswordFields
     @FXML
     public PasswordField confirm_pwfield;
     @FXML
     public PasswordField pwfield;
-    
     //Labels
     @FXML
     private Label lb_username;
@@ -83,7 +80,6 @@ public class PropertiesController implements Initializable {
     private Label lb_createNewKey;
     @FXML
     public Label errorLabel;
-    
     //Others
     @FXML
     private ImageView statusImage;
@@ -94,7 +90,6 @@ public class PropertiesController implements Initializable {
     @FXML
     private Tooltip debugTooltip;
     @FXML
-    
     //NotFX- Components
     private Tooltip encKeyTooltip;
     private String selectedAvatar = "";
@@ -104,46 +99,71 @@ public class PropertiesController implements Initializable {
     Language_Singleton language_singelton;
 
     // ==== END OF ATTRIBUTES ====
-    
     @FXML
     private void save(ActionEvent actionEvent) {
+        sm_main = new SettingManager("settings.ini");
+        String bufferedUserName = "unknown";
+        String bufferedPWHash = "unknown";
+        errorLabel.setVisible(false);
+        boolean changed = false;
+        try {
+            bufferedUserName = sm_main.returnProperty("USERNAME");
+            bufferedPWHash = sm_main.returnProperty("MPW");
+        } catch (IOException ex) {
+            Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-        PropertiesEntity validationObject = new PropertiesEntity();
-        validationObject.setUserName(tf_name.getText());
-        validationObject.setPassword(pwfield.getText());
-        validationObject.setPassword_confirm(confirm_pwfield.getText());
 
-        if (ValidationManager.isValid(validationObject)) {
-            errorLabel.setVisible(false);
-            if (chk_debug.isSelected()) {
-                debug = 1;
-            } else {
-                debug = 0;
-            }
-            try {
-                sm_main = new SettingManager("settings.ini");
+        if (chk_debug.isSelected()) {
+            debug = 1;
+        } else {
+            debug = 0;
+        }
+        try {
+            if (!bufferedUserName.equals(tf_name.getText()) && !tf_name.getText().isEmpty()) {
                 sm_main.storeProperty("USERNAME", tf_name.getText());
+                changed = true;
+            }
+            if (!Utilities.getHash(confirm_pwfield.getText()).equals(bufferedPWHash) && !confirm_pwfield.getText().isEmpty()) {
                 sm_main.storeProperty("MPW", Utilities.getHash(confirm_pwfield.getText()).trim());
-                if (selectedAvatar.equals("")) {
-                    sm_main.storeProperty("AVATAR", selectedInitialAvatar);
-                } else {
-                    sm_main.storeProperty("AVATAR", "AppData/Images/Avatars/" + selectedAvatar);
-                }
-                sm_main.storeProperty("DEBUG", String.valueOf(debug));
-            } catch (FileNotFoundException ex) {
-                LoggingManager.writeToErrorFile("Cant find Error-File", ex);
-            } catch (IOException ex) {
-                LoggingManager.writeToErrorFile(null, ex);
+                changed = true;
             }
 
+
+            if (selectedAvatar.equals("")) {
+                sm_main.storeProperty("AVATAR", selectedInitialAvatar);
+
+            } else {
+                sm_main.storeProperty("AVATAR", "AppData/Images/Avatars/" + selectedAvatar);
+                changed = true;
+            }
+            sm_main.storeProperty("DEBUG", String.valueOf(debug));
+        } catch (FileNotFoundException ex) {
+            LoggingManager.writeToErrorFile("Cant find Error-File", ex);
+        } catch (IOException ex) {
+            LoggingManager.writeToErrorFile(null, ex);
+        }
+
+
+        PropertiesEntity p = new PropertiesEntity();
+        p.setUserName(tf_name.getText());
+        p.setPassword(pwfield.getText());
+        p.setPassword_confirm(confirm_pwfield.getText());
+        if (changed && ValidationManager.isValid(p)) {
+            new PageLoadHelper().loadInfoRestartDialog();
             //closeEvent
             Node source = (Node) actionEvent.getSource();
             Stage stage = (Stage) source.getScene().getWindow();
             stage.close();
-
-            new PageLoadHelper().loadInfoRestartDialog();
-        } else {
+        }
+        if (!ValidationManager.isValid(p)) {
             errorLabel.setVisible(true);
+        }
+        if (!changed) {
+            //closeEvent
+            Node source = (Node) actionEvent.getSource();
+            Stage stage = (Stage) source.getScene().getWindow();
+            stage.close();
         }
     }
 
@@ -165,8 +185,19 @@ public class PropertiesController implements Initializable {
         try {
             debug = Integer.decode(sm_main.returnProperty("DEBUG"));
             chk_debug.setSelected(getSelectedDebug(debug));
+
+
+
+
+
+
+
+
+
+
         } catch (IOException ex) {
-            Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PropertiesController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
         debugTooltip.setText(language_singelton.getValue("DEBUGMODE"));
@@ -210,8 +241,19 @@ public class PropertiesController implements Initializable {
         SettingManager sm_icon = new SettingManager("AppData/icons.properties");
         try {
             lb_createNewKey.setGraphic(FileManager.getImageViewFromPath(sm_icon.returnProperty("RECREATEKEY")));
+
+
+
+
+
+
+
+
+
+
         } catch (IOException ex) {
-            Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PropertiesController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 

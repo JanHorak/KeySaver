@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import net.jan.keysaver.sources.Utilities;
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -29,6 +30,7 @@ public class TestUtilities {
     public void testHash(){
         String test = "123";
         String hashedTest = new Utilities().getHash(test);
+        System.out.println(hashedTest);
         String test2 = "123";
         assertTrue(new Utilities().getHash(test).equals(hashedTest));
         assertTrue(!test2.equals(hashedTest));
@@ -76,8 +78,12 @@ public class TestUtilities {
         File testFolder = new File("Testfolder");
         
         Utilities.decompressZip(new File(path), testFolder.getAbsolutePath());
-    
-        testFolder.delete();
+        try {
+            FileUtils.deleteDirectory(testFolder);
+        } catch (IOException ex) {
+            Logger.getLogger(TestUtilities.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        new File(path).delete();
     }
     
     

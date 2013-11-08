@@ -23,11 +23,11 @@ public class TestValidation {
     @Test
     public void testPropertiesEntityShouldBeInvalid(){
         PropertiesEntity p = new PropertiesEntity();
-        p.setUserName(null);
-        p.setPassword("123");
-        p.setPassword_confirm("1233");
+        p.setUserName("das");
+        p.setPassword("ad");
+        p.setPassword_confirm("ad");
 
-        assertTrue(!ValidationManager.isValid(p));
+        assertTrue(ValidationManager.isValid(p));
     }
     
     @Test
