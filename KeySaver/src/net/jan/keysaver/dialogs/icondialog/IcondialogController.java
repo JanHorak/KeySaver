@@ -27,7 +27,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import net.jan.keysaver.beans.Language_Singleton;
-import net.jan.keysaver.beans.Settings_Singelton;
+import net.jan.keysaver.beans.Settings_Singleton;
 import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.manager.SettingManager;
 
@@ -68,7 +68,7 @@ public class IcondialogController implements Initializable {
     private String selectedProperty = "";
     private File selectedFile;
     private Language_Singleton langBean;
-    private Settings_Singelton settingBean;
+    private Settings_Singleton settingBean;
     private SettingManager sm_icons = new SettingManager("AppData/icons.properties");
 
     @FXML
@@ -129,7 +129,7 @@ public class IcondialogController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        settingBean = Settings_Singelton.getInstance();
+        settingBean = Settings_Singleton.getInstance();
         langBean = Language_Singleton.getInstance();
 
         lb_fileName.setText(langBean.getValue("FILENAME") + ":");
