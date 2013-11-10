@@ -5,7 +5,6 @@
 package net.jan.keysaver.beans;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,7 +38,6 @@ public class Language_Singleton {
         }
         try {
             instanceProperties = new SettingManager("AppData/Lang_"+lang+".properties").initAndReturnProperties();
-            instanceProperties = setCharsetInNewPropertiesFile();
             System.out.println("Language-Values loaded in Singelton");
         } catch (IOException ex) {
             Logger.getLogger(Language_Singleton.class.getName()).log(Level.SEVERE, null, ex);
@@ -59,12 +57,5 @@ public class Language_Singleton {
         return instanceProperties.getProperty(value);
     }
     
-    private Properties setCharsetInNewPropertiesFile(){
-        Properties props = new Properties();
-        for ( Object obj : instanceProperties.stringPropertyNames() ){
-            props.setProperty(obj.toString(), new String(instanceProperties.getProperty(obj.toString()).getBytes(), Charset.forName("UTF-8")));
-        }
-        return props;
-    }
     
 }

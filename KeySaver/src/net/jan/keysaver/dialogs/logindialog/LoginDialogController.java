@@ -26,7 +26,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import net.jan.keysaver.beans.Settings_Singelton;
+import net.jan.keysaver.beans.Settings_Singleton;
 import net.jan.keysaver.mainpage.MainpageController;
 import net.jan.keysaver.manager.FileManager;
 import net.jan.keysaver.manager.SettingManager;
@@ -50,7 +50,7 @@ public class LoginDialogController implements Initializable {
     private String pw = "";
     @FXML
     private Label errorLabel;
-    private Settings_Singelton settingsBean;
+    private Settings_Singleton settingsBean;
     @FXML
     private TitledPane checkUppane;
     private final String PATH_MAIN_FRAME = "Mainpage.fxml";
@@ -59,7 +59,7 @@ public class LoginDialogController implements Initializable {
 
     @FXML
     private void login(Event actionEvent) {
-        settingsBean = Settings_Singelton.getInstance();
+        settingsBean = Settings_Singleton.getInstance();
         pw = settingsBean.getValue("MPW");
         if ((Utilities.getHash(pwField.getText()).trim()).equals(pw)) {
             new PageLoadHelper(PATH_MAIN_FRAME, "KeySaver2.0 " + "Version " + settingsBean.getVersion(), 612, 464, MainpageController.class).loadPage();

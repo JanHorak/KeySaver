@@ -48,7 +48,7 @@ import net.jan.keysaver.sources.CategoryList;
 import net.jan.keysaver.sources.EnumNotification;
 import net.jan.keysaver.sources.Key;
 import net.jan.keysaver.beans.Language_Singleton;
-import net.jan.keysaver.beans.Settings_Singelton;
+import net.jan.keysaver.beans.Settings_Singleton;
 import net.jan.keysaver.dialogs.icondialog.IcondialogController;
 import net.jan.keysaver.manager.ValidationManager;
 import net.jan.keysaver.properties.PropertiesController;
@@ -200,7 +200,7 @@ public class MainpageController implements Initializable {
     private String addString = "";
     private String addString2 = "";
     Language_Singleton languageBean;
-    Settings_Singelton settingsBean;
+    Settings_Singleton settingsBean;
     @FXML
     private Tooltip errorTooltip;
 
@@ -913,7 +913,7 @@ public class MainpageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Load Main-ini
-        settingsBean = Settings_Singelton.getInstance();
+        settingsBean = Settings_Singleton.getInstance();
         selectedLanguage = settingsBean.getValue("LANG");
 
         // Debugsettings

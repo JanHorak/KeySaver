@@ -18,31 +18,31 @@ import net.jan.keysaver.manager.SettingManager;
  *
  * @author Jan Horak
  */
-public class Settings_Singelton {
+public class Settings_Singleton {
 
-    private static Settings_Singelton instance = null;
+    private static Settings_Singleton instance = null;
     private static Properties propertiesOfInstance = new Properties();
     
-    private static final String PROGRAMVERSION = "V.0.9.9.1 Beta";
+    private static final String PROGRAMVERSION = "V.0.9.9.2 Beta";
     
     public String getVersion(){
         return PROGRAMVERSION;
     }
 
-    public static Settings_Singelton getInstance() {
+    public static Settings_Singleton getInstance() {
         if (instance == null) {
-            instance = new Settings_Singelton();
+            instance = new Settings_Singleton();
         }
         return instance;
     }
     
-    private Settings_Singelton(){
+    private Settings_Singleton(){
         SettingManager sm = new SettingManager("settings.ini");
         try {
             propertiesOfInstance = sm.initAndReturnProperties();
             propertiesOfInstance = setCharsetInNewPropertiesFile();
         } catch (IOException ex) {
-            Logger.getLogger(Settings_Singelton.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Settings_Singleton.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -59,9 +59,9 @@ public class Settings_Singelton {
             propertiesOfInstance.store(new FileOutputStream("settings.ini"), new String("Bean updated: " + new Date()));
             System.out.println("Values from Settings-Bean are Saved in settings.ini");
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Settings_Singelton.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Settings_Singleton.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(Settings_Singelton.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Settings_Singleton.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
