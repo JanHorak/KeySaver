@@ -239,7 +239,7 @@ public class ImportDialogController implements Initializable {
     }
 
     @FXML
-    private void importData() {
+    private void importData(ActionEvent event) {
         ImportEntity im = new ImportEntity();
         im.setAvatarZip(lb_avatarsPath.getText());
         im.setIconProps(lb_iconPropPath.getText());
@@ -282,12 +282,20 @@ public class ImportDialogController implements Initializable {
                 }
 
                 String[] tmpList = folder_pathTempFolder.list();
-
+                String pathInifile = "";
                 for (String s : tmpList) {
-                    coreFilePathes.add(s);
+                    if (s.endsWith("settings.ini")) {
+                        pathInifile = folder_pathTempFolder+"/"+s;
+                    } else {
+                        coreFilePathes.add(folder_pathTempFolder+"/"+s);
+                    }
                 }
-
                 Utilities.copyFiles(coreFilePathes, folder_appData.getAbsolutePath(), StandardCopyOption.REPLACE_EXISTING);
+                try {
+                    Files.copy(new File(pathInifile).toPath(), new File("settings.ini").toPath(), StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException ex) {
+                    Logger.getLogger(ImportDialogController.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 try {
                     FileUtils.deleteDirectory(folder_pathTempFolder);
                 } catch (IOException ex) {
@@ -296,10 +304,10 @@ public class ImportDialogController implements Initializable {
             } else {
                 Utilities.decompressZip(new File(lb_avatarsPath.getText()), folder_exportedAvatars.getAbsolutePath());
                 Utilities.decompressZip(new File(lb_imagesZipPath.getText()), folder_exportedImages.getAbsolutePath());
-                
+
                 Utilities.copyFiles(Utilities.getFilePathesFromFolder(folder_exportedImages.getAbsolutePath()), folder_images.getAbsolutePath(), StandardCopyOption.REPLACE_EXISTING);
                 Utilities.copyFiles(Utilities.getFilePathesFromFolder(folder_exportedAvatars.getAbsolutePath()), folder_avatars.getAbsolutePath(), StandardCopyOption.REPLACE_EXISTING);
-                
+
                 try {
                     FileUtils.deleteDirectory(folder_exportedAvatars);
                     FileUtils.deleteDirectory(folder_exportedImages);
@@ -317,7 +325,7 @@ public class ImportDialogController implements Initializable {
                 }
             }
             
-            close(new ActionEvent());
+            close(event);
 
             //invalid
         } else {

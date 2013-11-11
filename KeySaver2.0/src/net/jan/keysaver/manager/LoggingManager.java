@@ -42,7 +42,7 @@ public class LoggingManager {
             fw.append("\n");
             fw.append("Exception: \n");
             if (inputEx != null) {
-                fw.append(inputEx.getStackTrace().toString() + "\n");
+                fw.append(inputEx.toString() + "\n");
             } else {
                 fw.append("No Exception given \n");
             }
