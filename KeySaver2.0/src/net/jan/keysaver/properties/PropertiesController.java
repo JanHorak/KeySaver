@@ -185,16 +185,6 @@ public class PropertiesController implements Initializable {
         try {
             debug = Integer.decode(sm_main.returnProperty("DEBUG"));
             chk_debug.setSelected(getSelectedDebug(debug));
-
-
-
-
-
-
-
-
-
-
         } catch (IOException ex) {
             Logger.getLogger(PropertiesController.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -241,16 +231,6 @@ public class PropertiesController implements Initializable {
         SettingManager sm_icon = new SettingManager("AppData/icons.properties");
         try {
             lb_createNewKey.setGraphic(FileManager.getImageViewFromPath(sm_icon.returnProperty("RECREATEKEY")));
-
-
-
-
-
-
-
-
-
-
         } catch (IOException ex) {
             Logger.getLogger(PropertiesController.class
                     .getName()).log(Level.SEVERE, null, ex);

@@ -70,13 +70,13 @@ public class MainpageController implements Initializable {
     @FXML
     private Label lb_catName;
     @FXML
-    private Label lb_confpw;
+    private Label lb_password;
     @FXML
     private Label lb_keyname;
     @FXML
     private Label lb_description;
     @FXML
-    private Label lb_password;
+    private Label lb_keyicon;
     //Special Labels
     @FXML
     private Label notifyLabel;
@@ -92,8 +92,6 @@ public class MainpageController implements Initializable {
     private TextField tf_username;
     @FXML
     private TextField tf_password;
-    @FXML
-    private TextField tf_passwordConfirm;
     @FXML
     private TextField tf_catName;
     ///////
@@ -228,6 +226,7 @@ public class MainpageController implements Initializable {
 
             tf_catName.setText(selectedLocalCat.getName());
             pathLabelCatIcon.setText(selectedLocalCat.getIconPath());
+            iconCatPreview.setImage(FileManager.getImageFromPath(pathLabelCatIcon.getText()));
             selectedLocalCat = null;
             editCat = true;
         }
@@ -263,7 +262,7 @@ public class MainpageController implements Initializable {
         // Buttons
         enableControl(btn_cancel, btn_save);
         // Textfields
-        enableControl(tf_keyname, tf_description, tf_password, tf_passwordConfirm,
+        enableControl(tf_keyname, tf_description, tf_password,
                 tf_username, chk_useDefaultKeyIcon);
         chk_useDefaultKeyIcon.setSelected(true);
         try {
@@ -294,7 +293,7 @@ public class MainpageController implements Initializable {
         editKey = false;
         addKey = false;
         editCat = false;
-        chk_useDefaultCatIcon.setSelected(true);
+        chk_useDefaultCatIcon.setSelected(false);
         tf_catName.setText("");
         btn_browseCatIcon.setDisable(true);
         pathLabelCatIcon.setText("");
@@ -305,7 +304,7 @@ public class MainpageController implements Initializable {
         iconCatPreview.setImage(null);
         iconKeyPreview.setImage(null);
         //EmptyString resets to Default 
-        tf_passwordConfirm.setStyle("");
+        tf_password.setStyle("");
     }
 
     private void initTree() {
@@ -439,7 +438,7 @@ public class MainpageController implements Initializable {
             editedKey.setKeyname(tf_keyname.getText().trim());
             editedKey.setIconPath(pathLabelKeyIcon.getText());
             editedKey.setDescription(tf_description.getText().trim());
-            editedKey.setPassword(tf_passwordConfirm.getText().trim());
+            editedKey.setPassword(tf_password.getText().trim());
             editedKey.setUsername(tf_username.getText().trim());
 
             List<Category> cat = catList.getCategoryList();
@@ -475,7 +474,7 @@ public class MainpageController implements Initializable {
             Key newKey = new Key();
             newKey.setKeyname(tf_keyname.getText().trim());
             newKey.setDescription(tf_description.getText().trim());
-            newKey.setPassword(tf_passwordConfirm.getText().trim());
+            newKey.setPassword(tf_password.getText().trim());
             newKey.setUsername(tf_username.getText().trim());
             newKey.setIconPath(pathLabelKeyIcon.getText());
             // Validate new Key
@@ -502,17 +501,6 @@ public class MainpageController implements Initializable {
                 startNotification(EnumNotification.WARNING);
                 LoggingManager.writeToLogFile("Key is invalid!");
             }
-        }
-    }
-
-    @FXML
-    private void validatePW() {
-        if (tf_password.getText().equals(tf_passwordConfirm.getText())) {
-            tf_passwordConfirm.setStyle("-fx-background-color: #00FF00");
-            enableControl(btn_save);
-        } else {
-            tf_passwordConfirm.setStyle("-fx-background-color: #FE2E2E");
-            disableControl(btn_save);
         }
     }
 
@@ -610,11 +598,10 @@ public class MainpageController implements Initializable {
         debugLog("  Changing Language...");
         //Labels
         lb_catName.setText(languageBean.getValue("CATNAME"));
-        lb_confpw.setText(languageBean.getValue("CONFPASSWORD"));
         lb_username.setText(languageBean.getValue("USERNAMEMAIL"));
         lb_description.setText(languageBean.getValue("DESCRIPTION"));
         lb_password.setText(languageBean.getValue("PASSWORD"));
-        lb_confpw.setText(languageBean.getValue("CONFPASSWORD"));
+        lb_keyicon.setText(languageBean.getValue("KEYICONPATH"));
         debugLog("  ...Labels done");
 
         //Buttons
@@ -710,15 +697,18 @@ public class MainpageController implements Initializable {
     @FXML
     private void selectDefaultCatIconCheckBox() {
         if (chk_useDefaultCatIcon.isSelected()) {
-            disableControl(btn_browseCatIcon);
+            String path = "";
             try {
-                iconCatPreview.setImage(FileManager.getImageFromPath(sm_icons.returnProperty("FOLDER_DEFAULT")));
+                path = sm_icons.returnProperty("FOLDER_DEFAULT");
             } catch (IOException ex) {
                 Logger.getLogger(MainpageController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            pathLabelCatIcon.setText("");
+            pathLabelCatIcon.setText(path);
+            disableControl(btn_browseCatIcon);
+            iconCatPreview.setImage(FileManager.getImageFromPath(path));
         } else {
             enableControl(btn_browseCatIcon);
+            pathLabelCatIcon.setText("");
         }
     }
 
@@ -771,7 +761,6 @@ public class MainpageController implements Initializable {
         tf_username.setText("");
         tf_description.setText("");
         tf_password.setText("");
-        tf_passwordConfirm.setText("");
         pathLabelKeyIcon.setText("");
         iconKeyPreview.setImage(null);
         chk_useDefaultKeyIcon.setSelected(false);
@@ -779,13 +768,13 @@ public class MainpageController implements Initializable {
     }
 
     private void lockFields() {
-        disableControl(tf_keyname, tf_username, tf_description, tf_password, tf_passwordConfirm,
+        disableControl(tf_keyname, tf_username, tf_description, tf_password,
                 chk_useDefaultKeyIcon);
         disableControl(btn_browseKeyIcon);
     }
 
     private void unlockFields() {
-        enableControl(tf_keyname, tf_username, tf_description, tf_password, tf_passwordConfirm, chk_useDefaultKeyIcon);
+        enableControl(tf_keyname, tf_username, tf_description, tf_password, chk_useDefaultKeyIcon);
         enableControl(btn_browseKeyIcon);
     }
 
@@ -988,7 +977,6 @@ public class MainpageController implements Initializable {
                             tf_username.setText(selectedKey.getUsername());
                             tf_description.setText(selectedKey.getDescription());
                             tf_password.setText(selectedKey.getPassword());
-                            tf_passwordConfirm.setText(selectedKey.getPassword());
                             pathLabelKeyIcon.setText(selectedKey.getIconPath());
                             updateKeyIcon(selectedKey);
                             btn_edit.setDisable(false);

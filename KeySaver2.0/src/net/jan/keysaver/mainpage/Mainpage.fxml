@@ -24,22 +24,24 @@
         <Label fx:id="lb_keyname" text="Keyname" GridPane.columnIndex="0" GridPane.rowIndex="1" />
         <Label fx:id="lb_username" text="Username" GridPane.columnIndex="0" GridPane.rowIndex="2" />
         <Label fx:id="lb_description" alignment="TOP_LEFT" text="Description" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-        <Label fx:id="lb_password" text="Password" GridPane.columnIndex="0" GridPane.rowIndex="4" />
         <TextField fx:id="tf_keyname" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
         <TextField fx:id="tf_username" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
         <TextField fx:id="tf_description" alignment="TOP_LEFT" prefHeight="96.0" prefWidth="202.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
         <Label id="tf_username" fx:id="lb_dynamicUserName" text="\#{Username}" GridPane.columnIndex="0" GridPane.rowIndex="0" />
         <ImageView fx:id="avatarIV" fitHeight="40.87501525878906" fitWidth="54.50001807291066" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-        <Label fx:id="lb_confpw" text="Confirm Password" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-        <TextField fx:id="tf_password" onKeyReleased="#validatePW" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-        <TextField fx:id="tf_passwordConfirm" onKeyReleased="#validatePW" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+        <Label id="lb_confpw" fx:id="lb_password" text="Confirm Password" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+        <TextField id="tf_passwordConfirm" fx:id="tf_password" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
         <Label fx:id="lb_catName" text="Categoryname" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="8" />
         <TextField fx:id="tf_catName" prefWidth="200.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-        <CheckBox id="chk_useDefaultIcon" fx:id="chk_useDefaultCatIcon" mnemonicParsing="false" onAction="#selectDefaultCatIconCheckBox" prefWidth="126.0" selected="true" text="Use default Icon" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+        <CheckBox id="chk_useDefaultIcon" fx:id="chk_useDefaultCatIcon" mnemonicParsing="false" onAction="#selectDefaultCatIconCheckBox" prefWidth="126.0" selected="false" text="Use default Icon" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="9" />
         <Button id="btn_browse" fx:id="btn_browseCatIcon" disable="true" mnemonicParsing="false" onAction="#browseImageCatIcon" prefWidth="114.0" text="Browse" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="9" />
         <ImageView id="pwImage" fx:id="iconCatPreview" fitHeight="21.24999992161581" fitWidth="28.33333396911621" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="9" />
-        <Label text="KeyIcon" GridPane.columnIndex="0" GridPane.rowIndex="6" />
-        <Label fx:id="pathLabelKeyIcon" prefWidth="233.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+        <Label fx:id="lb_keyicon" text="KeyIcon" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+        <Label fx:id="pathLabelKeyIcon" prefWidth="233.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="6">
+          <font>
+            <Font size="10.0" fx:id="x2" />
+          </font>
+        </Label>
         <ImageView fx:id="iconKeyPreview" fitHeight="24.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="6" />
         <CheckBox fx:id="chk_useDefaultKeyIcon" mnemonicParsing="false" onAction="#selectDefaultKeyIconCheckBox" text="Use Default" GridPane.columnIndex="0" GridPane.rowIndex="7" />
         <Button fx:id="btn_browseKeyIcon" disable="true" mnemonicParsing="false" onAction="#browseImageKeyIcon" text="Browse" GridPane.columnIndex="1" GridPane.rowIndex="7" />
@@ -125,11 +127,7 @@
       <content>
         <AnchorPane prefHeight="200.0" prefWidth="200.0">
           <children>
-            <Label fx:id="notifyLabel" layoutX="0.0" layoutY="6.0" prefHeight="24.0" prefWidth="188.0">
-              <font>
-                <Font size="10.0" />
-              </font>
-            </Label>
+            <Label fx:id="notifyLabel" font="$x2" layoutX="0.0" layoutY="6.0" prefHeight="24.0" prefWidth="188.0" />
             <Hyperlink fx:id="errorLogHyperlink" disable="true" layoutX="21.0" layoutY="17.0" minHeight="16.0" onAction="#openErrorFile" prefHeight="24.0" prefWidth="160.0">
               <tooltip>
                 <Tooltip text="Empty Tooltip" fx:id="errorTooltip" />
