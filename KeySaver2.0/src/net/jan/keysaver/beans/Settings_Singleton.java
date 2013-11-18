@@ -23,10 +23,14 @@ public class Settings_Singleton {
     private static Settings_Singleton instance = null;
     private static Properties propertiesOfInstance = new Properties();
     
-    private static final String PROGRAMVERSION = "V.0.9.9.3 Beta";
+    private static final String PROGRAMVERSION = "V.0.9.9.4 Beta";
+    private static final double PROGRAMVERSIONNUMBER = 0.994;
     
     public String getVersion(){
         return PROGRAMVERSION;
+    }
+    public double getVersionNumber(){
+        return PROGRAMVERSIONNUMBER;
     }
 
     public static Settings_Singleton getInstance() {

@@ -4,10 +4,12 @@
  */
 package net.jan.keysaver.sources;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
@@ -20,6 +22,7 @@ import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+import net.jan.keysaver.beans.Settings_Singleton;
 import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.manager.SettingManager;
 
@@ -130,7 +133,7 @@ public class Utilities {
             } catch (IOException ex) {
                 Logger.getLogger(Utilities.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         }
     }
 
@@ -181,5 +184,26 @@ public class Utilities {
             resultList.add(f.getAbsolutePath());
         }
         return resultList;
+    }
+
+    public static String getStringFromFile(String path) {
+        String result = "";
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+
+            String sCurrentLine;
+
+            while ((sCurrentLine = br.readLine()) != null) {
+                result += sCurrentLine;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    
+    public static void isCurrentVersionOlder(double in){
+        double currentVersion = Settings_Singleton.getInstance().getVersionNumber();
+        System.out.println(currentVersion < in);
     }
 }
