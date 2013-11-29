@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="145.75" prefWidth="558.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.jan.keysaver.dialogs.updatedialog.UpdateDialogController">
+  <children>
+    <Label fx:id="lb_info" layoutX="14.0" layoutY="14.0" text="Mind you have to need connection to the internet to check for the newest version" />
+    <Button fx:id="btn_checkVersion" layoutX="14.0" layoutY="40.0" mnemonicParsing="false" onAction="#checkConnectionAndVersion" text="Looking for newest Version" />
+    <ProgressBar fx:id="bar" layoutX="279.0" layoutY="43.0" prefWidth="268.0" progress="0.0" />
+    <ProgressIndicator fx:id="indicator" layoutX="227.0" layoutY="33.0" progress="0.0" />
+    <Label fx:id="lb_progress" layoutX="279.0" layoutY="53.0" text="" />
+    <Button fx:id="btn_download" layoutX="14.0" layoutY="72.0" mnemonicParsing="false" onAction="#downloadNewVersion" text="Download" />
+    <Button fx:id="btn_close" layoutX="489.0" layoutY="116.0" mnemonicParsing="false" text="Close" />
+    <ImageView fx:id="image_connectionstatus" fitHeight="33.75" fitWidth="45.0" layoutX="14.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true" />
+  </children>
+</AnchorPane>
