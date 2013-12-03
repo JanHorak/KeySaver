@@ -12,21 +12,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 import net.jan.keysaver.beans.Language_Singleton;
-import net.jan.keysaver.beans.Settings_Singleton;
 import net.jan.keysaver.manager.FileManager;
 import net.jan.keysaver.manager.SettingManager;
 import net.jan.keysaver.manager.UpdateManager;
 import net.jan.keysaver.sources.EnumClientVersionStatus;
-import net.jan.keysaver.sources.Utilities;
 
 /**
  * FXML Controller class
@@ -57,7 +58,7 @@ public class UpdateDialogController implements Initializable {
     private Language_Singleton langBean;
     private SettingManager sm_icon;
     boolean connection = false;
-    
+    File downloadLocation = new File("");
 
     Task task = new Task<Boolean>() {
         boolean live = true;
@@ -115,8 +116,32 @@ public class UpdateDialogController implements Initializable {
 
             return con;
         }
+
         private void kill() {
             live = false;
+        }
+    };
+
+    Task downloadTask = new Task<Void>() {
+
+        @Override
+        protected Void call() throws Exception {
+            updateMessage(langBean.getValue("DOWNLOADING"));
+            updateProgress(-1, -1);
+            UpdateManager.downloadAndSave(UpdateManager.getFilePathForDownload(), downloadLocation.getAbsolutePath() + "/KeySaver2.0_" + UpdateManager.getCurrentVersionFromGitHub() + ".zip");
+            done();
+            return null;
+        }
+
+        public void done() {
+            updateMessage(langBean.getValue("DOWNLOADING_ENDED"));
+            updateProgress(100, 100);
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    btn_download.setDisable(false);
+                }
+            });
         }
     };
 
@@ -138,14 +163,24 @@ public class UpdateDialogController implements Initializable {
     }
 
     @FXML
-    private void downloadNewVersion(){
+    private void downloadNewVersion() {
         DirectoryChooser chooser = new DirectoryChooser();
-        File downloadLocation = chooser.showDialog(null);
-        if ( downloadLocation != null ){
-            UpdateManager.downloadAndSave(UpdateManager.getFilePathForDownload(), downloadLocation.getAbsolutePath()+"KeySaver2.0_"+Settings_Singleton.getInstance().getVersion()+".zip");
+        downloadLocation = chooser.showDialog(null);
+        if (downloadLocation != null) {
+            lb_progress.textProperty().bind(downloadTask.messageProperty());
+            indicator.progressProperty().bind(downloadTask.progressProperty());
+            bar.progressProperty().bind(downloadTask.progressProperty());
+            new Thread(downloadTask).start();
         }
     }
     
+    @FXML
+    private void cancel(ActionEvent actionEvent) {
+        Node source = (Node) actionEvent.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         langBean = Language_Singleton.getInstance();

@@ -144,6 +144,8 @@ public class MainpageController implements Initializable {
     @FXML
     private MenuItem exitItem;
     @FXML
+    private MenuItem updateItem;
+    @FXML
     private CheckBox chk_englishLang;
     @FXML
     private CheckBox chk_germanLang;
@@ -628,6 +630,7 @@ public class MainpageController implements Initializable {
         exitItem.setText(languageBean.getValue("EXIT"));
         helpItem.setText(languageBean.getValue("HELP"));
         devSiteItem.setText(languageBean.getValue("VISIT"));
+        updateItem.setText(languageBean.getValue("UPDATE"));
         debugLog("  ...Menus and Items done");
 
         //Panes
@@ -794,6 +797,11 @@ public class MainpageController implements Initializable {
     @FXML
     private void open_Iconsite() {
         new PageLoadHelper(PATH_ICONMANAGEMENT, "Iconmanagement", 366, 400, IcondialogController.class).loadPage();
+    }
+    
+    @FXML
+    private void open_updatesite(){
+        new PageLoadHelper().loadUpdateDialog();
     }
 
     @FXML
