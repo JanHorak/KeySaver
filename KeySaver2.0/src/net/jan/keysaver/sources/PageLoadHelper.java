@@ -4,21 +4,19 @@
  */
 package net.jan.keysaver.sources;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import net.jan.keysaver.beans.Language_Singleton;
 import net.jan.keysaver.dialogs.exportdialog.ExportDialogController;
 import net.jan.keysaver.dialogs.importdialog.ImportDialogController;
 import net.jan.keysaver.dialogs.infodialog.InfoDialogController;
 import net.jan.keysaver.dialogs.recreatedialog.RecreateKeyDialogController;
+import net.jan.keysaver.dialogs.updatedialog.UpdateDialogController;
 import net.jan.keysaver.manager.FileManager;
 
 /**
@@ -93,6 +91,15 @@ public class PageLoadHelper {
         title = langSingleton.getValue("IMPORTDIALOG_TITLE");
         height = 193.1;
         width = 573;
+        loadPage();
+    }
+    
+    public void loadUpdateDialog(){
+        pathString = "UpdateDialog.fxml";
+        c = UpdateDialogController.class;
+        title = langSingleton.getValue("UPDATEDIALOG_TITLE");
+        height = 138;
+        width = 558;
         loadPage();
     }
 

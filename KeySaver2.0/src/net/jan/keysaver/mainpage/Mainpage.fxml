@@ -101,6 +101,7 @@
           <items>
             <MenuItem mnemonicParsing="false" onAction="#openHelpFile" text="Help" fx:id="helpItem" />
             <MenuItem mnemonicParsing="false" onAction="#openGitHub" text="Visit Developersite" fx:id="devSiteItem" />
+            <MenuItem mnemonicParsing="false" onAction="#open_updatesite" text="Check for Updates" fx:id="updateItem" />
           </items>
         </Menu>
       </menus>

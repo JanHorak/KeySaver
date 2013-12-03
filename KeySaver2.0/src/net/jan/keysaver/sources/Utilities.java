@@ -190,7 +190,7 @@ public class Utilities {
         String result = "";
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
 
-            String sCurrentLine;
+            String sCurrentLine = "";
 
             while ((sCurrentLine = br.readLine()) != null) {
                 result += sCurrentLine;
@@ -202,8 +202,7 @@ public class Utilities {
         return result;
     }
     
-    public static void isCurrentVersionOlder(double in){
-        double currentVersion = Settings_Singleton.getInstance().getVersionNumber();
-        System.out.println(currentVersion < in);
-    }
+
+    
+    
 }
