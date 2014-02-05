@@ -8,7 +8,7 @@ import java.io.File;
 import net.jan.aes.decryption.Decryption;
 import net.jan.aes.encryption.Encryption;
 import net.jan.aes.keygenerationmanager.KeyGenerationManager;
-import net.jan.keysaver.manager.FileManager;
+import net.jan.keysaver.manager.XMLManager;
 import org.junit.Test;
 
 /**
@@ -19,7 +19,7 @@ public class SimpleEncryptionTest {
     
     @Test
     public void shouldEnAndDecryptTheStructure(){
-        FileManager fm = new FileManager();
+        XMLManager fm = new XMLManager();
         fm.checkAvailibility();
         File structureFile = new File("AppData/structure.xml");
         structureFile = new Encryption().returnEncryptedFile(structureFile, structureFile.getAbsolutePath(), "AppData/private.key");

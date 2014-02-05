@@ -4,7 +4,11 @@
  */
 package net.jan.keysaver.validationtests;
 
+import java.util.List;
 import net.jan.keysaver.manager.ValidationManager;
+import net.jan.keysaver.manager.XMLManager;
+import net.jan.keysaver.sources.Category;
+import net.jan.keysaver.sources.CategoryList;
 import net.jan.keysaver.sources.Key;
 import net.jan.keysaver.validationentities.ImportEntity;
 import net.jan.keysaver.validationentities.PropertiesEntity;
@@ -87,6 +91,20 @@ public class TestValidation {
         ie.setIniFile("");
         ie.setGlobalZip("");
         assertTrue(!ValidationManager.isValid(ie));
+    }
+    
+    @Test
+    public void testShouldInsertTwoCatsAndFail(){
+        
+        Category cat1 = new Category();
+        List<Category> list = new XMLManager().returnListofCategories().getCategoryList();
+        
+        cat1.setName("default");
+        cat1.setKeylist(list.get(0).getKeylist());
+        cat1.setIconPath("blabla");
+        
+        assertTrue(!ValidationManager.isValid(cat1));
+        
     }
     
 }
