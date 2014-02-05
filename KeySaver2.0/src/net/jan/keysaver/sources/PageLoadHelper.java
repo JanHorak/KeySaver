@@ -18,6 +18,7 @@ import net.jan.keysaver.dialogs.infodialog.InfoDialogController;
 import net.jan.keysaver.dialogs.recreatedialog.RecreateKeyDialogController;
 import net.jan.keysaver.dialogs.updatedialog.UpdateDialogController;
 import net.jan.keysaver.manager.FileManager;
+import net.jan.keysaver.manager.XMLManager;
 
 /**
  *

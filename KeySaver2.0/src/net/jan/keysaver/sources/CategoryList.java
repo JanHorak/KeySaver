@@ -6,6 +6,7 @@ package net.jan.keysaver.sources;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -49,4 +50,22 @@ public class CategoryList implements Serializable{
         }
         
     }
+    
+    public void addNewCategory(Category category){
+        this.categoryList.add(category);
+    }
+    
+    public void replaceCategory(Category oldCategory, Category newCategory){
+        Iterator<Category> iterator = this.categoryList.iterator();
+        int index = 0;
+        while (iterator.hasNext()){
+            Category catTmp = iterator.next();
+            if ( catTmp.getName().equals(oldCategory.getName()) ){
+                this.categoryList.set(index, newCategory);
+                break;
+            }
+            index++;
+        }
+    }
+    
 }

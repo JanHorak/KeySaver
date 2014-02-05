@@ -41,7 +41,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import net.jan.keysaver.manager.LoggingManager;
-import net.jan.keysaver.manager.FileManager;
+import net.jan.keysaver.manager.XMLManager;
 import net.jan.keysaver.manager.SettingManager;
 import net.jan.keysaver.sources.Category;
 import net.jan.keysaver.sources.CategoryList;
@@ -50,6 +50,7 @@ import net.jan.keysaver.sources.Key;
 import net.jan.keysaver.beans.Language_Singleton;
 import net.jan.keysaver.beans.Settings_Singleton;
 import net.jan.keysaver.dialogs.icondialog.IcondialogController;
+import net.jan.keysaver.manager.FileManager;
 import net.jan.keysaver.manager.ValidationManager;
 import net.jan.keysaver.properties.PropertiesController;
 import net.jan.keysaver.sources.PageLoadHelper;
@@ -178,7 +179,7 @@ public class MainpageController implements Initializable {
     @FXML
     private TitledPane actionPane;
     private CategoryList catList = new CategoryList();
-    private FileManager fileManager = new FileManager();
+    private XMLManager xmlManager = new XMLManager();
     private final String PATH_PROPERTIES = "Properties.fxml";
     private final String PATH_ICONMANAGEMENT = "Icondialog.fxml";
     private SelectionModel model;
@@ -191,7 +192,7 @@ public class MainpageController implements Initializable {
     private String tmpBuffer = "";
     private Key keyBuffer = new Key();
     private Key editedKey = new Key();
-    private String selectedCat = "";
+    private Category selectedCategory = new Category();
     private boolean isKeySelected = false;
     private boolean isCatSelected = false;
     private String selectedLanguage = "unknown";
@@ -212,13 +213,21 @@ public class MainpageController implements Initializable {
             lockTree();
             disableControl(btn_edit, btn_remove);
             enableControl(btn_cancel, btn_save);
-            keyBuffer = new FileManager().returnKey(tmpBuffer);
+            keyBuffer = new XMLManager().returnKey(tmpBuffer);
+            pathLabelKeyIcon.setText(keyBuffer.getIconPath());
+            if (keyBuffer.getIconPath().endsWith("Key_tree_16x16.png")) {
+                chk_useDefaultKeyIcon.setSelected(true);
+                btn_browseKeyIcon.setDisable(true);
+            } else {
+                btn_browseKeyIcon.setDisable(false);
+                chk_useDefaultKeyIcon.setSelected(false);
+            }
             editKey = true;
         }
         if (!selectedItem.isLeaf()) {
             lockTree();
             lockFields();
-            Category selectedLocalCat = new FileManager().returnSingleCategory(tmpBuffer);
+            Category selectedLocalCat = new XMLManager().returnSingleCategory(tmpBuffer);
             setControlVisible(lb_catName, tf_catName);
             disableControl(btn_addCat, btn_edit, btn_remove, btn_addKey);
             setControlVisible(btn_browseCatIcon, chk_useDefaultCatIcon);
@@ -229,6 +238,13 @@ public class MainpageController implements Initializable {
             tf_catName.setText(selectedLocalCat.getName());
             pathLabelCatIcon.setText(selectedLocalCat.getIconPath());
             iconCatPreview.setImage(FileManager.getImageFromPath(pathLabelCatIcon.getText()));
+            if (selectedLocalCat.getIconPath().endsWith("Folder_default_16x16.png")) {
+                chk_useDefaultCatIcon.setSelected(true);
+                btn_browseCatIcon.setDisable(true);
+            } else {
+                chk_useDefaultCatIcon.setSelected(false);
+                btn_browseCatIcon.setDisable(false);
+            }
             selectedLocalCat = null;
             editCat = true;
         }
@@ -295,6 +311,7 @@ public class MainpageController implements Initializable {
         editKey = false;
         addKey = false;
         editCat = false;
+        chk_useDefaultKeyIcon.setSelected(false);
         chk_useDefaultCatIcon.setSelected(false);
         tf_catName.setText("");
         btn_browseCatIcon.setDisable(true);
@@ -305,8 +322,6 @@ public class MainpageController implements Initializable {
         pathLabelKeyIcon.setDisable(true);
         iconCatPreview.setImage(null);
         iconKeyPreview.setImage(null);
-        //EmptyString resets to Default 
-        tf_password.setStyle("");
     }
 
     private void initTree() {
@@ -330,8 +345,8 @@ public class MainpageController implements Initializable {
     @FXML
     private void remove() {
         boolean live = true;
+        List<Category> cat = catList.getCategoryList();
         if (isKeySelected) {
-            List<Category> cat = catList.getCategoryList();
             for (Category c : cat) {
                 List<Key> keyList = c.getKeylist();
                 if (cat.size() >= 1 && keyList.size() > 1) {
@@ -347,7 +362,7 @@ public class MainpageController implements Initializable {
                         }
                     }
                     catList.setCategoryList(cat);
-                    new FileManager().saveStructure(catList);
+                    new XMLManager().saveStructure(catList);
                     initTree();
                     editCancel();
                     startNotification(EnumNotification.KEY_REMOVED);
@@ -356,31 +371,47 @@ public class MainpageController implements Initializable {
                     LoggingManager.writeToErrorFile("WARNING!! \nList of Categories may not be empty!", null);
                 }
 
-                if (isCatSelected) {
-                    if (cat.size() > 1) {
-                        for (int i = 0; i < cat.size() && live; i++) {
-                            Category currentCategory = cat.get(i);
-                            if (currentCategory.getName().equals(selectedCat)) {
-                                cat.remove(currentCategory);
-                                new FileManager().saveStructure(catList);
-                                initTree();
-                                editCancel();
-                                startNotification(EnumNotification.CAT_REMOVED);
-                                live = false;
-                            }
-                        }
-                    } else {
-                        startNotification(EnumNotification.WARNING_LASTCAT);
-                        LoggingManager.writeToErrorFile("WARNING!! \nList of Categories may not be empty!", null);
+            }
+        }
+
+        if (isCatSelected) {
+            if (cat.size() > 1) {
+                for (int i = 0; i < cat.size() && live; i++) {
+                    Category currentCategory = cat.get(i);
+                    if (currentCategory.getName().equals(selectedCategory.getName())) {
+                        cat.remove(currentCategory);
+                        new XMLManager().saveStructure(catList);
+                        initTree();
+                        editCancel();
+                        startNotification(EnumNotification.CAT_REMOVED);
+                        live = false;
                     }
                 }
+            } else {
+                startNotification(EnumNotification.WARNING_LASTCAT);
+                LoggingManager.writeToErrorFile("WARNING!! \nList of Categories may not be empty!", null);
             }
         }
     }
 
+    /**
+     * Save- Method for keys and Categories. This method saves all keys and
+     * Categories. The saving of data includes the editing and adding new
+     * values. So the Method is divided in add- and edit- parts. The variables {@link #addCat }, {@link #editCat }, {@link #addKey
+     * } and {@link #editKey }
+     * are controlled by the prepare- methods and the cancel- method. See: {@link #prepareAddCat() }
+     * {@link #prepareAddKey() }
+     * {@link #editCancel() }
+     *
+     * @throws IOException
+     */
     @FXML
     private void save() throws IOException {
+        Category categoryBuffer = new Category();
         //new Category
+        /*
+         * Defines the behavior of the addCat- Case.
+         */
         if (addCat) {
             Category cat = new Category();
             cat.setName(tf_catName.getText().trim());
@@ -402,11 +433,8 @@ public class MainpageController implements Initializable {
 
             //Validation of the Category
             if (ValidationManager.isValid(cat)) {
-                List<Category> categoryList = new ArrayList<>();
-                categoryList = catList.getCategoryList();
-                categoryList.add(cat);
-                catList.setCategoryList(categoryList);
-                new FileManager().saveStructure(catList);
+                catList.addNewCategory(cat);
+                new XMLManager().saveStructure(catList);
                 initTree();
                 editCancel();
                 startNotification(EnumNotification.CAT_ADDED);
@@ -418,52 +446,43 @@ public class MainpageController implements Initializable {
                         + " Please try again");
             }
         }
-        // Change existing name of Cat
+        // Change existing name of Cat or path of icon
         if (editCat) {
-            boolean live = true;
-            for (int i = 0; i < catList.getCategoryList().size() && live; i++) {
-                Category currentCategory = catList.getCategoryList().get(i);
-                if (currentCategory.getName().equals(tmpBuffer)) {
-                    currentCategory.setName(tf_catName.getText());
-                    currentCategory.setIconPath(pathLabelCatIcon.getText());
-                    new FileManager().saveStructure(catList);
-                    initTree();
-                    editCancel();
-                    live = false;
-                }
-            }
+            Category editedCategory = new Category();
+            editedCategory.setName(tf_catName.getText().trim());
+            editedCategory.setIconPath(pathLabelCatIcon.getText());
+            editedCategory.setKeylist(selectedCategory.getKeylist());
 
+            if (ValidationManager.isValid(editedCategory)) {
+                catList.replaceCategory(selectedCategory, editedCategory);
+                new XMLManager().saveStructure(catList);
+                initTree();
+                editCancel();
+            } else {
+                startNotification(EnumNotification.WARNING);
+                LoggingManager.writeToLogFile("Categoryname or Iconpath is invalid!"
+                        + " Please try again");
+            }
         }
 
         if (editKey) {
             Key oldKey = keyBuffer;
+            editedKey = new Key();
             editedKey.setKeyname(tf_keyname.getText().trim());
             editedKey.setIconPath(pathLabelKeyIcon.getText());
             editedKey.setDescription(tf_description.getText().trim());
             editedKey.setPassword(tf_password.getText().trim());
             editedKey.setUsername(tf_username.getText().trim());
 
-            List<Category> cat = catList.getCategoryList();
-
             //Validation of the Key
             if (ValidationManager.isValid(editedKey)) {
-                boolean live = true;
-                for (int i = 0; i < cat.size() && live; i++) {
-                    Category currentCategory = cat.get(i);
-                    List<Key> keyList = currentCategory.getKeylist();
-                    for (int j = 0; j < keyList.size() && live; j++) {
-                        Key currentKey = keyList.get(j);
-                        if (currentKey.getKeyname().equals(oldKey.getKeyname())) {
-                            currentKey.overwriteKey(editedKey);
-                            currentCategory.setKeylist(keyList);
-                            catList.setCategoryList(cat);
-                            new FileManager().saveStructure(catList);
-                            initTree();
-                            editCancel();
-                            live = false;
-                        }
-                    }
-                }
+                categoryBuffer = selectedCategory;
+                selectedCategory.replaceKey(oldKey, editedKey);
+                catList.replaceCategory(categoryBuffer, selectedCategory);
+                new XMLManager().saveStructure(catList);
+                initTree();
+                editCancel();
+
                 //Key is Invalid
             } else {
                 startNotification(EnumNotification.WARNING);
@@ -481,20 +500,10 @@ public class MainpageController implements Initializable {
             newKey.setIconPath(pathLabelKeyIcon.getText());
             // Validate new Key
             if (ValidationManager.isValid(newKey)) {
-
-                List<Category> cat = catList.getCategoryList();
-                boolean stop = false;
-                for (Category c : cat) {
-                    if (stop) {
-                        break;
-                    }
-                    if (c.getName().equals(selectedCat)) {
-                        c.getKeylist().add(newKey);
-                        stop = true;
-                    }
-                }
-                catList.setCategoryList(cat);
-                new FileManager().saveStructure(catList);
+                categoryBuffer = selectedCategory;
+                selectedCategory.addKey(newKey);
+                catList.replaceCategory(categoryBuffer, selectedCategory);
+                new XMLManager().saveStructure(catList);
                 initTree();
                 editCancel();
                 startNotification(EnumNotification.KEY_ADDED);
@@ -595,7 +604,6 @@ public class MainpageController implements Initializable {
 
         addString = languageBean.getValue("SAVE");
         addString2 = languageBean.getValue("SAVEII");
-
 
         debugLog("  Changing Language...");
         //Labels
@@ -798,9 +806,9 @@ public class MainpageController implements Initializable {
     private void open_Iconsite() {
         new PageLoadHelper(PATH_ICONMANAGEMENT, "Iconmanagement", 366, 400, IcondialogController.class).loadPage();
     }
-    
+
     @FXML
-    private void open_updatesite(){
+    private void open_updatesite() {
         new PageLoadHelper().loadUpdateDialog();
     }
 
@@ -868,7 +876,8 @@ public class MainpageController implements Initializable {
         if (path != null) {
             return path;
         }
-
+        // @TODO: Empty null- path will be returned anyway
+        
         return path;
     }
 
@@ -921,14 +930,11 @@ public class MainpageController implements Initializable {
         debugLog("------------------------------");
         debugLog("");
 
-
-
         // Check availibility of the Structure.xml
-        new FileManager().checkAvailibility();
+        new XMLManager().checkAvailibility();
         debugLog("Structure.xml founded or created");
 
         //Load the ini-Files and provide data
-
         sm_icons = new SettingManager("AppData/icons.properties");
         languageBean = Language_Singleton.getInstance();
 
@@ -938,13 +944,12 @@ public class MainpageController implements Initializable {
         initLanguage();
         debugLog("Language configured");
 
-        catList = fileManager.returnListofCategories();
+        catList = xmlManager.returnListofCategories();
         debugLog("Get converted List from Structure.xml");
 
         String userAvatar = null;
         userAvatar = settingsBean.getValue("AVATAR");
         lb_dynamicUserName.setText(settingsBean.getValue("USERNAME"));
-
 
         try {
             avatarIV.setImage(FileManager.getImageFromPath((userAvatar)));
@@ -975,12 +980,14 @@ public class MainpageController implements Initializable {
         tree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue ov, Object t, Object t1) {
+
                 if (ov != null || t != null || t1 != null) {
                     selectedItem = (TreeItem) ov.getValue();
                     if (selectedItem != null) {
                         btn_remove.setDisable(false);
                         if (selectedItem.isLeaf()) {
-                            selectedKey = new FileManager().returnKey(selectedItem.getValue().toString());
+                            selectedKey = new XMLManager().returnKey(selectedItem.getValue().toString());
+                            selectedCategory = new XMLManager().returnSingleCategory(selectedItem.getParent().getValue().toString());
                             tf_keyname.setText(selectedKey.getKeyname());
                             tf_username.setText(selectedKey.getUsername());
                             tf_description.setText(selectedKey.getDescription());
@@ -996,7 +1003,7 @@ public class MainpageController implements Initializable {
                             btn_edit.setDisable(false);
                             btn_addCat.setDisable(false);
                             btn_addKey.setDisable(false);
-                            selectedCat = selectedItem.getValue().toString();
+                            selectedCategory = new XMLManager().returnSingleCategory(selectedItem.getValue().toString());
                             isCatSelected = true;
                             isKeySelected = false;
                             resetFields();

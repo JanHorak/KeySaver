@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" fx:id="mainpane" minHeight="141.0" prefHeight="319.0" prefWidth="285.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.jan.keysaver.dialogs.logindialog.LoginDialogController">
+<AnchorPane id="AnchorPane" fx:id="mainpane" minHeight="141.0" prefHeight="243.0" prefWidth="285.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.jan.keysaver.dialogs.logindialog.LoginDialogController">
   <children>
     <Label layoutX="14.0" layoutY="51.0" text="Password:" />
     <PasswordField fx:id="pwField" layoutX="81.0" layoutY="48.0" prefWidth="195.0" />
     <Button fx:id="loginButton" layoutX="218.0" layoutY="73.0" mnemonicParsing="false" onAction="#login" text="Login" />
     <ImageView fx:id="imageView" fitHeight="35.0" fitWidth="153.0" layoutX="10.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
-    <Label fx:id="errorLabel" layoutX="14.0" layoutY="76.0" prefWidth="162.0" textFill="RED" />
-    <Button fx:id="btn_import" layoutX="239.0" layoutY="11.0" mnemonicParsing="false" onAction="#loadImportDialog" text="" />
-    <Separator layoutX="10.0" layoutY="103.0" prefWidth="270.0" />
-    <TitledPane fx:id="checkUppane" animated="false" collapsible="true" expanded="false" layoutX="14.0" layoutY="113.0" onMouseClicked="#updateSize" prefHeight="198.0" prefWidth="263.0" text="Program- Checkup">
+    <Label fx:id="errorLabel" layoutX="14.0" layoutY="76.0" prefHeight="26.0" prefWidth="188.0" textFill="RED" />
+    <Button fx:id="btn_import" layoutX="239.0" layoutY="11.0" mnemonicParsing="false" onAction="#loadImportDialog" text="" /><Accordion layoutX="10.0" layoutY="113.0" prefHeight="116.0" prefWidth="270.0" xmlns:fx="http://javafx.com/fxml">
+  <panes>
+    <TitledPane fx:id="registerPane" animated="false" expanded="false" onMouseClicked="#updateSize" prefHeight="108.0" prefWidth="270.0" text="New User? - Register here">
       <content>
-        <fx:include source="Component_CheckupPane.fxml" />
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="79.0" prefWidth="268.0">
+<children><Label layoutX="8.464599609375" layoutY="6.0" text="Username:" /><Label layoutX="8.0" layoutY="34.0" text="Masterpassword:" /><PasswordField fx:id="tf_password" layoutX="127.0" layoutY="29.0" prefHeight="26.0" prefWidth="131.0" /><TextField fx:id="tf_username" layoutX="127.0" layoutY="1.0" prefHeight="26.0" prefWidth="131.0" /><Button fx:id="btn_register" layoutX="185.0" layoutY="61.0" mnemonicParsing="false" onAction="#registerUser" text="Register" /><Hyperlink fx:id="helpLink" layoutX="7.937255859375" layoutY="62.0" onAction="#getHelp" text="Help" />
+</children></AnchorPane>
       </content>
     </TitledPane>
+  </panes>
+</Accordion>
   </children>
 </AnchorPane>

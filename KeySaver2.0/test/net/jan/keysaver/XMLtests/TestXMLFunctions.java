@@ -11,7 +11,7 @@ import java.util.List;
 import net.jan.aes.decryption.Decryption;
 import net.jan.aes.encryption.Encryption;
 import net.jan.aes.keygenerationmanager.KeyGenerationManager;
-import net.jan.keysaver.manager.FileManager;
+import net.jan.keysaver.manager.XMLManager;
 import net.jan.keysaver.sources.Category;
 import net.jan.keysaver.sources.CategoryList;
 import net.jan.keysaver.sources.Key;
@@ -36,7 +36,7 @@ public class TestXMLFunctions {
     public void shouldCheckAvailibilityOfStructure(){
         KeyGenerationManager keyMananger = new KeyGenerationManager();
         keyMananger.generateAndStoreKey("AppData/private.key");
-        FileManager fm = new FileManager();
+        XMLManager fm = new XMLManager();
         fm.checkAvailibility();
         
         //Points the File for Deleting
@@ -53,7 +53,7 @@ public class TestXMLFunctions {
     @Test
     public void shouldLoadCategoryListFromXML(){
         CategoryList catList = new CategoryList();
-        catList = new FileManager().returnListofCategories();
+        catList = new XMLManager().returnListofCategories();
         
         assertNotNull(catList);
         catList.printStructure();
@@ -63,14 +63,14 @@ public class TestXMLFunctions {
     @Test
     public void shouldReturnSingleCategoryListFromXML(){
         Category cat = new Category();
-        cat = new FileManager().returnSingleCategory("default");
+        cat = new XMLManager().returnSingleCategory("default");
         assertNotNull(cat);
     }
     
     @Test
     public void shouldReturnKeyFromXML(){
         Key k = new Key();
-        k = new FileManager().returnKey("defaultKey");
+        k = new XMLManager().returnKey("defaultKey");
         assertNotNull(k);
     }
     
@@ -94,7 +94,7 @@ public class TestXMLFunctions {
     @Test
     public void testShouldReturnAllIconPathes(){
         List<String> list = new ArrayList<>();
-        list = new FileManager().returnIconCategoryPathes();
+        list = new XMLManager().returnIconCategoryPathes();
         assertTrue(!list.isEmpty());
     }
 }

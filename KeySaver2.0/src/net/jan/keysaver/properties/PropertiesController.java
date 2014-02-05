@@ -36,6 +36,7 @@ import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.manager.SettingManager;
 import net.jan.keysaver.beans.Language_Singleton;
 import net.jan.keysaver.manager.FileManager;
+import net.jan.keysaver.manager.XMLManager;
 import net.jan.keysaver.manager.ValidationManager;
 
 import net.jan.keysaver.sources.PageLoadHelper;

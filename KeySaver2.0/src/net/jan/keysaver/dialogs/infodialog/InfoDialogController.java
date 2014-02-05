@@ -19,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import net.jan.keysaver.beans.Language_Singleton;
 import net.jan.keysaver.manager.FileManager;
+import net.jan.keysaver.manager.XMLManager;
 import net.jan.keysaver.manager.SettingManager;
 
 /**

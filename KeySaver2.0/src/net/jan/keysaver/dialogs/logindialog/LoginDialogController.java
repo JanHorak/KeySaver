@@ -4,6 +4,7 @@
  */
 package net.jan.keysaver.dialogs.logindialog;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -16,8 +17,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.effect.Reflection;
 import javafx.scene.image.Image;
@@ -27,10 +30,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import net.jan.keysaver.beans.Settings_Singleton;
+import net.jan.keysaver.dialogs.exportdialog.ExportDialogController;
 import net.jan.keysaver.mainpage.MainpageController;
 import net.jan.keysaver.manager.FileManager;
 import net.jan.keysaver.manager.SettingManager;
+import net.jan.keysaver.manager.UserManager;
+import net.jan.keysaver.manager.ValidationManager;
 import net.jan.keysaver.sources.PageLoadHelper;
+import net.jan.keysaver.sources.User;
 import net.jan.keysaver.sources.Utilities;
 
 /**
@@ -52,11 +59,24 @@ public class LoginDialogController implements Initializable {
     private Label errorLabel;
     private Settings_Singleton settingsBean;
     @FXML
-    private TitledPane checkUppane;
+    private TitledPane registerPane;
+    
     private final String PATH_MAIN_FRAME = "Mainpage.fxml";
     @FXML
     private Button btn_import;
 
+    @FXML
+    private Button btn_register;
+    
+    @FXML
+    private TextField tf_username;
+
+    @FXML
+    private PasswordField tf_password;
+    
+    @FXML
+    private Hyperlink helpLink;
+    
     @FXML
     private void login(Event actionEvent) {
         settingsBean = Settings_Singleton.getInstance();
@@ -108,12 +128,36 @@ public class LoginDialogController implements Initializable {
     private void updateSize(MouseEvent actionEvent) {
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
-        if (!checkUppane.isExpanded()) {
+        if (!registerPane.isExpanded()) {
             stage.setWidth(285);
             stage.setHeight(171);
         } else {
             stage.setWidth(285);
-            stage.setHeight(346);
+            stage.setHeight(260);
+        }
+    }
+    
+    @FXML
+    private void registerUser(){
+        User newUser = new User();
+        newUser.setName(tf_username.getText().trim());
+        newUser.setMPW(tf_password.getText().trim());
+        newUser.setIconPath("AppData/Images/Avatars/Unknown_56x56.png");
+        
+        if ( ValidationManager.isValid(newUser) ){
+            new UserManager().registerUser(newUser);
+            pwField.setText(tf_password.getText());
+        } else {
+            errorLabel.setText("Invalid Values!");
+        }
+    }
+    
+    @FXML
+    private void getHelp() {
+        try {
+            Desktop.getDesktop().open(new File("AppData/Help/Register_help.html"));
+        } catch (IOException ex) {
+            Logger.getLogger(ExportDialogController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
