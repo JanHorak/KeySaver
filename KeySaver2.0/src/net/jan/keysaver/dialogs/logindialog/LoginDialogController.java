@@ -27,6 +27,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import net.jan.keysaver.beans.Settings_Singleton;
@@ -119,9 +120,6 @@ public class LoginDialogController implements Initializable {
                 }
             }
         });
-        Reflection r = new Reflection();
-        r.setFraction(0.7f);
-        errorLabel.setEffect(r);
     }
 
     @FXML
@@ -147,6 +145,9 @@ public class LoginDialogController implements Initializable {
         if ( ValidationManager.isValid(newUser) ){
             new UserManager().registerUser(newUser);
             pwField.setText(tf_password.getText());
+            tf_username.setText("");
+            tf_password.setText("");
+            errorLabel.setText("Registered!\nPlease log in.");
         } else {
             errorLabel.setText("Invalid Values!");
         }

@@ -26,7 +26,6 @@ public class User {
     
     @NotNull
     @NotEmpty
-    @Min(8)
     private String MPW;
 
     public String getName() {
