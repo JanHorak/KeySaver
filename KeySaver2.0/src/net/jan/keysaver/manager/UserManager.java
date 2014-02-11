@@ -27,7 +27,6 @@ public class UserManager {
         user.setName(settingsBean.getValue("USERNAME"));
         user.setIconPath(settingsBean.getValue("AVATAR"));
         user.setMPW(settingsBean.getValue("MPW"));
-        
         return user;
     }
     
@@ -36,6 +35,7 @@ public class UserManager {
         settingsBean.storeInBean("USERNAME", user.getName());
         settingsBean.storeInBean("MPW", Utilities.getHash(user.getMPW()));
         settingsBean.storeInBean("AVATAR", user.getIconPath());
+        settingsBean.saveBean();
         FileManager.deleteXMLAndKey();
     }
     

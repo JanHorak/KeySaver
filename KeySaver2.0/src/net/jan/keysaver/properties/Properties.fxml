@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="282.0" prefWidth="428.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.jan.keysaver.properties.PropertiesController">
+<AnchorPane id="AnchorPane" prefHeight="319.0" prefWidth="428.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.jan.keysaver.properties.PropertiesController">
   <children>
-    <Button id="saveButton" fx:id="btn_save" disable="false" layoutX="335.0" layoutY="247.0" mnemonicParsing="false" onAction="#save" prefWidth="79.0" text="Save" />
-    <Button fx:id="btn_cancel" cancelButton="true" layoutX="234.0" layoutY="247.0" mnemonicParsing="false" onAction="#cancel" prefWidth="87.0" text="Cancel" />
-    <GridPane layoutX="2.0" layoutY="4.0" prefHeight="235.0" prefWidth="424.0">
+    <Button id="saveButton" fx:id="btn_save" disable="false" layoutX="335.0" layoutY="279.0" mnemonicParsing="false" onAction="#save" prefWidth="79.0" text="Save" />
+    <Button fx:id="btn_cancel" cancelButton="true" layoutX="235.0" layoutY="279.0" mnemonicParsing="false" onAction="#cancel" prefWidth="87.0" text="Cancel" />
+    <GridPane layoutX="2.0" layoutY="4.0" prefHeight="268.0" prefWidth="424.0">
       <children>
         <Label fx:id="lb_username" text="Username" GridPane.columnIndex="0" GridPane.rowIndex="0" />
         <Label fx:id="lb_pw" text="Masterpassword" GridPane.columnIndex="0" GridPane.rowIndex="1" />
@@ -23,21 +21,21 @@
         <TextField fx:id="tf_name" prefWidth="235.0001220703125" GridPane.columnIndex="1" GridPane.rowIndex="0" />
         <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" GridPane.columnIndex="1" GridPane.rowIndex="3">
           <content>
-            <ListView fx:id="iconList" prefHeight="117.0" prefWidth="235.0" />
+            <ListView fx:id="iconList" prefHeight="117.0" prefWidth="196.0" />
           </content>
         </ScrollPane>
-        <Label fx:id="lb_debugmode" text="DebugMode" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-        <CheckBox fx:id="chk_debug" mnemonicParsing="false" text="enable" GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <Label fx:id="lb_debugmode" text="DebugMode" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+        <CheckBox fx:id="chk_debug" mnemonicParsing="false" text="enable" GridPane.columnIndex="1" GridPane.rowIndex="5">
           <tooltip>
-            <Tooltip text="TOOLTIP" fx:id="debugTooltip" />
+            <Tooltip fx:id="debugTooltip" text="TOOLTIP" />
           </tooltip>
         </CheckBox>
-        <Label fx:id="lb_createNewKey" text="Create new encryptionkey" GridPane.columnIndex="0" GridPane.rowIndex="5">
+        <Label fx:id="lb_createNewKey" text="Create new encryptionkey" GridPane.columnIndex="0" GridPane.rowIndex="6">
           <tooltip>
-            <Tooltip text="Empty Tooltip" fx:id="encKeyTooltip" />
+            <Tooltip fx:id="encKeyTooltip" text="Empty Tooltip" />
           </tooltip>
         </Label>
-        <Button fx:id="btn_createNewKey" mnemonicParsing="false" onAction="#recreateKey" text="Create" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+        <Button fx:id="btn_createNewKey" mnemonicParsing="false" onAction="#recreateKey" text="Create" GridPane.columnIndex="1" GridPane.rowIndex="6" /><Button fx:id="btn_uploadImage" mnemonicParsing="false" onAction="#uploadImage" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="4" /><Label fx:id="lb_uploadOwnImage" text="Upload own Image" GridPane.rowIndex="4" />
       </children>
       <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="262.0" minWidth="10.0" prefWidth="213.0" />
@@ -49,10 +47,11 @@
         <RowConstraints maxHeight="58.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="18.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="138.0" minHeight="10.0" prefHeight="113.0" vgrow="SOMETIMES" />
+<RowConstraints maxHeight="117.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" />
         <RowConstraints maxHeight="117.0" minHeight="10.0" prefHeight="19.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="117.0" minHeight="10.0" prefHeight="19.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
-    <Label fx:id="errorLabel" layoutX="7.0" layoutY="252.0" prefWidth="207.0" text="" textFill="RED" />
+    <Label fx:id="errorLabel" layoutX="14.0" layoutY="284.0" prefWidth="207.0" text="" textFill="RED" />
   </children>
 </AnchorPane>
