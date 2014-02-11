@@ -38,6 +38,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import net.jan.keysaver.manager.LoggingManager;
@@ -49,7 +50,6 @@ import net.jan.keysaver.sources.EnumNotification;
 import net.jan.keysaver.sources.Key;
 import net.jan.keysaver.beans.Language_Singleton;
 import net.jan.keysaver.beans.Settings_Singleton;
-import net.jan.keysaver.dialogs.icondialog.IcondialogController;
 import net.jan.keysaver.manager.FileManager;
 import net.jan.keysaver.manager.ValidationManager;
 import net.jan.keysaver.properties.PropertiesController;
@@ -137,8 +137,6 @@ public class MainpageController implements Initializable {
     @FXML
     private MenuItem export_fileItem;
     @FXML
-    private MenuItem iconsItem;
-    @FXML
     private MenuItem devSiteItem;
     @FXML
     private MenuItem languageItem;
@@ -185,11 +183,6 @@ public class MainpageController implements Initializable {
     private SelectionModel model;
     private Key selectedKey = new Key();
     private TreeItem selectedItem = new TreeItem();
-    private boolean addCat = false;
-    private boolean editKey = false;
-    private boolean addKey = false;
-    private boolean editCat = false;
-    private String tmpBuffer = "";
     private Key keyBuffer = new Key();
     private Key editedKey = new Key();
     private Category selectedCategory = new Category();
@@ -204,13 +197,43 @@ public class MainpageController implements Initializable {
     Settings_Singleton settingsBean;
     @FXML
     private Tooltip errorTooltip;
-
+    
+    @FXML
+    private GridPane keyGrid;
+    @FXML
+    private GridPane categoryGrid;
+    
+    /*
+     * The Behavior- Variables define the global behavior of the UI.
+     */
+    /**
+     * The addCat- Variable flags if a Category will be added.
+     */
+    private boolean addCat = false;
+    /**
+     * The editKey- Variable flags if a Key will be edited.
+     */
+    private boolean editKey = false;
+    /**
+     * The addKey- Variable flags if a Key will be added.
+     */
+    private boolean addKey = false;
+    /**
+     * The editCat- Variable flags if a Category will be edited.
+     */
+    private boolean editCat = false;
+    // ============================
+    
+    
+    // ========== END OF VARIABLES AND DECLARATIONS =================
+    
     @FXML
     private void edit() {
-        tmpBuffer = selectedItem.getValue().toString();
+        String tmpBuffer = selectedItem.getValue().toString();
         if (selectedItem.isLeaf()) {
             unlockFields();
             lockTree();
+            categoryGrid.setStyle("-fx-background-color: #E6E6E6");
             disableControl(btn_edit, btn_remove);
             enableControl(btn_cancel, btn_save);
             keyBuffer = new XMLManager().returnKey(tmpBuffer);
@@ -227,13 +250,12 @@ public class MainpageController implements Initializable {
         if (!selectedItem.isLeaf()) {
             lockTree();
             lockFields();
+            keyGrid.setStyle("-fx-background-color: #E6E6E6");
             Category selectedLocalCat = new XMLManager().returnSingleCategory(tmpBuffer);
-            setControlVisible(lb_catName, tf_catName);
             disableControl(btn_addCat, btn_edit, btn_remove, btn_addKey);
-            setControlVisible(btn_browseCatIcon, chk_useDefaultCatIcon);
             chk_useDefaultCatIcon.setDisable(false);
             iconCatPreview.setDisable(false);
-            enableControl(btn_save, btn_cancel);
+            enableControl(btn_save, btn_cancel, tf_catName);
 
             tf_catName.setText(selectedLocalCat.getName());
             pathLabelCatIcon.setText(selectedLocalCat.getIconPath());
@@ -247,19 +269,21 @@ public class MainpageController implements Initializable {
             }
             selectedLocalCat = null;
             editCat = true;
+            
         }
     }
 
     @FXML
     private void prepareAddCat() {
-        setControlVisible(lb_catName, tf_catName, chk_useDefaultCatIcon, btn_browseCatIcon);
         disableControl(btn_edit, btn_addCat, btn_remove, btn_addKey);
-        enableControl(btn_cancel, btn_save);
+        enableControl(btn_cancel, btn_save, chk_useDefaultCatIcon, tf_catName);
+        keyGrid.setStyle("-fx-background-color: #E6E6E6");
         btn_save.setText(addString2);
         addCat = true;
         if (iconCatPreview.getImage() == null) {
             try {
                 String pathDefaultIcon = sm_icons.returnProperty("FOLDER_DEFAULT");
+                chk_useDefaultCatIcon.setSelected(true);
                 iconCatPreview.setImage(FileManager.getImageFromPath(pathDefaultIcon));
                 pathLabelCatIcon.setText(pathDefaultIcon);
             } catch (FileNotFoundException ex) {
@@ -273,7 +297,16 @@ public class MainpageController implements Initializable {
         }
         lockTree();
     }
-
+    
+    
+    /**
+     * PrepareAddKey- Method manages the behavior of the UI if the
+     * addition of a Key is detected.
+     * This method defines some rules for UI- Components if
+     * the User want to add a Key. 
+     * Beside the simple changes set this method the important 
+     * {@link #addKey} - value for the {@link #save() }- method.
+     */
     @FXML
     private void prepareAddKey() {
         disableControl(btn_edit, btn_addCat, btn_remove, btn_addKey);
@@ -283,6 +316,7 @@ public class MainpageController implements Initializable {
         enableControl(tf_keyname, tf_description, tf_password,
                 tf_username, chk_useDefaultKeyIcon);
         chk_useDefaultKeyIcon.setSelected(true);
+        categoryGrid.setStyle("-fx-background-color: #E6E6E6");
         try {
             String prop = sm_icons.returnProperty("KEYINTREE");
             iconKeyPreview.setImage(FileManager.getImageFromPath(prop));
@@ -303,8 +337,13 @@ public class MainpageController implements Initializable {
     private void editCancel() {
         lockFields();
         unlockTree();
-        setControlUnvisible(lb_catName, tf_catName, btn_browseCatIcon, chk_useDefaultCatIcon);
-        disableControl(btn_edit, btn_save, btn_addCat, btn_addKey, btn_cancel, btn_remove);
+        
+        disableControl(
+                btn_edit, btn_save, btn_addCat, 
+                btn_addKey, btn_cancel, chk_useDefaultCatIcon, 
+                tf_catName, btn_remove, btn_browseCatIcon,
+                pathLabelCatIcon, btn_browseKeyIcon, pathLabelKeyIcon);
+        
         btn_save.setText(addString);
         tf_catName.setText("");
         addCat = false;
@@ -314,19 +353,18 @@ public class MainpageController implements Initializable {
         chk_useDefaultKeyIcon.setSelected(false);
         chk_useDefaultCatIcon.setSelected(false);
         tf_catName.setText("");
-        btn_browseCatIcon.setDisable(true);
         pathLabelCatIcon.setText("");
-        pathLabelCatIcon.setDisable(true);
-        btn_browseKeyIcon.setDisable(true);
         pathLabelKeyIcon.setText("");
-        pathLabelKeyIcon.setDisable(true);
         iconCatPreview.setImage(null);
         iconKeyPreview.setImage(null);
+        categoryGrid.setStyle("-fx-background-color: #FFFFFF");
+        keyGrid.setStyle("-fx-background-color: #FFFFFF");
     }
 
     private void initTree() {
         TreeItem<String> rootItem = new TreeItem<String>("Categories", null);
         rootItem.setExpanded(true);
+        
         for (Category cat : catList.getCategoryList()) {
             TreeItem<String> categoryItem = new TreeItem<String>(cat.getName());
             categoryItem.setGraphic(FileManager.getImageViewFromPath(cat.getIconPath()));
@@ -340,6 +378,7 @@ public class MainpageController implements Initializable {
         tree.setRoot(rootItem);
         model = tree.getSelectionModel();
         tree.setEditable(true);
+        tree.showRootProperty().setValue(false);
     }
 
     @FXML
@@ -632,7 +671,6 @@ public class MainpageController implements Initializable {
         languageItem.setText(languageBean.getValue("LANGUAGE"));
         chk_englishLang.setText(languageBean.getValue("ENGLISH"));
         chk_germanLang.setText(languageBean.getValue("GERMAN"));
-        iconsItem.setText(languageBean.getValue("ICONMAN"));
         settingsItem.setText(languageBean.getValue("PROP"));
         export_fileItem.setText(languageBean.getValue("EXPORT"));
         exitItem.setText(languageBean.getValue("EXIT"));
@@ -755,17 +793,17 @@ public class MainpageController implements Initializable {
         }
     }
 
-    private void setControlVisible(Control... c) {
-        for (Control b : c) {
-            b.setVisible(true);
-        }
-    }
+//    private void setControlVisible(Control... c) {
+//        for (Control b : c) {
+//            b.setVisible(true);
+//        }
+//    }
 
-    private void setControlUnvisible(Control... c) {
-        for (Control b : c) {
-            b.setVisible(false);
-        }
-    }
+//    private void setControlUnvisible(Control... c) {
+//        for (Control b : c) {
+//            b.setVisible(false);
+//        }
+//    }
 
     private void resetFields() {
         tf_keyname.setText("");
@@ -799,12 +837,7 @@ public class MainpageController implements Initializable {
 
     @FXML
     private void open_Properties() {
-        new PageLoadHelper(PATH_PROPERTIES, "Properties", 428, 282, PropertiesController.class).loadPage();
-    }
-
-    @FXML
-    private void open_Iconsite() {
-        new PageLoadHelper(PATH_ICONMANAGEMENT, "Iconmanagement", 366, 400, IcondialogController.class).loadPage();
+        new PageLoadHelper(PATH_PROPERTIES, "Properties", 428, 319, PropertiesController.class).loadPage();
     }
 
     @FXML
@@ -973,7 +1006,6 @@ public class MainpageController implements Initializable {
         btn_remove.setGraphic(new ImageView(trashImage));
         btn_addKey.setGraphic(new ImageView(keyImage));
         settingsItem.setGraphic(new ImageView(settingImage));
-        iconsItem.setGraphic(new ImageView(iconsImage));
         debugLog("Images for Mainpage loaded");
 
         debugLog("Try to add SelectionListener to Tree...");

@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +30,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.effect.Reflection;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import net.jan.aes.decryption.Decryption;
 import net.jan.aes.encryption.Encryption;
@@ -36,7 +39,6 @@ import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.manager.SettingManager;
 import net.jan.keysaver.beans.Language_Singleton;
 import net.jan.keysaver.manager.FileManager;
-import net.jan.keysaver.manager.XMLManager;
 import net.jan.keysaver.manager.ValidationManager;
 
 import net.jan.keysaver.sources.PageLoadHelper;
@@ -58,6 +60,8 @@ public class PropertiesController implements Initializable {
     private Button btn_cancel;
     @FXML
     private Button btn_createNewKey;
+    @FXML
+    private Button btn_uploadImage;
     //TextFields
     @FXML
     public TextField tf_name;
@@ -81,6 +85,8 @@ public class PropertiesController implements Initializable {
     private Label lb_createNewKey;
     @FXML
     public Label errorLabel;
+    @FXML
+    private Label lb_uploadOwnImage;
     //Others
     @FXML
     private ImageView statusImage;
@@ -202,24 +208,9 @@ public class PropertiesController implements Initializable {
         } catch (IOException ex) {
             LoggingManager.writeToErrorFile(null, ex);
         }
-        ObservableList<Label> avatarList = FXCollections.observableArrayList();
+        updateAvatarList();
 
-        File dir = new File("AppData/Images/Avatars");
-        String[] files = dir.list();
-        int tmpcounter = 0;
-        int position = 0;
-        for (String s : files) {
-            Label l = new Label(s);
-            l.setGraphic(FileManager.getImageViewFromPath("AppData/Images/Avatars/" + s));
-            if (("AppData/Images/Avatars/" + s).equals(selectedInitialAvatar)) {
-                position = tmpcounter;
-            }
-            avatarList.add(l);
-            tmpcounter++;
-        }
-
-        iconList.setItems(avatarList);
-        iconList.getSelectionModel().select(position);
+        
         iconList.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
@@ -244,14 +235,17 @@ public class PropertiesController implements Initializable {
         lb_confirmPW.setText(language_singelton.getValue("CONFPASSWORD"));
         lb_image.setText(language_singelton.getValue("AVATAR"));
         lb_debugmode.setText(language_singelton.getValue("DEBUG"));
+        lb_uploadOwnImage.setText(language_singelton.getValue("UPLOADAVATAR"));
+        lb_createNewKey.setText(language_singelton.getValue("CREATENEWENCKEY"));
         chk_debug.setText(language_singelton.getValue("ACTIVATE"));
         btn_save.setText(language_singelton.getValue("SAVE"));
         btn_cancel.setText(language_singelton.getValue("CANCEL"));
         btn_createNewKey.setText(language_singelton.getValue("CREATE"));
-        lb_createNewKey.setText(language_singelton.getValue("CREATENEWENCKEY"));
+        btn_uploadImage.setText(language_singelton.getValue("BROWSE"));
         encKeyTooltip.setText(language_singelton.getValue("ENCKEY"));
         debugTooltip.setText(language_singelton.getValue("DEBUGMODE"));
         errorLabel.setText(language_singelton.getValue("ERROR_PROPERTIESINVALID"));
+        
     }
 
     @FXML
@@ -283,5 +277,47 @@ public class PropertiesController implements Initializable {
         } else {
             confirm_pwfield.setStyle("-fx-background-color: #FE2E2E");
         }
+    }
+    
+    @FXML
+    private void uploadImage(){
+        File file4Upload;
+        
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Upload own");
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Avatars", "*.bmp", "*.gif", "*.jpg", "*.png"));
+        file4Upload = chooser.showOpenDialog(null);
+        if (file4Upload != null ){
+            try {
+                Files.copy(file4Upload.getAbsoluteFile().toPath(), new File("AppData/Images/Avatars/"+file4Upload.getName()).toPath(), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException ex) {
+                Logger.getLogger(PropertiesController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            updateAvatarList();
+        }
+        
+    }
+    
+    private void updateAvatarList(){
+        ObservableList<Label> avatarList = FXCollections.observableArrayList();
+
+        File dir = new File("AppData/Images/Avatars");
+        String[] files = dir.list();
+        int tmpcounter = 0;
+        int position = 0;
+        for (String s : files) {
+            Label l = new Label(s);
+            l.setGraphic(FileManager.getImageViewFromPath("AppData/Images/Avatars/" + s));
+            if (("AppData/Images/Avatars/" + s).equals(selectedInitialAvatar)) {
+                position = tmpcounter;
+            }
+            l.getGraphic().setScaleX(0.8);
+            l.getGraphic().setScaleY(0.8);
+            avatarList.add(l);
+            tmpcounter++;
+            
+        }
+        iconList.setItems(avatarList);
+        iconList.getSelectionModel().select(position);
     }
 }

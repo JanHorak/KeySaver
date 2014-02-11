@@ -30,9 +30,9 @@
         <group/>
         <group name="KeySaver2.0">
             <file>file:/home/janhorak/Development/KeySaver2.0/KeySaver2.0/src/net/jan/keysaver/beans/Settings_Singleton.java</file>
-            <file>file:/home/janhorak/Development/KeySaver2.0/KeySaver2.0/src/net/jan/keysaver/manager/FileManager.java</file>
+            <file>file:/home/janhorak/Development/KeySaver2.0/KeySaver2.0/src/net/jan/keysaver/sources/PageLoadHelper.java</file>
+            <file>file:/home/janhorak/Development/KeySaver2.0/KeySaver2.0/src/net/jan/keysaver/dialogs/updatedialog/UpdateDialogController.java</file>
             <file>file:/home/janhorak/Development/KeySaver2.0/KeySaver2.0/src/net/jan/keysaver/mainpage/MainpageController.java</file>
-            <file>file:/home/janhorak/Development/KeySaver2.0/KeySaver2.0/src/net/jan/keysaver/dialogs/logindialog/LoginDialogController.java</file>
         </group>
     </open-files>
 </project-private>
