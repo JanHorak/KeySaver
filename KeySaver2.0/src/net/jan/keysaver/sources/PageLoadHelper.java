@@ -18,7 +18,6 @@ import net.jan.keysaver.dialogs.infodialog.InfoDialogController;
 import net.jan.keysaver.dialogs.recreatedialog.RecreateKeyDialogController;
 import net.jan.keysaver.dialogs.updatedialog.UpdateDialogController;
 import net.jan.keysaver.manager.FileManager;
-import net.jan.keysaver.manager.XMLManager;
 
 /**
  *
@@ -81,7 +80,7 @@ public class PageLoadHelper {
         pathString = "ExportDialog.fxml";
         c = ExportDialogController.class;
         title = langSingleton.getValue("EXPORTDIALOG_TITLE");
-        height = 156.1;
+        height = 133;
         width = 359;
         loadPage();
     }
@@ -90,7 +89,7 @@ public class PageLoadHelper {
         pathString = "ImportDialog.fxml";
         c = ImportDialogController.class;
         title = langSingleton.getValue("IMPORTDIALOG_TITLE");
-        height = 193.1;
+        height = 102;
         width = 573;
         loadPage();
     }

@@ -55,6 +55,16 @@ public class CategoryList implements Serializable{
         this.categoryList.add(category);
     }
     
+    public void removeCategory(Category category){
+        for (int i = 0; i < categoryList.size(); i++ ){
+            Category tmp = categoryList.get(i);
+            if ( tmp.getName().equals(category.getName())){
+                categoryList.remove(tmp);
+                break;
+            }
+        }
+    }
+    
     public void replaceCategory(Category oldCategory, Category newCategory){
         Iterator<Category> iterator = this.categoryList.iterator();
         int index = 0;

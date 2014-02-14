@@ -19,13 +19,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import net.jan.aes.decryption.Decryption;
-import net.jan.aes.encryption.Encryption;
+import net.jan.keysaver.beans.Language_Singleton;
 import net.jan.keysaver.sources.Utilities;
 
 /**
@@ -39,10 +37,6 @@ public class ExportDialogController implements Initializable {
      * Initializes the controller class.
      */
     @FXML
-    private CheckBox chk_exportDecrypted;
-    @FXML
-    private CheckBox chk_exportZipped;
-    @FXML
     private Label lb_pathLabel;
     @FXML
     private Label lb_path;
@@ -55,6 +49,7 @@ public class ExportDialogController implements Initializable {
     @FXML
     private Hyperlink hyper_help;
     private File placeForExport;
+    private Language_Singleton lang;
 
     @FXML
     private void getHelp() {
@@ -93,9 +88,6 @@ public class ExportDialogController implements Initializable {
 
         String exportPath_zip = placeForExport + File.separator + "KeySaver2.0_export.zip";
 
-        if (chk_exportDecrypted.isSelected()) {
-            file_structure = new Decryption().returnDecryptedFile(file_structure, file_structure.getAbsolutePath(), file_key.getAbsolutePath());
-        }
         // Collecting Data
         List<String> files2Zip = new ArrayList<>();
         files2Zip.add(file_structure.getAbsolutePath());
@@ -104,22 +96,24 @@ public class ExportDialogController implements Initializable {
         files2Zip.add(file_iconProp.getAbsolutePath());
         files2Zip.add("images.zip");
         files2Zip.add("avatars.zip");
-        if (chk_exportZipped.isSelected()) {
-            Utilities.generateZip(exportPath_zip, files2Zip);
-        } else {
-            Utilities.copyFiles(files2Zip, placeForExport.toString(), StandardCopyOption.REPLACE_EXISTING);
-        }
+        Utilities.copyFiles(files2Zip, placeForExport.toString(), StandardCopyOption.REPLACE_EXISTING);
 
-        if (chk_exportDecrypted.isSelected()) {
-            file_structure = new Encryption().returnEncryptedFile(file_structure, file_structure.getAbsolutePath(), file_key.getAbsolutePath());
-        }
+
         new File("images.zip").delete();
         new File("avatars.zip").delete();
         cancel(actionEvent);
     }
+    
+    private void initLang(){
+        lang = Language_Singleton.getInstance();
+        btn_browse.setText(lang.getValue("BROWSE"));
+        btn_cancel.setText(lang.getValue("CANCEL"));
+        hyper_help.setText(lang.getValue("HELP"));
+        lb_pathLabel.setText(lang.getValue("ZIPPATH"));
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        initLang();
     }
 }

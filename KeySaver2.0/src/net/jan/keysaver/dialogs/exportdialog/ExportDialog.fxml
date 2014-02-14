@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="156.1328125" prefWidth="359.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.jan.keysaver.dialogs.exportdialog.ExportDialogController">
+<AnchorPane id="AnchorPane" prefHeight="133.0" prefWidth="359.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.jan.keysaver.dialogs.exportdialog.ExportDialogController">
   <children>
-    <CheckBox fx:id="chk_exportDecrypted" layoutX="14.0" layoutY="15.0" mnemonicParsing="false" text="Export decrypted" />
-    <Label fx:id="lb_pathLabel" layoutX="14.0" layoutY="69.0" text="Path for Export:" />
-    <Label id="pathLabel" fx:id="lb_path" layoutX="129.0" layoutY="102.0" prefWidth="216.0" text="" />
-    <Button fx:id="btn_browse" layoutX="14.0" layoutY="92.0" mnemonicParsing="false" onAction="#browse" text="Browse" />
-    <CheckBox fx:id="chk_exportZipped" layoutX="14.0" layoutY="41.0" mnemonicParsing="false" text="Export zipped" />
-    <Button fx:id="btn_export" disable="false" layoutX="280.0" layoutY="120.0" mnemonicParsing="false" onAction="#export" text="Export" underline="false" />
-    <Button fx:id="btn_cancel" layoutX="201.0" layoutY="121.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
-    <Hyperlink fx:id="hyper_help" layoutX="5.0" layoutY="118.0" onAction="#getHelp" text="Help" />
+    <Label fx:id="lb_pathLabel" layoutX="14.0" layoutY="14.0" text="Path for Export:" />
+    <Label id="pathLabel" fx:id="lb_path" layoutX="14.0" layoutY="37.0" prefHeight="16.0" prefWidth="327.0" text="" />
+    <Button fx:id="btn_browse" layoutX="10.0" layoutY="78.0" mnemonicParsing="false" onAction="#browse" prefHeight="26.0" prefWidth="103.0" text="Browse" />
+    <Button fx:id="btn_export" disable="false" layoutX="270.0" layoutY="78.0" mnemonicParsing="false" onAction="#export" prefHeight="26.0" prefWidth="75.0" text="Export" underline="false" />
+    <Button fx:id="btn_cancel" layoutX="167.0" layoutY="78.0" mnemonicParsing="false" onAction="#cancel" prefHeight="26.0" prefWidth="75.0" text="Cancel" />
+    <Hyperlink fx:id="hyper_help" layoutX="10.0" layoutY="107.0" onAction="#getHelp" text="Help" /><Separator layoutX="13.0" layoutY="65.0" prefHeight="2.0" prefWidth="327.0" />
   </children>
 </AnchorPane>

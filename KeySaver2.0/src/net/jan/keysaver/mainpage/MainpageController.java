@@ -12,6 +12,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -381,51 +382,31 @@ public class MainpageController implements Initializable {
         tree.showRootProperty().setValue(false);
     }
 
+    /**
+     * This method removes the selected Category or Key from the Tree.
+     */
     @FXML
     private void remove() {
-        boolean live = true;
         List<Category> cat = catList.getCategoryList();
         if (isKeySelected) {
-            for (Category c : cat) {
-                List<Key> keyList = c.getKeylist();
-                if (cat.size() >= 1 && keyList.size() > 1) {
-                    for (int i = 0; i < keyList.size() && live; i++) {
-                        if (keyList.get(i).getKeyname().equals(selectedKey.getKeyname())) {
-                            if (keyList.size() == 1 && cat.size() > 1) {
-                                cat.remove(c);
-                            } else {
-                                keyList.remove(i);
-                                c.setKeylist(keyList);
-                                live = false;
-                            }
-                        }
-                    }
-                    catList.setCategoryList(cat);
-                    new XMLManager().saveStructure(catList);
-                    initTree();
-                    editCancel();
-                    startNotification(EnumNotification.KEY_REMOVED);
-                } else {
-                    startNotification(EnumNotification.WARNING_LASTCAT);
-                    LoggingManager.writeToErrorFile("WARNING!! \nList of Categories may not be empty!", null);
-                }
-
+            if (selectedCategory.hasMoreThanOneKey()){
+                Category c = selectedCategory;
+                c.deleteKey(selectedKey);
+                catList.replaceCategory(selectedCategory, c);
+                new XMLManager().saveStructure(catList);
+                sortTree();
+            } else {
+                startNotification(EnumNotification.WARNING_LASTCAT);
+                LoggingManager.writeToErrorFile("WARNING!! \nList of Categories may not be empty!", null);
             }
         }
-
+        
         if (isCatSelected) {
-            if (cat.size() > 1) {
-                for (int i = 0; i < cat.size() && live; i++) {
-                    Category currentCategory = cat.get(i);
-                    if (currentCategory.getName().equals(selectedCategory.getName())) {
-                        cat.remove(currentCategory);
-                        new XMLManager().saveStructure(catList);
-                        initTree();
-                        editCancel();
-                        startNotification(EnumNotification.CAT_REMOVED);
-                        live = false;
-                    }
-                }
+            if (cat.size() > 1){
+                Category c = selectedCategory;
+                catList.removeCategory(c);
+                new XMLManager().saveStructure(catList);
+                sortTree();
             } else {
                 startNotification(EnumNotification.WARNING_LASTCAT);
                 LoggingManager.writeToErrorFile("WARNING!! \nList of Categories may not be empty!", null);
@@ -474,7 +455,7 @@ public class MainpageController implements Initializable {
             if (ValidationManager.isValid(cat)) {
                 catList.addNewCategory(cat);
                 new XMLManager().saveStructure(catList);
-                initTree();
+                sortTree();
                 editCancel();
                 startNotification(EnumNotification.CAT_ADDED);
 
@@ -495,7 +476,7 @@ public class MainpageController implements Initializable {
             if (ValidationManager.isValid(editedCategory)) {
                 catList.replaceCategory(selectedCategory, editedCategory);
                 new XMLManager().saveStructure(catList);
-                initTree();
+                sortTree();
                 editCancel();
             } else {
                 startNotification(EnumNotification.WARNING);
@@ -519,7 +500,7 @@ public class MainpageController implements Initializable {
                 selectedCategory.replaceKey(oldKey, editedKey);
                 catList.replaceCategory(categoryBuffer, selectedCategory);
                 new XMLManager().saveStructure(catList);
-                initTree();
+                sortTree();
                 editCancel();
 
                 //Key is Invalid
@@ -543,7 +524,7 @@ public class MainpageController implements Initializable {
                 selectedCategory.addKey(newKey);
                 catList.replaceCategory(categoryBuffer, selectedCategory);
                 new XMLManager().saveStructure(catList);
-                initTree();
+                sortTree();
                 editCancel();
                 startNotification(EnumNotification.KEY_ADDED);
 
@@ -793,18 +774,6 @@ public class MainpageController implements Initializable {
         }
     }
 
-//    private void setControlVisible(Control... c) {
-//        for (Control b : c) {
-//            b.setVisible(true);
-//        }
-//    }
-
-//    private void setControlUnvisible(Control... c) {
-//        for (Control b : c) {
-//            b.setVisible(false);
-//        }
-//    }
-
     private void resetFields() {
         tf_keyname.setText("");
         tf_username.setText("");
@@ -866,7 +835,7 @@ public class MainpageController implements Initializable {
     }
 
     @FXML
-    private void exportFile() {
+    private void openExportDialog() {
         new PageLoadHelper().loadExportDialog();
     }
 
@@ -921,6 +890,22 @@ public class MainpageController implements Initializable {
     @FXML
     private void close(Event e) {
         System.exit(0);
+    }
+    
+    private void sortCatListForName(){
+        Collections.sort(catList.getCategoryList());
+    }
+    
+    private void sortKeyListForName(){
+        for (Category c : catList.getCategoryList()){
+            Collections.sort(c.getKeylist());
+        }
+    }
+    
+    private void sortTree(){
+        sortCatListForName();
+        sortKeyListForName();
+        initTree();
     }
 
     ////////////////////////////////
