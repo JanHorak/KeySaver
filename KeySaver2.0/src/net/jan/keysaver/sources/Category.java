@@ -16,7 +16,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author Jan Horak
  */
 @UniqueInCategoryList(uniqueField = "name", iconField = "iconPath")
-public class Category implements Serializable{
+public class Category implements Serializable, Comparable<Category>{
  
     @NotNull
     @NotEmpty
@@ -71,6 +71,29 @@ public class Category implements Serializable{
         this.keylist.add(key);
     }
     
+    public void deleteKey(Key key){
+        for ( int i = 0; i < this.keylist.size(); i++ ){
+            Key k = this.keylist.get(i);
+            if (k.getKeyname().equals(key.getKeyname())){
+                this.keylist.remove(k);
+                break;
+            }
+        }
+    }
     
-    
+    public boolean hasMoreThanOneKey(){
+        if (this.keylist.size() > 1){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int compareTo(Category o) {
+        return this.name.compareTo(o.getName());
+    }
+
+
+      
 }

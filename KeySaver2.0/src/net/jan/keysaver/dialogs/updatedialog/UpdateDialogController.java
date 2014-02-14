@@ -4,6 +4,7 @@
  */
 package net.jan.keysaver.dialogs.updatedialog;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -17,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
@@ -25,10 +27,11 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import net.jan.keysaver.beans.Language_Singleton;
 import net.jan.keysaver.manager.FileManager;
-import net.jan.keysaver.manager.XMLManager;
+import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.manager.SettingManager;
 import net.jan.keysaver.manager.UpdateManager;
 import net.jan.keysaver.sources.EnumClientVersionStatus;
+import net.jan.keysaver.sources.EnumNotification;
 
 /**
  * FXML Controller class
@@ -56,6 +59,9 @@ public class UpdateDialogController implements Initializable {
     private Button btn_close;
     @FXML
     private ImageView image_connectionstatus;
+    @FXML
+    private Hyperlink help;
+    
     private Language_Singleton langBean;
     private SettingManager sm_icon;
     boolean connection = false;
@@ -151,6 +157,16 @@ public class UpdateDialogController implements Initializable {
         btn_checkVersion.setText(langBean.getValue("CHECKUPDATES"));
         btn_close.setText(langBean.getValue("CLOSE"));
         btn_download.setText(langBean.getValue("DOWNLOAD"));
+        help.setText(langBean.getValue("HELP"));
+    }
+    
+    @FXML
+    private void openHelpFile() {
+        try {
+            Desktop.getDesktop().open(new File("AppData/Help/Update_help.html"));
+        } catch (IOException ex) {
+            LoggingManager.writeToErrorFile("openHelpFile()", ex);
+        }
     }
 
     @FXML

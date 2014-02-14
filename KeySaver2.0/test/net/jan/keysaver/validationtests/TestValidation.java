@@ -8,7 +8,6 @@ import java.util.List;
 import net.jan.keysaver.manager.ValidationManager;
 import net.jan.keysaver.manager.XMLManager;
 import net.jan.keysaver.sources.Category;
-import net.jan.keysaver.sources.CategoryList;
 import net.jan.keysaver.sources.Key;
 import net.jan.keysaver.validationentities.ImportEntity;
 import net.jan.keysaver.validationentities.PropertiesEntity;
@@ -74,28 +73,19 @@ public class TestValidation {
     public void testKeyShouldBeValidateImport(){
         ImportEntity ie = new ImportEntity();
         
-        ie.setAvatarZip("das");
-        ie.setImagesZip("ff");
-        ie.setIconProps("uzu");
-        ie.setIniFile("asdasd");
-        ie.setKey("d");
-        ie.setXml("ddd");
-
-        
         ie.setGlobalZip("");
-        assertTrue(ValidationManager.isValid(ie));
-        
-        ie.setGlobalZip("dd");
         assertTrue(!ValidationManager.isValid(ie));
         
-        ie.setIniFile("");
-        ie.setGlobalZip("");
+        ie.setGlobalZip("dd");
+        assertTrue(ValidationManager.isValid(ie));
+        
+        ie.setGlobalZip(null);
         assertTrue(!ValidationManager.isValid(ie));
     }
     
     @Test
     public void testShouldInsertTwoCatsAndFail(){
-        
+        // Test needs the default- XML
         Category cat1 = new Category();
         List<Category> list = new XMLManager().returnListofCategories().getCategoryList();
         

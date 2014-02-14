@@ -1,111 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="193.1328125" prefWidth="573.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="net.jan.keysaver.dialogs.importdialog.ImportDialogController">
+<AnchorPane id="AnchorPane" prefHeight="102.0" prefWidth="573.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.jan.keysaver.dialogs.importdialog.ImportDialogController">
   <children>
-    <Button fx:id="btn_import" disable="false" layoutX="498.0" layoutY="164.0" mnemonicParsing="false" onAction="#importData" text="Import" />
-    <Label fx:id="lb_error" layoutX="4.0" layoutY="169.0" prefWidth="344.0" text="" textFill="RED">
+    <Button fx:id="btn_import" disable="false" layoutX="456.0" layoutY="71.0" mnemonicParsing="false" onAction="#importData" prefHeight="26.0" prefWidth="88.0" text="Import" />
+    <Label fx:id="lb_error" layoutX="8.0" layoutY="76.0" prefWidth="344.0" text="" textFill="RED">
       <font>
         <Font name="System Bold" size="13.0" />
       </font>
     </Label>
-    <Button fx:id="btn_cancel" layoutX="399.0" layoutY="163.0" mnemonicParsing="false" onAction="#close" text="Cancel" />
-    <Accordion layoutX="0.0" layoutY="0.0" prefHeight="149.0" prefWidth="573.0">
-      <expandedPane>
-        <TitledPane id="x1" fx:id="zipPane" animated="true" prefHeight="67.0" text="Zip- File">
-          <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="32.0" prefWidth="570.0">
-              <children>
+    <Button fx:id="btn_cancel" layoutX="352.0" layoutY="71.0" mnemonicParsing="false" onAction="#close" prefHeight="26.0" prefWidth="96.0" text="Cancel" />
                 <GridPane layoutX="0.0" layoutY="0.0" prefWidth="569.0">
                   <children>
                     <Label fx:id="lb_zip" text="Zip- File" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                    <Button fx:id="btn_browse_zip" mnemonicParsing="false" onAction="#browseZip" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                    <Button fx:id="btn_browse_zip" mnemonicParsing="false" onAction="#browseZip" prefHeight="26.0" prefWidth="102.0" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                     <Label fx:id="lb_zipPath" text="" GridPane.columnIndex="2" GridPane.rowIndex="0" />
                     <Button fx:id="btn_cancel_zip" mnemonicParsing="false" onAction="#clearZip" text="Button" GridPane.columnIndex="3" GridPane.rowIndex="0" />
                   </children>
                   <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="143.0" minWidth="10.0" prefWidth="143.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="77.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.0" minWidth="10.0" prefWidth="170.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="10.0" prefWidth="100.0" />
                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="280.0" minWidth="10.0" prefWidth="280.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="141.0" minWidth="10.0" prefWidth="69.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="141.0" minWidth="10.0" prefWidth="100.0" />
                   </columnConstraints>
                   <rowConstraints>
                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   </rowConstraints>
                 </GridPane>
-              </children>
-            </AnchorPane>
-          </content>
-        </TitledPane>
-      </expandedPane>
-      <panes>
-        <fx:reference source="zipPane" />
-        <TitledPane fx:id="singlePane" animated="true" expanded="false" text="Single Files">
-          <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-              <children>
-                <ScrollPane layoutX="2.0" layoutY="-1.0" prefHeight="101.0" prefWidth="569.0">
-                  <content>
-                    <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
-                      <children>
-                        <GridPane layoutX="0.0" layoutY="-1.0" prefWidth="569.0">
-                          <children>
-                            <Label fx:id="lb_mainFile" text="Structure- File" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                            <Label fx:id="lb_keyFile" text="Key- File" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                            <Label fx:id="lb_iconPropFile" text="Icon- Properties- File" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                            <Label fx:id="lb_imagesZipFile" text="Images - Zipfile" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                            <Label fx:id="lb_iniFile" text="Settings- Inifile" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                            <Button fx:id="btn_browse_mainFile" mnemonicParsing="false" onAction="#browseXML" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                            <Button fx:id="btn_browse_key" mnemonicParsing="false" onAction="#browseKey" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                            <Button fx:id="btn_browse_Iconproperties" mnemonicParsing="false" onAction="#browseIcons" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                            <Button fx:id="btn_browse_images" mnemonicParsing="false" onAction="#browseImages" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                            <Button fx:id="btn_browse_ini" mnemonicParsing="false" onAction="#browseini" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                            <Label fx:id="lb_mainFilePath" text="" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                            <Label fx:id="lb_keyFilePath" text="" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                            <Label fx:id="lb_iniFilePath" text="" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                            <Label fx:id="lb_imagesZipPath" text="" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                            <Label fx:id="lb_iconPropPath" text="" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                            <Button fx:id="btn_cancel_mainFile" mnemonicParsing="false" onAction="#clearXML" text="Button" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-                            <Button fx:id="btn_cancel_key" mnemonicParsing="false" onAction="#clearKey" text="Button" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                            <Button fx:id="btn_cancel_iconProp" mnemonicParsing="false" onAction="#clearIcons" text="Button" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                            <Button fx:id="btn_cancel_ini" mnemonicParsing="false" onAction="#clearIni" text="Button" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                            <Button fx:id="btn_cancel_images" mnemonicParsing="false" onAction="#clearImages" text="Button" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                            <Label id="lb_mainFile" fx:id="lb_avatars" text="Avatars- ZipFile" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-                            <Button id="btn_cancel_mainFile" fx:id="btn_cancel_avatars" mnemonicParsing="false" onAction="#clearAvatars" text="Button" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-                            <Label id="lb_iconPropPath" fx:id="lb_avatarsPath" text="" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                            <Button id="btn_cancel_images" fx:id="btn_browse_avatars" mnemonicParsing="false" onAction="#browseAvatars" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                          </children>
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="283.0" minWidth="10.0" prefWidth="150.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="376.0" minWidth="10.0" prefWidth="97.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="376.0" minWidth="10.0" prefWidth="245.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="376.0" minWidth="10.0" prefWidth="77.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                        </GridPane>
-                      </children>
-                    </AnchorPane>
-                  </content>
-                </ScrollPane>
-              </children>
-            </AnchorPane>
-          </content>
-        </TitledPane>
-      </panes>
-    </Accordion>
   </children>
 </AnchorPane>

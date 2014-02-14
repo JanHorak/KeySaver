@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author Jan Horak
  */
 @net.jan.keysaver.validation.Key
-public class Key{
+public class Key implements Comparable<Key>{
     
     @NotNull
     @NotEmpty
@@ -80,6 +80,11 @@ public class Key{
         this.password = newKey.getPassword();
         this.username = newKey.getUsername();
         this.iconPath = newKey.getIconPath();
+    }
+
+    @Override
+    public int compareTo(Key o) {
+        return this.keyname.compareTo(o.getKeyname());
     }
     
 }
