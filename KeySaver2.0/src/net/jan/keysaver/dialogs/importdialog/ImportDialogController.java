@@ -7,7 +7,6 @@ package net.jan.keysaver.dialogs.importdialog;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +19,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TitledPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import net.jan.keysaver.beans.Language_Singleton;
 import net.jan.keysaver.manager.ValidationManager;
 import net.jan.keysaver.sources.Utilities;
 import net.jan.keysaver.validationentities.ImportEntity;
@@ -54,7 +51,6 @@ public class ImportDialogController implements Initializable {
     @FXML
     private Button btn_cancel;
     private File wantToImport;
-    private Language_Singleton languageBean;
 
     @FXML
     private void browseZip() {
@@ -63,32 +59,18 @@ public class ImportDialogController implements Initializable {
 
     @FXML
     private void clearZip() {
-        clear(lb_zipPath);
+        lb_zipPath.setText("");
         lb_error.setVisible(false);
     }
 
     private void browse(Label pathLabel, String filterHint, String filter) {
+        lb_error.setVisible(false);
         FileChooser chooser = new FileChooser();
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(filterHint, filter));
         wantToImport = chooser.showOpenDialog(null);
         if (wantToImport != null) {
             pathLabel.setText(wantToImport.getAbsolutePath());
         }
-    }
-
-    private void clear(Label label) {
-        lb_error.setVisible(false);
-        label.setText("");
-    }
-
-    private void setUpLanguage() {
-        lb_zip.setText(languageBean.getValue("ZIPHEADER"));
-        lb_error.setText(languageBean.getValue("ERROR_IMPORTINVALID"));
-        //Buttons
-        btn_browse_zip.setText(languageBean.getValue("BROWSE"));
-        btn_cancel.setText(languageBean.getValue("CANCEL"));
-        btn_import.setText(languageBean.getValue("IMPORT"));
-
     }
 
     @FXML
@@ -135,18 +117,17 @@ public class ImportDialogController implements Initializable {
             String[] tmpList = folder_pathTempFolder.list();
             String pathInifile = "";
             for (String s : tmpList) {
-                if (s.endsWith("settings.ini")) {
+                if (s.equals("settings.ini")) {
                     pathInifile = folder_pathTempFolder + "/" + s;
                 } else {
                     coreFilePathes.add(folder_pathTempFolder + "/" + s);
                 }
             }
+            
             Utilities.copyFiles(coreFilePathes, folder_appData.getAbsolutePath(), StandardCopyOption.REPLACE_EXISTING);
-            try {
-                Files.copy(new File(pathInifile).toPath(), new File("settings.ini").toPath(), StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException ex) {
-                Logger.getLogger(ImportDialogController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            coreFilePathes.clear();
+            coreFilePathes.add(pathInifile);
+            Utilities.copyFiles(coreFilePathes, new File("").getAbsolutePath().toString(), StandardCopyOption.REPLACE_EXISTING);
             try {
                 FileUtils.deleteDirectory(folder_pathTempFolder);
             } catch (IOException ex) {
@@ -162,8 +143,7 @@ public class ImportDialogController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        languageBean = Language_Singleton.getInstance();
+        lb_error.setText("Error - File not valid!");
         lb_error.setVisible(false);
-        setUpLanguage();
     }
 }

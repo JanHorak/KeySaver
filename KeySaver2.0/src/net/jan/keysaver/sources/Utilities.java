@@ -22,7 +22,6 @@ import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
-import net.jan.keysaver.beans.Settings_Singleton;
 import net.jan.keysaver.manager.LoggingManager;
 import net.jan.keysaver.manager.SettingManager;
 
@@ -177,7 +176,7 @@ public class Utilities {
             }
         }
     }
-
+    
     public static List<String> getPathesFromFileList(List<File> fileList) {
         List<String> resultList = new ArrayList<>();
         for (File f : fileList) {
@@ -201,8 +200,5 @@ public class Utilities {
         }
         return result;
     }
-    
 
-    
-    
 }
