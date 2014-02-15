@@ -97,7 +97,7 @@ public class LoginDialogController implements Initializable {
 
     @FXML
     private void loadImportDialog() {
-        new PageLoadHelper().loadImportDialog();
+        PageLoadHelper.loadImportDialog();
     }
 
     @Override
@@ -126,7 +126,7 @@ public class LoginDialogController implements Initializable {
         Stage stage = (Stage) source.getScene().getWindow();
         if (!registerPane.isExpanded()) {
             stage.setWidth(285);
-            stage.setHeight(171);
+            stage.setHeight(151);
         } else {
             stage.setWidth(285);
             stage.setHeight(260);

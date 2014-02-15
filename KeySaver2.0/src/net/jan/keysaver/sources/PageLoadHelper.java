@@ -15,9 +15,11 @@ import net.jan.keysaver.beans.Language_Singleton;
 import net.jan.keysaver.dialogs.exportdialog.ExportDialogController;
 import net.jan.keysaver.dialogs.importdialog.ImportDialogController;
 import net.jan.keysaver.dialogs.infodialog.InfoDialogController;
+import net.jan.keysaver.dialogs.logindialog.LoginDialogController;
 import net.jan.keysaver.dialogs.recreatedialog.RecreateKeyDialogController;
 import net.jan.keysaver.dialogs.updatedialog.UpdateDialogController;
 import net.jan.keysaver.manager.FileManager;
+import net.jan.keysaver.properties.PropertiesController;
 
 /**
  *
@@ -25,12 +27,13 @@ import net.jan.keysaver.manager.FileManager;
  */
 public class PageLoadHelper {
 
-    private String pathString;
-    private String title;
-    private double width;
-    private double height;
-    private Language_Singleton langSingleton;
-    Class c;
+    private static String pathString;
+    private static String title;
+    private static double width;
+    private static double height;
+    private static Language_Singleton langSingleton;
+    private static Class c;
+    private static Parent root;
 
     public PageLoadHelper(String pathString, String title, double width, double height, Class c) {
         this.height = height;
@@ -44,9 +47,8 @@ public class PageLoadHelper {
         langSingleton = Language_Singleton.getInstance();
     }
 
-    public void loadPage() {
+    public static void loadPage() {
         try {
-            Parent root;
             root = FXMLLoader.load(c.getResource(pathString));
             Stage stage = new Stage();
             stage.setTitle(title);
@@ -85,11 +87,17 @@ public class PageLoadHelper {
         loadPage();
     }
     
-    public void loadImportDialog(){
+    /*
+     * The Importdialog has to be static, because the Logindialog and the
+     * Loginpage have no access to the settings.ini.
+     * This is important because the KeySaver on Windows have a lot of 
+     * Problems with the read- and write- rights.
+     */
+    public static void loadImportDialog(){
         pathString = "ImportDialog.fxml";
         c = ImportDialogController.class;
-        title = langSingleton.getValue("IMPORTDIALOG_TITLE");
-        height = 102;
+        title = "Importdialog";
+        height = 68;
         width = 573;
         loadPage();
     }
@@ -100,6 +108,24 @@ public class PageLoadHelper {
         title = langSingleton.getValue("UPDATEDIALOG_TITLE");
         height = 138;
         width = 558;
+        loadPage();
+    }
+    
+    public static void loadLoginDialog(){
+        pathString = "LoginDialog.fxml";
+        c = LoginDialogController.class;
+        title = "Login";
+        height = 151;
+        width = 285;
+        loadPage();
+    }
+    
+    public void loadPropertiesDialog(){
+        pathString = "Properties.fxml";
+        c = PropertiesController.class;
+        title = langSingleton.getValue("PROPERTIESDIALOG");
+        height = 319;
+        width = 428;
         loadPage();
     }
 

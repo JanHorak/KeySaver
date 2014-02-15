@@ -179,8 +179,6 @@ public class MainpageController implements Initializable {
     private TitledPane actionPane;
     private CategoryList catList = new CategoryList();
     private XMLManager xmlManager = new XMLManager();
-    private final String PATH_PROPERTIES = "Properties.fxml";
-    private final String PATH_ICONMANAGEMENT = "Icondialog.fxml";
     private SelectionModel model;
     private Key selectedKey = new Key();
     private TreeItem selectedItem = new TreeItem();
@@ -806,7 +804,7 @@ public class MainpageController implements Initializable {
 
     @FXML
     private void open_Properties() {
-        new PageLoadHelper(PATH_PROPERTIES, "Properties", 428, 319, PropertiesController.class).loadPage();
+        new PageLoadHelper().loadPropertiesDialog();
     }
 
     @FXML

@@ -6,7 +6,6 @@ package net.jan.keysaver.main;
  */
 import javafx.application.Application;
 import javafx.stage.Stage;
-import net.jan.keysaver.dialogs.logindialog.LoginDialogController;
 import net.jan.keysaver.sources.PageLoadHelper;
 
 /**
@@ -17,7 +16,7 @@ public class KeySaver extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        new PageLoadHelper("LoginDialog.fxml", "Login",285, 151, LoginDialogController.class).loadPage();
+        PageLoadHelper.loadLoginDialog();
     }
 
     /**
