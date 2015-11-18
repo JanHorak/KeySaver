@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" fx:id="mainpane" minHeight="141.0" prefHeight="192.0" prefWidth="285.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.jan.keysaver2.controller.LoginDialogController">
+  <children>
+    <Button fx:id="loginButton" layoutX="224.0" layoutY="127.0" mnemonicParsing="false" onAction="#login" text="Login" />
+    <ImageView fx:id="imageView" fitHeight="35.0" fitWidth="153.0" layoutX="10.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+      <PasswordField fx:id="pwField1" layoutX="8.0" layoutY="56.0" prefHeight="25.0" prefWidth="266.0" promptText="Username" />
+      <PasswordField fx:id="pwField2" layoutX="8.0" layoutY="91.0" prefHeight="25.0" prefWidth="266.0" promptText="Passwort" />
+      <Hyperlink layoutX="10.0" layoutY="128.0" text="Lade privaten Schlüssel" />
+      <Separator layoutX="8.0" layoutY="159.0" prefHeight="1.0" prefWidth="266.0" />
+      <Hyperlink layoutX="11.0" layoutY="164.0" text="Neu? Hier registrieren" />
+  </children>
+</AnchorPane>

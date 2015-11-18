@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="464.0" prefWidth="612.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.jan.keysaver2.controller.MainpageController">
+  <children>
+    <TitledPane fx:id="keyPane" animated="false" collapsible="false" layoutX="0.0" layoutY="24.0" minWidth="188.0" prefHeight="356.0" prefWidth="188.0" text="Keys">
+      <content>
+        <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="334.0" prefWidth="184.0">
+          <children>
+            <TreeView fx:id="tree" layoutX="0.0" layoutY="2.0" prefHeight="330.0" prefWidth="184.0" />
+          </children>
+        </AnchorPane>
+      </content>
+    </TitledPane>
+    <GridPane fx:id="keyGrid" layoutX="197.0" layoutY="30.0" prefHeight="266.0" prefWidth="411.0">
+      <children>
+        <Label fx:id="lb_keyname" text="Keyname" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <Label fx:id="lb_username" text="Username" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <Label fx:id="lb_description" alignment="TOP_LEFT" text="Description" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+        <TextField fx:id="tf_keyname" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <TextField fx:id="tf_username" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <TextField fx:id="tf_description" alignment="TOP_LEFT" prefHeight="96.0" prefWidth="202.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+        <Label id="tf_username" fx:id="lb_dynamicUserName" text="\#{Username}" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <ImageView fx:id="avatarIV" fitHeight="40.87501525878906" fitWidth="54.50001807291066" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <Label id="lb_confpw" fx:id="lb_password" text="Confirm Password" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+        <TextField id="tf_passwordConfirm" fx:id="tf_password" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+        <Label fx:id="lb_keyicon" text="KeyIcon" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+        <Label fx:id="pathLabelKeyIcon" prefWidth="233.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="6">
+          <font>
+            <Font size="10.0" fx:id="x2" />
+          </font>
+        </Label>
+        <ImageView fx:id="iconKeyPreview" fitHeight="24.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+        <CheckBox fx:id="chk_useDefaultKeyIcon" mnemonicParsing="false" onAction="#selectDefaultKeyIconCheckBox" text="Use Default" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+        <Button fx:id="btn_browseKeyIcon" disable="true" mnemonicParsing="false" onAction="#browseImageKeyIcon" text="Browse" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+      </children>
+      <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="176.0" minWidth="10.0" prefWidth="176.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="374.0" minWidth="10.0" prefWidth="201.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="334.0" minWidth="10.0" prefWidth="34.0" />
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints maxHeight="144.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="144.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="260.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="143.0" minHeight="10.0" prefHeight="63.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="143.0" minHeight="0.0" prefHeight="27.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="143.0" minHeight="0.0" prefHeight="24.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="143.0" minHeight="0.0" prefHeight="27.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="143.0" minHeight="0.0" prefHeight="25.0" vgrow="SOMETIMES" />
+      </rowConstraints>
+    </GridPane>
+    <MenuBar fx:id="menuBar" prefWidth="612.0">
+      <menus>
+        <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
+          <items>
+            <MenuItem fx:id="export_fileItem" mnemonicParsing="false" onAction="#openExportDialog" text="Export" />
+            <MenuItem fx:id="exitItem" mnemonicParsing="false" onAction="#close" text="Exit" />
+          </items>
+        </Menu>
+        <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
+          <items>
+            <MenuItem fx:id="languageItem" disable="true" mnemonicParsing="false" text="Language" />
+            <CustomMenuItem mnemonicParsing="false" text="Unspecified Action">
+              <content>
+                <CheckBox id="englishMI" fx:id="chk_englishLang" onAction="#changeLangEN" selected="true" styleClass="menu-item, custom-menu-item" text="English" />
+              </content>
+            </CustomMenuItem>
+            <CustomMenuItem mnemonicParsing="false" text="Unspecified Action">
+              <content>
+                <CheckBox id="germanMI" fx:id="chk_germanLang" onAction="#changeLangDE" styleClass="menu-item, custom-menu-item" text="German" />
+              </content>
+            </CustomMenuItem>
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="settingsItem" mnemonicParsing="false" onAction="#open_Properties" text="Properties" />
+          </items>
+        </Menu>
+        <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
+          <items>
+            <MenuItem fx:id="helpItem" mnemonicParsing="false" onAction="#openHelpFile" text="Help" />
+            <MenuItem fx:id="devSiteItem" mnemonicParsing="false" onAction="#openGitHub" text="Visit Developersite" />
+            <MenuItem fx:id="updateItem" mnemonicParsing="false" onAction="#open_updatesite" text="Check for Updates" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+    <TitledPane fx:id="actionPane" animated="false" collapsible="false" layoutX="190.0" layoutY="380.0" prefHeight="82.0" prefWidth="415.0" text="Actions">
+      <content>
+        <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+          <children>
+            <Button fx:id="btn_edit" disable="true" mnemonicParsing="false" onAction="#edit" prefWidth="93.0" text="Edit" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="30.0">
+              <font>
+                <Font size="10.5" fx:id="x1" />
+              </font>
+            </Button>
+            <Button fx:id="btn_cancel" disable="true" font="$x1" mnemonicParsing="false" onAction="#editCancel" prefWidth="93.0" text="Cancel" AnchorPane.rightAnchor="205.0" AnchorPane.topAnchor="30.0" />
+            <Button fx:id="btn_addCat" disable="true" font="$x1" layoutX="8.0" layoutY="4.0" mnemonicParsing="false" onAction="#prepareAddCat" prefWidth="145.0" text="Add Category" />
+            <Button id="btn_addCat" fx:id="btn_remove" disable="true" font="$x1" mnemonicParsing="false" onAction="#remove" prefWidth="93.0" text="Remove" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
+            <Button id="btn_addCat" fx:id="btn_addKey" disable="true" font="$x1" mnemonicParsing="false" onAction="#prepareAddKey" prefWidth="114.0" text="Add Key" AnchorPane.rightAnchor="115.0" AnchorPane.topAnchor="5.0" />
+            <Button fx:id="btn_save" disable="true" font="$x1" mnemonicParsing="false" onAction="#save" prefWidth="83.0" text="Save" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="30.0" />
+          </children>
+        </AnchorPane>
+      </content>
+    </TitledPane>
+    <TitledPane fx:id="notificationPane" animated="false" collapsible="false" layoutX="0.0" layoutY="380.0" minWidth="188.0" prefHeight="82.0" prefWidth="188.0" text="Notifications">
+      <content>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+          <children>
+            <Label fx:id="notifyLabel" font="$x2" layoutX="0.0" layoutY="6.0" prefHeight="24.0" prefWidth="188.0" />
+            <Hyperlink fx:id="errorLogHyperlink" disable="true" layoutX="21.0" layoutY="17.0" minHeight="16.0" onAction="#openErrorFile" prefHeight="24.0" prefWidth="160.0">
+              <tooltip>
+                <Tooltip fx:id="errorTooltip" text="Empty Tooltip" />
+              </tooltip>
+            </Hyperlink>
+          </children>
+        </AnchorPane>
+      </content>
+    </TitledPane><GridPane fx:id="categoryGrid" layoutX="197.0" layoutY="303.0" prefHeight="76.0" prefWidth="405.0" xmlns:fx="http://javafx.com/fxml">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" />
+<ColumnConstraints />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+<children>
+        <Label id="pathLabel" fx:id="pathLabelCatIcon" prefHeight="21.0" prefWidth="248.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+          <font>
+            <Font size="8.0" />
+          </font>
+        </Label>
+        <ImageView id="pwImage" fx:id="iconCatPreview" fitHeight="21.24999992161581" fitWidth="28.33333396911621" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+        <Button id="btn_browse" fx:id="btn_browseCatIcon" disable="true" mnemonicParsing="false" onAction="#browseImageCatIcon" prefWidth="114.0" text="Browse" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <CheckBox id="chk_useDefaultIcon" fx:id="chk_useDefaultCatIcon" disable="true" mnemonicParsing="false" onAction="#selectDefaultCatIconCheckBox" prefWidth="126.0" selected="false" text="Use default Icon" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextField fx:id="tf_catName" disable="true" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <Label fx:id="lb_catName" text="Categoryname" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+</children>
+</GridPane>
+  </children>
+</AnchorPane>
