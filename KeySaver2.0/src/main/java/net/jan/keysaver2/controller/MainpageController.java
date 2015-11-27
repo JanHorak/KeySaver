@@ -680,11 +680,6 @@ public class MainpageController implements Initializable {
     }
 
     @FXML
-    private void open_updatesite() {
-        new PageLoadHelper().loadUpdateDialog();
-    }
-
-    @FXML
     private void openErrorFile() {
         try {
             Desktop.getDesktop().open(new File("AppData/Error.log"));
@@ -703,12 +698,8 @@ public class MainpageController implements Initializable {
         }
 
     }
-
-    @FXML
-    private void openExportDialog() {
-        new PageLoadHelper().loadExportDialog();
-    }
-
+    
+    
     @FXML
     private void openHelpFile() {
         try {

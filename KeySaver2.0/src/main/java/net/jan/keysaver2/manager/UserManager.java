@@ -3,33 +3,33 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package net.jan.keysaver2.manager;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import net.jan.keysaver2.entities.AppUser;
-import net.jan.keysaver2.sources.Utilities;
 
 /**
  *
  * @author janhorak
  */
 public class UserManager {
-    
-    
-    
-    public UserManager(){
 
-    }
-    
-    public AppUser getUser(){
-        AppUser user = new AppUser();
+    private final EntityManager em;
+    private final EntityManagerFactory emf;
 
-        return user;
+    public UserManager() {
+        emf = Persistence.createEntityManagerFactory("KS2PU");
+        em = emf.createEntityManager();
     }
-    
-    
-    public void registerUser(AppUser user){
 
+    public void registerUser(AppUser user) {
+        em.getTransaction().begin();
+        em.persist(user);
+        em.getTransaction().commit();
+        em.close();
+        emf.close();
     }
-    
+
 }

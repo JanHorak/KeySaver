@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="188.0" prefWidth="258.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.jan.keysaver2.controller.RegisterDialogController">
+   <children>
+      <TextField fx:id="tf_username" layoutX="12.0" layoutY="14.0" prefHeight="25.0" prefWidth="234.0" promptText="Username" />
+      <PasswordField fx:id="pw_userpassword" layoutX="12.0" layoutY="50.0" prefHeight="25.0" prefWidth="234.0" promptText="Passwort" />
+      <Separator layoutX="12.0" layoutY="89.0" prefHeight="3.0" prefWidth="234.0" />
+      <Slider fx:id="byteSlider" blockIncrement="1.0" layoutX="77.0" layoutY="108.0" max="4086.0" min="2.0" prefHeight="14.0" prefWidth="119.0" value="2048.0" />
+      <Text layoutX="12.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Keystärke" />
+      <Button fx:id="btn_register" layoutX="187.0" layoutY="159.0" mnemonicParsing="false" text="anlegen" />
+      <Label fx:id="byteLabel" layoutX="203.0" layoutY="107.0" text="Byte" />
+      <Label fx:id="lb_path" layoutX="14.0" layoutY="135.0" prefHeight="17.0" prefWidth="167.0" />
+      <Hyperlink fx:id="hyp_savePubK" layoutX="12.0" layoutY="132.0" text="Speicherpfad privater Schlüssel" />
+      <Button fx:id="btn_newPath" layoutX="190.0" layoutY="131.0" mnemonicParsing="false" opacity="0.0" text="Neu">
+         <font>
+            <Font size="9.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
