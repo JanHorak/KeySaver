@@ -12,12 +12,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import net.jan.keysaver2.controller.ExportDialogController;
+import net.jan.keysaver2.controller.RegisterDialogController;
 import net.jan.keysaver2.controller.ImportDialogController;
 import net.jan.keysaver2.controller.InfoDialogController;
 import net.jan.keysaver2.controller.LoginDialogController;
 import net.jan.keysaver2.controller.RecreateKeyDialogController;
-import net.jan.keysaver2.controller.UpdateDialogController;
 import net.jan.keysaver2.controller.PropertiesController;
 
 /**
@@ -77,12 +76,12 @@ public class PageLoadHelper {
         loadPage();
     }
 
-    public void loadExportDialog() {
-        pathString = "ExportDialog.fxml";
-        c = ExportDialogController.class;
-
-        height = 133;
-        width = 359;
+    public void loadRegisterDialog() {
+        pathString = getClass().getClassLoader().getResource("fxml/RegisterDialog.fxml").toString();
+        c = RegisterDialogController.class;
+        title = "Neuen User anlegen";
+        height = 188;
+        width = 258;
         loadPage();
     }
 
@@ -101,20 +100,11 @@ public class PageLoadHelper {
         loadPage();
     }
 
-    public void loadUpdateDialog() {
-        pathString = "UpdateDialog.fxml";
-        c = UpdateDialogController.class;
-
-        height = 138;
-        width = 558;
-        loadPage();
-    }
-
     public void loadLoginDialog() {
         pathString = getClass().getClassLoader().getResource("fxml/LoginDialog.fxml").toString();
         c = LoginDialogController.class;
         title = "Login";
-        height = 151;
+        height = 192;
         width = 285;
         loadPage();
     }

@@ -8,11 +8,11 @@ package net.jan.keysaver2.entities;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
@@ -34,6 +34,11 @@ public class AppUser implements Serializable {
     private String password;
 
     @NotNull
+    @Column(columnDefinition = "blob")
+    private byte[] pk;
+
+    @NotNull
+    @Column(columnDefinition = "blob")
     private byte[] avatar;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
@@ -77,6 +82,14 @@ public class AppUser implements Serializable {
 
     public void setCatList(List<Category> catList) {
         this.catList = catList;
+    }
+
+    public byte[] getPk() {
+        return pk;
+    }
+
+    public void setPk(byte[] pk) {
+        this.pk = pk;
     }
 
 }
