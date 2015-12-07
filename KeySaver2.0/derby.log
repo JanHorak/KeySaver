@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Mon Dec 07 18:27:38 CET 2015:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance a816c00e-0151-7d7c-05c3-00000eb2f168 
+on database directory /Users/Jan/Documents/Development/Projects/KeySaver2.0/KeySaver2.0/KeySaver.db with class loader sun.misc.Launcher$AppClassLoader@232204a1 
+Loaded from file:/Users/Jan/.m2/repository/org/apache/derby/derby/10.11.1.1/derby-10.11.1.1.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_65-b17
+user.dir=/Users/Jan/Documents/Development/Projects/KeySaver2.0/KeySaver2.0
+os.name=Mac OS X
+os.arch=x86_64
+os.version=10.11.1
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

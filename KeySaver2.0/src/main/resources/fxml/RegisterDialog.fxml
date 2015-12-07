@@ -14,9 +14,12 @@
       <Text layoutX="12.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Keystärke" />
       <Button fx:id="btn_register" layoutX="187.0" layoutY="159.0" mnemonicParsing="false" text="anlegen" />
       <Label fx:id="byteLabel" layoutX="203.0" layoutY="107.0" text="Byte" />
-      <Label fx:id="lb_path" layoutX="14.0" layoutY="135.0" prefHeight="17.0" prefWidth="167.0" />
-      <Hyperlink fx:id="hyp_savePubK" layoutX="12.0" layoutY="132.0" text="Speicherpfad privater Schlüssel" />
-      <Button fx:id="btn_newPath" layoutX="190.0" layoutY="131.0" mnemonicParsing="false" opacity="0.0" text="Neu">
+      <Label fx:id="lb_path" layoutX="14.0" layoutY="135.0" prefHeight="17.0" prefWidth="167.0">
+         <font>
+            <Font size="9.0" />
+         </font></Label>
+      <Hyperlink fx:id="hyp_savePubK" layoutX="8.0" layoutY="132.0" text="Speicherpfad privater Schlüssel" />
+      <Button fx:id="btn_newPath" layoutX="215.0" layoutY="135.0" mnemonicParsing="false" opacity="0.0" text="Neu">
          <font>
             <Font size="9.0" />
          </font>
