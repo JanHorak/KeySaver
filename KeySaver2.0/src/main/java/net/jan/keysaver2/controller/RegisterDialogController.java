@@ -21,7 +21,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
-import net.jan.keysaver2.actions.RegisterActions;
+import net.jan.keysaver2.actions.GeneralActions;
 import net.jan.keysaver2.entities.AppUser;
 import net.jan.keysaver2.manager.UserManager;
 import net.jan.keysaver2.security.KeyGenerationHelper;
@@ -78,7 +78,7 @@ public class RegisterDialogController implements Initializable, ActionController
 
     @Override
     public void initControlActions() {
-        RegisterActions.fadeOut(btn_newPath);
+        GeneralActions.fadeOut(btn_newPath);
         byteSlider.valueProperty().addListener((e) -> {
             byteLabel.setText(String.valueOf(Math.round(byteSlider.getValue())));
         });
@@ -91,9 +91,9 @@ public class RegisterDialogController implements Initializable, ActionController
                 pkPath = pkFile.getAbsolutePath();
                 lb_path.setText(pkPath);
                 
-                RegisterActions.fadeIn(lb_path);
-                RegisterActions.fadeIn(btn_newPath);
-                RegisterActions.fadeOut(hyp_savePubK);
+                GeneralActions.fadeIn(lb_path);
+                GeneralActions.fadeIn(btn_newPath);
+                GeneralActions.fadeOut(hyp_savePubK);
                 hyp_savePubK.setDisable(true);
             }
         });
@@ -109,9 +109,9 @@ public class RegisterDialogController implements Initializable, ActionController
         });
         
         btn_newPath.setOnAction((e) -> {
-            RegisterActions.fadeOut(btn_newPath);
-            RegisterActions.fadeOut(lb_path);
-            RegisterActions.fadeIn(hyp_savePubK);
+            GeneralActions.fadeOut(btn_newPath);
+            GeneralActions.fadeOut(lb_path);
+            GeneralActions.fadeIn(hyp_savePubK);
             hyp_savePubK.setDisable(false);
         });
     }
@@ -124,7 +124,7 @@ public class RegisterDialogController implements Initializable, ActionController
             user.setPk(KeyGenerationHelper.readPrivateKeyFromFile(new File("public.key").getAbsolutePath()).getEncoded());
             user.setCatList(new ArrayList<>());
             user.setName(tf_username.getText());
-            user.setPassword(pw_userpassword.getText());
+            user.setPassword(pw_userpassword.getText().getBytes());
             new UserManager().registerUser(user);
             new File("public.key").delete();
             LOGGER.info("New User saved. Cleaned up!");

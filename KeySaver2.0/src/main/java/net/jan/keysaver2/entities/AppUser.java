@@ -15,13 +15,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
 
 /**
  *
  * @author Jan
  */
 @Entity
+@NamedQueries(
+        @NamedQuery(name = AppUser.FIND_BY_NAME, query = "Select u FROM AppUser u WHERE u.name = :name"))
 public class AppUser implements Serializable {
+
+    public static final String FIND_BY_NAME = "AppUser.getByName";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,7 +37,8 @@ public class AppUser implements Serializable {
     private String name;
 
     @NotNull
-    private String password;
+    @Column(columnDefinition = "blob")
+    private byte[] password;
 
     @NotNull
     @Column(columnDefinition = "blob")
@@ -60,11 +67,11 @@ public class AppUser implements Serializable {
         this.name = name;
     }
 
-    public String getPassword() {
+    public byte[] getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(byte[] password) {
         this.password = password;
     }
 

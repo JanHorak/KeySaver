@@ -16,7 +16,7 @@ public final class LoginActions extends GeneralActions {
 
     private LoginActions() {
     }
-
+    
     public static EventHandler loginAction = (e) -> {
         System.out.println("t");
     };

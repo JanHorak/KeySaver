@@ -32,4 +32,20 @@ public class UserManager {
         emf.close();
     }
 
+    public AppUser getUserByName(String name) {
+        em.getTransaction().begin();
+        AppUser u = (AppUser) em.createNamedQuery(AppUser.FIND_BY_NAME).setParameter("name", name).getSingleResult();
+        em.close();
+        emf.close();
+        return u == null ? null : u;
+    }
+    
+    public boolean doesUserExist(String user){
+        em.getTransaction().begin();
+        AppUser u = (AppUser) em.createNamedQuery(AppUser.FIND_BY_NAME).getSingleResult();
+        em.close();
+        emf.close();
+        return (u == null);
+    }
+
 }

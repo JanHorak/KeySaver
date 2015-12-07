@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -9,10 +10,19 @@
   <children>
     <Button fx:id="btn_login" layoutX="224.0" layoutY="127.0" mnemonicParsing="false" text="Login" />
     <ImageView fx:id="imageView" fitHeight="35.0" fitWidth="153.0" layoutX="10.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
-      <PasswordField fx:id="pwField1" layoutX="8.0" layoutY="56.0" prefHeight="25.0" prefWidth="266.0" promptText="Username" />
-      <PasswordField fx:id="pwField2" layoutX="8.0" layoutY="91.0" prefHeight="25.0" prefWidth="266.0" promptText="Passwort" />
-      <Hyperlink fx:id="hyp_loadPK" layoutX="10.0" layoutY="128.0" text="Lade privaten Schlüssel" />
+      <PasswordField fx:id="pw_password" layoutX="8.0" layoutY="91.0" prefHeight="25.0" prefWidth="266.0" promptText="Passwort" />
       <Separator layoutX="8.0" layoutY="159.0" prefHeight="1.0" prefWidth="266.0" />
       <Hyperlink fx:id="hyp_register" layoutX="11.0" layoutY="164.0" text="Neu? Hier registrieren" />
+      <TextField fx:id="tf_username" layoutX="8.0" layoutY="55.0" prefHeight="27.0" prefWidth="266.0" promptText="Username" />
+      <Label fx:id="lb_pkPath" layoutX="11.0" layoutY="132.0" prefHeight="17.0" prefWidth="211.0">
+         <font>
+            <Font size="9.0" />
+         </font></Label>
+      <Hyperlink fx:id="hyp_loadPK" layoutX="10.0" layoutY="128.0" text="Lade privaten Schlüssel" />
+      <Button fx:id="btn_newPK" layoutX="192.0" layoutY="133.0" mnemonicParsing="false" opacity="0.0" prefHeight="17.0" prefWidth="30.0" text="Neu">
+         <font>
+            <Font size="9.0" />
+         </font>
+      </Button>
   </children>
 </AnchorPane>
